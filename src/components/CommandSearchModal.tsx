@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import Link from 'next/link';
 import { IssueSummary } from '@/types';
-import { formatDate, cn } from '@/lib/utils';
+import { formatDate, formatIssueBadge, cn } from '@/lib/utils';
 
 interface CommandSearchModalProps {
   isOpen: boolean;
@@ -36,7 +36,7 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
     if (!deferredQuery.trim()) return issues.slice(0, 5);
     const q = deferredQuery.toLowerCase().trim();
     return issues.filter((issue) => {
-      const badgeText = `the daily nodes #${String(issue.issueNumber).padStart(3, '0')}`.toLowerCase();
+      const badgeText = formatIssueBadge(issue.nodeType, issue.issueNumber).toLowerCase();
       const nodeTypeText = (issue.nodeType || 'daily-node').toLowerCase();
 
       return (
@@ -102,7 +102,7 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
                 <div className="flex items-center justify-between gap-3 text-xs font-mono mb-1.5">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-[var(--accent)]">
-                      The Daily Nodes #{String(issue.issueNumber).padStart(3, '0')}
+                      {formatIssueBadge(issue.nodeType, issue.issueNumber)}
                     </span>
                   </div>
                   <time dateTime={issue.date} className="text-[var(--text-secondary)]">{formatDate(issue.date)}</time>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Issue } from '@/types';
+import { formatIssueBadge } from '@/lib/utils';
 
 interface RelatedIssuesProps {
   issues: Issue[];
@@ -25,7 +26,7 @@ export function RelatedIssues({ issues }: RelatedIssuesProps) {
             >
               <div className="flex items-center justify-between text-xs font-mono text-[var(--text-secondary)] mb-3">
                 <span className="text-[var(--accent)] font-semibold">
-                  The Daily Nodes #{String(issue.issueNumber).padStart(3, '0')}
+                  {formatIssueBadge(issue.nodeType, issue.issueNumber)}
                 </span>
                 {issue.readingTime > 0 && (
                   <span>{issue.readingTime} min read</span>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Issue } from '@/types';
+import { formatIssueBadge } from '@/lib/utils';
 
 interface PrevNextNavProps {
   previousIssue: Issue | null;
@@ -27,7 +28,7 @@ export function PrevNextNav({ previousIssue, nextIssue }: PrevNextNavProps) {
               <span className="px-2 py-0.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-[10px]">Up Next</span>
             </div>
             <div className="font-mono text-xs text-[var(--accent)] mb-1 font-semibold flex items-center gap-2">
-              <span>The Daily Nodes #{String(nextIssue.issueNumber).padStart(3, '0')}</span>
+              <span>{formatIssueBadge(nextIssue.nodeType, nextIssue.issueNumber)}</span>
               {nextIssue.readingTime > 0 && (
                 <span className="text-[var(--text-secondary)] font-normal">• {nextIssue.readingTime} min read</span>
               )}
@@ -52,7 +53,7 @@ export function PrevNextNav({ previousIssue, nextIssue }: PrevNextNavProps) {
               <span aria-hidden="true">&larr;</span> Previous Dispatch
             </div>
             <div className="font-mono text-xs text-[var(--text-secondary)] mb-1 font-semibold flex items-center gap-2">
-              <span>The Daily Nodes #{String(previousIssue.issueNumber).padStart(3, '0')}</span>
+              <span>{formatIssueBadge(previousIssue.nodeType, previousIssue.issueNumber)}</span>
               {previousIssue.readingTime > 0 && (
                 <span className="text-[var(--text-secondary)] font-normal">• {previousIssue.readingTime} min read</span>
               )}

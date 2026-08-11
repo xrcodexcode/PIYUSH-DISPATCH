@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { IssueSummary } from '@/types';
-import { formatDate, cn } from '@/lib/utils';
+import { formatDate, formatIssueBadge, cn } from '@/lib/utils';
 import BookmarkButton from './BookmarkButton';
 import OptimizedImage from './OptimizedImage';
 
@@ -12,7 +12,7 @@ interface IssueCardProps {
 
 export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
   const isCompact = variant === 'compact';
-  const issueBadgeText = `The Daily Nodes #${String(issue.issueNumber).padStart(3, '0')}`;
+  const issueBadgeText = formatIssueBadge(issue.nodeType, issue.issueNumber);
 
   return (
     <article className={cn(
@@ -102,7 +102,7 @@ export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
           <span aria-hidden="true">&rarr;</span>
         </Link>
         <span className="text-[10px] font-mono text-[var(--text-secondary)] uppercase">
-          {issue.nodeType || 'daily-node'}
+          {issue.nodeType === 'deep-node' ? 'Deep Node' : 'Daily Node'}
         </span>
       </div>
     </article>
