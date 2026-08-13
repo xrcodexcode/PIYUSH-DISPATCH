@@ -38,29 +38,29 @@ export function Header() {
       isScrolled && "border-[var(--border-color)] shadow-xs bg-[var(--bg)]/95 backdrop-blur-md"
     )}>
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex flex-wrap justify-between items-center gap-3 h-20">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="font-serif font-black text-2xl tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+            <Link href="/" className="font-serif font-black text-xl sm:text-2xl tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
               {"PIYUSH'S DISPATCH"}
             </Link>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8 items-center text-sm font-medium">
-            <Link href="/issues" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">All Dispatches</Link>
-            <Link href="/issues?type=daily-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
+          <nav className="hidden md:flex md:flex-wrap md:justify-end gap-3 lg:gap-4 items-center text-sm font-medium w-full md:w-auto">
+            <Link href="/issues" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">All Dispatches</Link>
+            <Link href="/issues?type=daily-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 whitespace-nowrap">
               <span>⚡</span> The Daily Nodes
             </Link>
-            <Link href="/issues?type=deep-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
+            <Link href="/issues?type=deep-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 whitespace-nowrap">
               <span>🧠</span> The Deep Nodes
             </Link>
-            <Link href="/issues/saved" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1">
+            <Link href="/issues/saved" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 whitespace-nowrap">
               <span>🔖</span> Saved Vault
             </Link>
-            <Link href="/about" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">About</Link>
+            <Link href="/about" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">About</Link>
             
-            <div className="flex items-center space-x-4 ml-2 pl-4 border-l border-[var(--border-color)]">
+            <div className="flex flex-wrap items-center space-x-4 ml-0 md:ml-2 pl-0 md:pl-4 border-t border-[var(--border-color)] pt-4 md:border-t-0 md:pt-0 md:border-l md:pl-4">
               <Link href="/search" aria-label="Search" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors p-2 rounded-full hover:bg-[var(--surface)]">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -71,7 +71,7 @@ export function Header() {
                 href="https://xrcodex.substack.com/subscribe" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-[var(--accent)] hover:opacity-90 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-xs hover:shadow-md inline-flex items-center gap-1"
+                className="bg-[var(--accent)] hover:opacity-90 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-xs hover:shadow-md inline-flex items-center gap-1"
               >
                 <span>Subscribe</span>
                 <span className="text-xs">↗</span>

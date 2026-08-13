@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 export function SubscribeDrawer() {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,21 +8,28 @@ export function SubscribeDrawer() {
   const [submitted, setSubmitted] = useState(false);
 
   const substackBaseUrl = 'https://xrcodex.substack.com/subscribe';
+  const dismissedRef = useRef(false);
 
-  useEffect(() => {
-    const isDismissed = sessionStorage.getItem('subscribe-drawer-dismissed');
-    if (!isDismissed) {
-      const handleScroll = () => {
-        if (window.scrollY > 400) {
-          setIsVisible(true);
-        }
-      };
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      return () => window.removeEventListener('scroll', handleScroll);
+  const handleScroll = useCallback(() => {
+    if (!dismissedRef.current && window.scrollY > 400) {
+      setIsVisible(true);
     }
   }, []);
 
+  useEffect(() => {
+    const isDismissed = sessionStorage.getItem('subscribe-drawer-dismissed') === 'true';
+    dismissedRef.current = isDismissed;
+
+    if (!isDismissed) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+
+    return undefined;
+  }, [handleScroll]);
+
   const handleDismiss = () => {
+    dismissedRef.current = true;
     setIsVisible(false);
     sessionStorage.setItem('subscribe-drawer-dismissed', 'true');
   };
