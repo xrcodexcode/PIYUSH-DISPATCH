@@ -1,9 +1,12 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { IssueSummary } from '@/types';
 import { formatDate, formatIssueBadge, cn } from '@/lib/utils';
 import BookmarkButton from './BookmarkButton';
 import OptimizedImage from './OptimizedImage';
+import { sanitizeSlug } from '@/lib/security';
 
 interface IssueCardProps {
   issue: IssueSummary;
@@ -13,6 +16,22 @@ interface IssueCardProps {
 export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
   const isCompact = variant === 'compact';
   const issueBadgeText = formatIssueBadge(issue.nodeType, issue.issueNumber);
+  const [isRead, setIsRead] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('read_dispatches');
+      if (raw) {
+        const readList = JSON.parse(raw);
+        if (Array.isArray(readList)) {
+          const cleanSlug = sanitizeSlug(issue.slug);
+          setIsRead(readList.includes(cleanSlug));
+        }
+      }
+    } catch {
+      // safe fallback
+    }
+  }, [issue.slug]);
 
   return (
     <article className={cn(
@@ -36,8 +55,14 @@ export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
               }
             />
 
-            {/* Save Bookmark Overlay */}
-            <div className="absolute top-3 right-3 z-10">
+            {/* Top Overlay Badges (Read status & Bookmark) */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+              {isRead && (
+                <span className="bg-green-500/90 text-white backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1 shadow-xs">
+                  <span>✓</span>
+                  <span>Read</span>
+                </span>
+              )}
               <div className="bg-[var(--bg)]/90 backdrop-blur-md rounded-full p-1 border border-[var(--border-color)] shadow-xs">
                 <BookmarkButton slug={issue.slug} compact />
               </div>
@@ -45,7 +70,7 @@ export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
           </div>
         )}
 
-        {/* Issue Metadata & Badge Line (Zero Overlap on Image) */}
+        {/* Issue Metadata & Badge Line */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs font-mono text-[var(--text-secondary)]">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)]">

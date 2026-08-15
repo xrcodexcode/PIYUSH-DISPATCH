@@ -8,7 +8,7 @@ import {
   getPreviousIssue,
   getNextIssue
 } from '@/lib/content';
-import { formatDate, formatIssueBadge, slugify } from '@/lib/utils';
+import { formatDate, formatIssueBadge } from '@/lib/utils';
 import ArticleTOC from '@/components/ArticleTOC';
 import ShareActions from '@/components/ShareActions';
 import SourceList from '@/components/SourceList';
@@ -22,10 +22,18 @@ import BookmarkButton from '@/components/BookmarkButton';
 import { absoluteUrl, siteConfig } from '@/lib/site';
 
 import AudioPlayer from '@/components/AudioPlayer';
-import DispatchFeedback from '@/components/DispatchFeedback';
 import SubscribeDrawer from '@/components/SubscribeDrawer';
 import ZenReadingControls from '@/components/ZenReadingControls';
 import BackToTop from '@/components/BackToTop';
+import ReaderCustomizer from '@/components/ReaderCustomizer';
+import PrintButton from '@/components/PrintButton';
+import SeriesTrackCard from '@/components/SeriesTrackCard';
+import QuoteShareTooltip from '@/components/QuoteShareTooltip';
+import ReadTracker from '@/components/ReadTracker';
+import IssueReactions from '@/components/IssueReactions';
+import BacklinksGraph from '@/components/BacklinksGraph';
+import IssueComments from '@/components/IssueComments';
+import ReadingRuler from '@/components/ReadingRuler';
 
 interface Props {
   params: Promise<{
@@ -81,14 +89,15 @@ export default async function IssuePage({ params }: Props) {
     notFound();
   }
 
-  const [related, prev, next] = await Promise.all([
+  const [allIssues, related, prev, next] = await Promise.all([
+    getAllIssues(),
     getRelatedIssues(issue, 3),
     getPreviousIssue(issue.issueNumber),
     getNextIssue(issue.issueNumber),
   ]);
+
   const articleUrl = absoluteUrl(`/issues/${issue.slug}`);
   const articleImage = issue.heroImage ? absoluteUrl(issue.heroImage) : absoluteUrl(siteConfig.defaultImage);
-
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -143,19 +152,29 @@ export default async function IssuePage({ params }: Props) {
   const rawSubstackUrl = substackSource ? substackSource.url : 'https://xrcodex.substack.com';
   const substackPostUrl = rawSubstackUrl.startsWith('https://') ? rawSubstackUrl : 'https://xrcodex.substack.com';
 
-
   return (
     <>
       <JsonLd data={articleJsonLd} />
       <JsonLd data={breadcrumbsJsonLd} />
       
+      {/* Guided Focus Ruler */}
+      <ReadingRuler />
+
+      {/* Floating Selection Quote Tooltip */}
+      <QuoteShareTooltip issueSlug={issue.slug} issueTitle={issue.title} />
+
+      {/* Background Read Completion Tracker */}
+      <ReadTracker issueSlug={issue.slug} />
+
       <article className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)] pt-8 pb-24 transition-colors">
         {/* Article Top Controls Bar */}
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex justify-between items-center mb-8 non-reading-ui">
           <Link href="/issues" className="text-xs font-mono font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] flex items-center gap-1">
             <span aria-hidden="true">&larr;</span> Back to Archive
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <ReaderCustomizer />
+            <PrintButton />
             <BookmarkButton slug={issue.slug} />
             <ZenReadingControls />
           </div>
@@ -200,7 +219,7 @@ export default async function IssuePage({ params }: Props) {
             <div className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-lg border border-[var(--border-color)] aspect-[21/9] bg-[var(--surface)]">
               <OptimizedImage
                 src={issue.heroImage} 
-                alt={issue.title}
+                alt={issue.title} 
                 fill
                 sizes="(max-width: 1024px) 100vw, 960px"
                 priority
@@ -224,8 +243,8 @@ export default async function IssuePage({ params }: Props) {
             </div>
           </aside>
 
-          {/* Core Reading Column (Mathematically Centered) */}
-          <div className="flex-1 max-w-[760px] mx-auto order-1 lg:order-2 w-full">
+          {/* Core Reading Column (Fluid Typography & Customizer Responsive) */}
+          <div className="reading-column-container flex-1 max-w-[760px] mx-auto order-1 lg:order-2 w-full transition-all duration-200">
             {/* Audio Player Bar */}
             <div className="mb-10 non-reading-ui">
               <AudioPlayer title={issue.title} textToRead={issue.content} readingTimeMinutes={issue.readingTime} />
@@ -237,13 +256,26 @@ export default async function IssuePage({ params }: Props) {
               <ShareActions title={issue.title} substackUrl={substackPostUrl} />
             </div>
 
+            {/* Curated Multi-Part Series Track Card (if part of a series) */}
+            <SeriesTrackCard issueSlug={issue.slug} />
+
             <div className="prose prose-lg max-w-none">
               <MDXContent content={issue.content} />
             </div>
 
-            {/* Interactive Feedback & Rating Widget */}
+            {/* 5-Dimension Reader Reaction Matrix */}
             <div className="mt-14 non-reading-ui">
-              <DispatchFeedback slug={issue.slug} />
+              <IssueReactions slug={issue.slug} />
+            </div>
+
+            {/* Knowledge Graph & Backlinks Explorer */}
+            <div className="non-reading-ui">
+              <BacklinksGraph currentIssue={issue} allIssues={allIssues} />
+            </div>
+
+            {/* Community Comments Thread & Substack Discussion Bridge */}
+            <div className="non-reading-ui">
+              <IssueComments slug={issue.slug} issueTitle={issue.title} substackUrl={substackPostUrl} />
             </div>
 
             {/* End of Article Share Bar */}

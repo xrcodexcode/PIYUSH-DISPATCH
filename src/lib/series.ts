@@ -1,0 +1,73 @@
+export interface SeriesTrack {
+  id: string;
+  title: string;
+  badge: string;
+  description: string;
+  issueSlugs: string[];
+}
+
+export const SERIES_TRACKS: SeriesTrack[] = [
+  {
+    id: 'agentic-ai-engineering',
+    title: 'The Agentic AI Engineering Series',
+    badge: '4-Part Masterclass',
+    description: 'From self-correcting execution loops and graph workflows to full agentic reasoning and long-term neural memory.',
+    issueSlugs: [
+      '030-loop-engineering-what-makes-ai-agents-improve-themselves',
+      '031-graph-engineering-beyond-single-ai-loops',
+      '032-ai-agents-101',
+      '033-agent-memory',
+    ],
+  },
+  {
+    id: 'context-engineering-fundamentals',
+    title: 'Prompt to Context Engineering',
+    badge: '4-Part Track',
+    description: 'Why prompt engineering evolved into context architectures, RAG systems, and tool harness design.',
+    issueSlugs: [
+      '026-prompt-engineering-isnt-dead-its-evolving',
+      '027-rag-isnt-dead-most-people-just-dont-understand-it',
+      '028-better-input-better-output-thats-context-engineering',
+      '029-the-prompt-is-just-one-ingredient-the-harness-is-the-kitchen',
+    ],
+  },
+  {
+    id: 'personal-intelligence-systems',
+    title: 'Personal Intelligence & Knowledge Systems',
+    badge: 'Deep Node Series',
+    description: 'Designing an AI that doesn’t just answer questions, but builds a lifelong, editable model of your work.',
+    issueSlugs: [
+      'the-personal-ai',
+      '001-the-personal-ai',
+      'agent-skills-and-hooks',
+      '002-agent-skills-and-hooks',
+    ],
+  },
+];
+
+export function getSeriesForIssue(slug: string): {
+  series: SeriesTrack;
+  currentIndex: number;
+  total: number;
+  prevSlug: string | null;
+  nextSlug: string | null;
+} | null {
+  const clean = slug.toLowerCase().trim();
+
+  for (const series of SERIES_TRACKS) {
+    const idx = series.issueSlugs.findIndex(
+      (s) => s.toLowerCase() === clean || s.toLowerCase().replace(/^\d+-/, '') === clean.replace(/^\d+-/, '')
+    );
+    if (idx !== -1) {
+      return {
+        series,
+        currentIndex: idx,
+        total: series.issueSlugs.length,
+        prevSlug: idx > 0 ? series.issueSlugs[idx - 1] : null,
+        nextSlug: idx < series.issueSlugs.length - 1 ? series.issueSlugs[idx + 1] : null,
+      };
+    }
+  }
+
+  return null;
+}

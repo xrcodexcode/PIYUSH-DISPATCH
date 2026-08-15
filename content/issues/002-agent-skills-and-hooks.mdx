@@ -1,0 +1,632 @@
+---
+issueNumber: 2
+date: '2026-08-16'
+slug: agent-skills-and-hooks
+title: 'Agent Skills & Hooks'
+subtitle: The architecture that turns a raw AI model into a system that actually does useful work.
+excerpt: A deep-dive into the two building blocks that separate a language model from an intelligent agent system — reusable skills that teach agents how to work, and event-driven hooks that teach them when to act.
+heroImage: /assets/deep-node-2/1.jpg
+topics:
+  - AI
+  - Agentic AI
+  - System Architecture
+  - Knowledge Systems
+tags:
+  - skills
+  - hooks
+  - agents
+  - architecture
+  - knowledge-systems
+sources:
+  - title: 'Generative Agents: Interactive Simulacra of Human Behavior'
+    publisher: Stanford University and Google Research
+    date: '2023-04-07'
+    url: 'https://arxiv.org/abs/2304.03442'
+  - title: 'ReAct: Synergizing Reasoning and Acting in Language Models'
+    publisher: Google Research and Princeton University
+    date: '2022-10-06'
+    url: 'https://arxiv.org/abs/2210.03629'
+  - title: Model Context Protocol Specification
+    publisher: Anthropic
+    date: '2025-06-18'
+    url: 'https://modelcontextprotocol.io/specification/2025-06-18'
+  - title: 'Toolformer: Language Models Can Teach Themselves to Use Tools'
+    publisher: Meta AI Research
+    date: '2023-02-09'
+    url: 'https://arxiv.org/abs/2302.04761'
+  - title: Substack Dispatch
+    publisher: Substack (xrcodex)
+    date: '2026-08-16'
+    url: 'https://xrcodex.substack.com/p/deep-notes002-agent-skills-and-hooks'
+  - title: node-wiki (My Knowledge Base)
+    publisher: Piyush's Dispatch
+    date: '2026-08-16'
+    url: /about
+published: true
+nodeType: deep-node
+---
+
+Two people can use the exact same AI model and get wildly different results.
+
+Not because one of them writes better prompts. Not because one has a higher API tier. But because one of them built a *system* around the model — and the other just talks to it.
+
+This is the gap nobody explains well enough. The model is never the whole story. What surrounds the model — the instructions, the memory, the tools, and especially the **skills** and **hooks** — is what turns raw intelligence into useful behavior. Strip those away and you have a very expensive autocomplete engine. Add them back and you have something that starts to feel like a capable, autonomous worker.
+
+This issue is about those two specific building blocks: skills and hooks. What they are. Why they exist. How to build them. And how they quietly change the entire trajectory of what an AI agent can become.
+
+> **An AI agent is not just a model. It is a model + instructions + skills + tools + memory + hooks = system behavior.**
+
+![IMAGE 01 — COVER: A luminous crystalline AI model core surrounded by orbiting modular components — skill modules, hook triggers, tool interfaces, and memory banks — in a dark atmospheric void](/assets/deep-node-2/1.jpg)
+
+## 1. AI Agents Are Becoming Systems
+
+Let's establish the foundation.
+
+A **large language model** (LLM) is a neural network trained on vast amounts of text. It predicts the next token. It can write, reason, summarize, and translate. But on its own, it's stateless. It doesn't remember your last conversation. It doesn't know what tools are available. It doesn't know your preferences, your files, or your workflows.
+
+An **agent** is what happens when you wrap structure around a model. You give it instructions, connect it to tools, feed it relevant context, and let it plan and execute multi-step tasks. The model provides the reasoning. The architecture around it provides everything else.
+
+Think about it this way: a model is like a brilliant consultant you hired for exactly one phone call. An agent is that same consultant — but now they have an office, a filing cabinet, a calendar, and a procedure manual.
+
+```text
+             ┌─────────────┐
+             │    Model     │
+             └──────┬──────┘
+                    │
+             ┌──────▼──────┐
+             │    Agent     │
+             └──────┬──────┘
+                    │
+       ┌────────────┴────────────┐
+       │                         │
+    Skills                     Hooks
+  (capabilities)             (reactions)
+```
+
+The model provides intelligence. Skills tell it *how* to do specific jobs. Hooks tell it *when* to act automatically.
+
+That distinction — how vs. when — is the entire architecture this article is built around.
+
+## 2. What Exactly Is an Agent Skill?
+
+Here's the simplest definition:
+
+> **A skill is a reusable capability that teaches an agent how to perform a specific kind of task.**
+
+Not a one-time prompt. Not a system instruction. A *structured, repeatable procedure* that the agent can invoke whenever a matching task appears.
+
+To understand why this matters, let's separate four things that people constantly confuse:
+
+```text
+Prompt       = today's instruction
+Instruction  = standing orders
+Skill        = learned procedure
+Tool         = instrument
+Agent        = worker coordinating everything
+```
+
+A **prompt** is what you type right now. It's ephemeral. "Summarize this article" is a prompt.
+
+An **instruction** is a standing rule the agent always follows. "Always respond in British English" is an instruction.
+
+A **tool** is an external capability the agent can call — a calculator, a web search, a file reader. Tools give the agent hands. But tools don't know *when* or *why* to be used. They're instruments sitting on a shelf.
+
+A **skill** is the procedure that combines reasoning, tools, and decisions into a complete workflow. It's the *how*. "When you receive a YouTube transcript, extract atomic knowledge notes, classify each by topic, check for duplicates against existing notes, and store the results" — that's a skill. It's not a single tool call. It's an orchestrated process.
+
+![IMAGE 02 — A digital figure selecting specialized skills from a vast floating library of hexagonal capability modules](/assets/deep-node-2/2.jpg)
+
+Why does reusability matter so much? Because without skills, every complex task requires you to re-explain the entire workflow from scratch. You become the bottleneck. You're manually reconstructing the same multi-step process every single time. Skills let you encode that process once and invoke it repeatedly — across different inputs, different sessions, different agents.
+
+This sounds small, but it changes a lot. It means the agent's capability set can *grow* over time without the model itself changing.
+
+## 3. Anatomy of a Skill
+
+A skill is typically defined in a single structured file — often a Markdown document that the agent reads as operational instructions.
+
+```text
+skill/
+└── SKILL.md
+```
+
+Inside that file, a well-designed skill contains these components:
+
+```text
+Purpose           — What this skill does
+When to use       — Conditions that trigger it
+Inputs            — What data the skill expects
+Process           — Step-by-step procedure
+Rules             — Constraints and guardrails
+Examples          — Concrete input/output pairs
+Output            — What the skill produces
+Failure conditions — What to do when things go wrong
+```
+
+![IMAGE 03 — A glowing translucent SKILL.md document hovering in a dark void, with procedural steps flowing outward as holographic cards](/assets/deep-node-2/3.jpg)
+
+Here's what a simplified skill definition might look like:
+
+```markdown
+---
+name: extract-atomic-notes
+description: Extract atomic knowledge notes from a source document.
+---
+
+# Purpose
+Convert a source document into individual atomic notes,
+each containing exactly one concept.
+
+# When to Use
+When a raw source (article, transcript, paper) enters the system
+and needs to be broken into reusable knowledge units.
+
+# Process
+1. Read the full source
+2. Identify distinct concepts, facts, and claims
+3. Create one note per concept
+4. Add source provenance to each note
+5. Tag each note using the controlled vocabulary
+6. Check for duplicates against existing notes
+7. Output the notes for storage
+
+# Failure Conditions
+- If no distinct concepts found → flag for manual review
+- If duplicate detected → update existing note, don't create new
+```
+
+The goal is clarity, not complexity. A skill should be specific enough that the agent knows exactly what to do, but general enough that it works across many different inputs.
+
+## 4. Real Example — The Atomic Notes Skill
+
+Let's make this concrete.
+
+Here's a problem almost everyone building a personal knowledge system runs into:
+
+```text
+Large source (article, video, book chapter)
+       ↓
+AI generates a big summary
+       ↓
+Summary is hard to reuse
+       ↓
+Knowledge becomes a pile of long documents
+       ↓
+Nothing connects to anything
+```
+
+You end up with a vault full of summaries that you never look at again. The information is *stored* but not *organized*. And unorganized knowledge is almost as useless as no knowledge at all.
+
+![IMAGE 04 — Chaotic tangled information on the left transforming through a beam of light into perfectly organized atomic knowledge nodes connected by luminous threads on the right](/assets/deep-node-2/4.jpg)
+
+The Atomic Notes Skill solves this by changing the fundamental unit of output. Instead of one big summary, the agent produces many small, self-contained notes — each containing exactly one idea.
+
+```text
+Source
+ ↓
+Extract individual ideas
+ ↓
+One note per concept
+ ↓
+Add provenance + tags
+ ↓
+Check for duplicates
+ ↓
+Link related notes
+ ↓
+Store in knowledge system
+```
+
+Here's what this looks like in practice. Say you feed the agent a 30-minute conference talk about retrieval-augmented generation. Without the skill, you'd get a 500-word summary. With the skill, you might get 8–12 atomic notes:
+
+- **"What is RAG?"** — a clean definition note
+- **"RAG vs Fine-tuning"** — a comparison note
+- **"Chunking strategies for retrieval"** — a method note
+- **"Embedding models used in RAG pipelines"** — a reference note
+- **"When RAG fails: hallucination from irrelevant retrieval"** — a failure-mode note
+
+Each note stands alone. Each note links to related notes already in your system. Each note is tagged, sourced, and reusable. The knowledge graph gets denser and more connected with every source you process.
+
+This is why skills are powerful. The agent isn't just summarizing — it's performing a structured knowledge engineering workflow. And it does it the same way every time because the skill defines the procedure.
+
+## 5. Enter the Hook
+
+Skills solve the *how*. But there's a different problem they don't address: *when*.
+
+If you have an Atomic Notes Skill, someone still has to invoke it. Someone has to say, "Hey agent, run this skill on this input." That someone is usually you. Manually. Every time.
+
+And this is where hooks enter the picture.
+
+> **A hook is logic that runs automatically when a specific event occurs.**
+
+Think of it this way:
+
+```text
+Skill = knowing how to react
+Hook  = knowing when to react automatically
+```
+
+A hook watches for events. When the right event happens and the right conditions are met, the hook fires an action — usually invoking a skill.
+
+```text
+Event
+ ↓
+Condition
+ ↓
+Action
+```
+
+![IMAGE 05 — A sleek amber sensor device activated by a beam of light, emitting golden energy threads that connect to automated action nodes](/assets/deep-node-2/5.jpg)
+
+Examples of events a hook might watch for:
+
+- A new file appears in a directory
+- A note is created or updated
+- A task is marked complete
+- New content enters the system
+- An agent finishes a workflow
+- A scheduled time arrives
+
+The hook doesn't perform the work itself. It detects the moment and delegates to the right skill. It's the difference between a fire extinguisher sitting on the wall (a skill — available but passive) and a smoke detector connected to a sprinkler system (a hook — watching, detecting, and triggering automatically).
+
+![IMAGE 06 — A glowing event signal traveling through a pipeline with a diamond condition gate, a skill execution chamber, and an output node](/assets/deep-node-2/6.jpg)
+
+This is what makes agents feel less like tools you use and more like systems that work alongside you. You stop being the trigger for every action.
+
+## 6. Skills vs Hooks
+
+Let's make the distinction crystal clear.
+
+| | Skill | Hook |
+|---|---|---|
+| **Role** | Capability | Trigger |
+| **Nature** | Reusable procedure | Automatic reaction |
+| **Answers** | "How should the agent do this?" | "When should the system react?" |
+| **Activation** | Usually invoked explicitly | Event-driven |
+| **Function** | Performs a workflow | Starts a workflow |
+| **Analogy** | A recipe | A kitchen timer |
+
+> **Skills answer: "How should the agent do this?"**
+>
+> **Hooks answer: "When should the system react?"**
+
+Neither is complete without the other. A skill without a hook requires manual invocation every time. A hook without a skill has nothing to execute when it fires. Together, they create something qualitatively different: autonomous, event-driven agent behavior.
+
+## 7. Real Example — The Linker Hook
+
+Let's see a hook in action inside a personal knowledge system.
+
+Imagine you've been building a personal wiki for months. You have 400 atomic notes. You add a new one about "transformer attention mechanisms." Somewhere in your existing vault, you already have notes about "self-attention," "multi-head attention," and "the original Transformer paper." Those notes are related. They should be linked.
+
+Without a hook, here's what happens:
+
+```text
+Create new note
+     ↓
+Manually search for related notes
+     ↓
+Find them (if you remember they exist)
+     ↓
+Manually create links
+     ↓
+Repeat for every new note, forever
+```
+
+You won't do this. Not consistently. Not at scale. The links won't get created. Your knowledge graph stays sparse.
+
+Now imagine a **Linker Hook**:
+
+```text
+New note created
+       ↓
+Hook detects the event
+       ↓
+Extract key concepts from the new note
+       ↓
+Search existing notes for related concepts
+       ↓
+Score relevance
+       ↓
+Create or suggest links
+       ↓
+Knowledge graph grows automatically
+```
+
+![IMAGE 09 — A newly created knowledge node radiating scanning beams that find and connect to related existing nodes through luminous bridges](/assets/deep-node-2/9.jpg)
+
+The difference is friction. The manual process requires effort, memory, and discipline every single time. The hook-driven process requires effort *once* — when you build the hook — and then it runs automatically for every new note, forever.
+
+This is how a knowledge system goes from being a storage tool to being a living graph that evolves on its own.
+
+## 8. When Skills and Hooks Work Together
+
+Here's where the architecture comes alive.
+
+Skills and hooks aren't meant to exist in isolation. They're two halves of a single system. Hooks detect events and delegate to skills. Skills perform work and produce outputs. Those outputs can trigger new hooks. The result is a chain of automated, intelligent behavior.
+
+```text
+                 AGENT
+                   │
+          ┌────────┴────────┐
+          │                 │
+       SKILLS              HOOKS
+     capabilities        reactions
+          │                 │
+          └────────┬────────┘
+                   │
+            Agentic Workflow
+```
+
+![IMAGE 07 — A central agent core connected to a blue ring of skill modules and an amber ring of hook sensors, with energy flowing in a continuous loop between them](/assets/deep-node-2/7.jpg)
+
+Let's trace a complete real-world workflow.
+
+You paste a YouTube transcript into your knowledge system. Here's what happens:
+
+```text
+YouTube transcript added
+        ↓
+Ingestion Hook fires
+  (event: new raw content detected)
+        ↓
+YouTube Ingestion Skill activates
+  (extracts metadata, cleans transcript)
+        ↓
+Atomic Notes Skill activates
+  (breaks transcript into atomic concepts)
+        ↓
+Linker Hook fires
+  (event: new notes created)
+        ↓
+Linking Skill activates
+  (connects new notes to existing knowledge)
+        ↓
+Personal wiki updated with connected knowledge
+```
+
+![IMAGE 11 — A complete automated pipeline flowing from a raw video source through ingestion hook, skill processor, atomic note generator, linker, to a personal wiki structure](/assets/deep-node-2/11.jpg)
+
+You pasted one transcript. The system did six things. No manual intervention after the initial paste. That's the power of skills and hooks working together — each link in the chain triggers the next.
+
+## 9. How to Build Your Own Skill
+
+You don't need a framework. You need a process.
+
+### Step 1: Find repetitive work
+
+Look at your workflow. What do you explain to the AI over and over? What multi-step task do you keep reconstructing from memory? That's your first skill candidate.
+
+### Step 2: Write the workflow manually
+
+Before you automate anything, do it by hand. Write down every step. Be specific. "Process the input" is too vague. "Extract all claims from the source and separate facts from opinions" — that's specific.
+
+### Step 3: Separate inputs, decisions, and outputs
+
+What does the skill receive? What decisions does it make along the way? What does it produce? These three things define the skill's boundary.
+
+### Step 4: Turn it into reusable instructions
+
+Write the procedure in clear, structured language. Use the anatomy from Section 3 as your template. Purpose. When to use. Process. Rules. Examples.
+
+### Step 5: Add examples
+
+Show the agent what good output looks like. One or two concrete input/output pairs make a bigger difference than 500 words of abstract explanation.
+
+### Step 6: Add failure conditions
+
+What should the agent do when the input is malformed? When no results are found? When duplicates exist? Skills without failure conditions break silently.
+
+### Step 7: Test with real inputs
+
+Not toy examples. Real inputs from your actual workflow.
+
+### Step 8: Refine
+
+The first version will be wrong. That's fine. Skills improve through iteration, not through planning.
+
+```text
+Repetitive task
+      ↓
+Manual workflow
+      ↓
+Reusable instructions
+      ↓
+Skill
+      ↓
+Testing
+      ↓
+Iteration
+```
+
+![IMAGE 12 — A futuristic workshop with holographic blueprints of a skill's internal structure, partially assembled components on a workbench, and a testing criteria checklist](/assets/deep-node-2/12.jpg)
+
+## 10. How to Build Your Own Hook
+
+Hooks follow a simpler model:
+
+```text
+EVENT     → What happened?
+CONDITION → Should we react?
+ACTION    → What do we do?
+```
+
+Here's a concrete example:
+
+```text
+EVENT:
+A new Markdown file appears in the /capture/ directory
+
+CONDITION:
+The file contains knowledge content
+(not a template, not a config file, not empty)
+
+ACTION:
+Run the classification skill
+Then run the linking workflow
+Then move the file to /source/
+```
+
+The key question when designing a hook: **is this event worth automating a reaction for?**
+
+Not everything should be a hook. A good hook responds to a *frequent, predictable event* that always requires the *same sequence of actions*. If the event is rare, or if the correct response varies wildly each time, a hook adds complexity without value.
+
+A useful heuristic: if you'd feel annoyed doing the manual version more than three times, it's probably worth a hook. If you'd need to think carefully about the right response each time, keep it manual.
+
+Don't automate judgment calls. Automate the boring stuff.
+
+## 11. Skills + Hooks Inside a Personal AI Wiki
+
+Let's zoom out and see how all of this fits into a real system.
+
+A personal AI wiki — what some people call a "second brain" or a knowledge vault — is one of the best environments for skills and hooks. The workflows are repetitive. The events are predictable. And the payoff compounds over time.
+
+```text
+                 PERSONAL AI WIKI
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+      Agents          Skills           Hooks
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+                  Knowledge Base
+                        │
+                  Better Retrieval
+                        │
+                   Better Context
+```
+
+![IMAGE 13 — A three-layered architecture: a knowledge base network at the bottom, agents/skills/hooks as processing mechanisms in the middle, and a clean user interface at the top, connected by luminous data flows](/assets/deep-node-2/13.jpg)
+
+Here's what a well-architected personal wiki might look like:
+
+**Skills** handle the knowledge work:
+- *Atomic Notes Skill* — breaks sources into individual concepts
+- *Classification Skill* — tags and categorizes notes
+- *Deduplication Skill* — finds and merges near-duplicate notes
+- *MOC Generation Skill* — creates Maps of Content that organize navigation
+
+**Hooks** handle the automation:
+- *Ingestion Hook* — fires when new content enters the capture inbox
+- *Linker Hook* — fires when a note is created, connecting it to related nodes
+- *Quality Hook* — fires periodically to audit orphaned or poorly tagged notes
+
+**Agents** coordinate everything:
+- The ingestion agent orchestrates the pipeline from raw source to finished notes
+- The maintenance agent runs periodic quality checks
+
+The result is a knowledge system that gets smarter and more connected with every piece of information you feed it — without requiring you to manually manage every connection, every tag, every link.
+
+![IMAGE 08 — A sprawling personal knowledge graph with organically growing interconnected nodes, new connections actively forming between previously isolated concepts](/assets/deep-node-2/8.jpg)
+
+## 12. Common Mistakes
+
+Building skills and hooks is straightforward in theory. In practice, people make the same mistakes repeatedly.
+
+**1. Making skills too broad.** A skill called "process any document" is too vague to be useful. The agent won't know what "processing" means for a research paper vs. a meeting transcript vs. a recipe. Make skills specific. "Extract atomic notes from a YouTube transcript" is better than "handle video content."
+
+**2. Writing vague instructions.** "Analyze the content and produce good output" teaches the agent nothing. Be concrete about what "good" means. Show examples.
+
+**3. Creating skills for trivial one-off tasks.** If you'll only do it once, just write a prompt. Skills are for *recurring* work. Don't over-engineer.
+
+**4. Adding hooks everywhere.** Not every event needs an automated response. Hooks add complexity. Each one is a piece of automation you have to maintain, debug, and trust. Start with one or two high-value hooks.
+
+**5. No failure conditions.** What happens when the input is empty? When the API is down? When duplicates are found? Skills without failure handling break silently and corrupt your data.
+
+**6. No testing.** A skill that's never been tested against real input is a hypothesis, not a procedure. Test before you trust.
+
+**7. Making automation unpredictable.** If a hook sometimes fires and sometimes doesn't — or produces inconsistent results — you'll stop trusting the system entirely. Predictability matters more than cleverness.
+
+**8. Confusing tools with skills.** A web search is a tool. "Research a topic using web search, evaluate source credibility, extract key claims, and compile a structured briefing" is a skill. Tools are single actions. Skills are orchestrated workflows.
+
+![IMAGE 10 — Interchangeable modular components — skill prisms, hook sensors, tool cylinders, memory cubes — arranged on a dark engineering workspace with standardized connection ports](/assets/deep-node-2/10.jpg)
+
+## 13. The Deeper Idea
+
+Step back from the implementation details for a moment.
+
+There's a deeper pattern here that's easy to miss: **the intelligence of an agentic system increasingly comes from the architecture around the model, not from the model itself.**
+
+A more capable model helps. Obviously. But the same model with well-designed skills will outperform a bigger model with no skills. The same model with smart hooks will accomplish work that a hookless model simply can't — because the hookless model is waiting for someone to tell it what to do.
+
+```text
+Model
++
+Instructions
++
+Skills
++
+Tools
++
+Memory
++
+Hooks
+=
+System Behavior
+```
+
+The model provides raw reasoning capability. But the system determines how that capability is *organized*, *triggered*, and *reused*. This is why two people using the same model get different results. The difference isn't the model. It's the system.
+
+> **The model may provide the intelligence, but the surrounding system determines how that intelligence is organized, directed, and compounded over time.**
+
+This has a practical implication that most people overlook: improving your AI doesn't always mean upgrading the model. Sometimes the highest-leverage improvement is a better skill. A smarter hook. A cleaner workflow. Architecture beats raw capability more often than you'd expect.
+
+## 14. Where This Could Go
+
+The trajectory is interesting if you look at it as a progression:
+
+```text
+Prompt
+ ↓
+Agent
+ ↓
+Agent + Tools
+ ↓
+Agent + Skills
+ ↓
+Agent + Skills + Hooks
+ ↓
+Personal Agent Ecosystem
+```
+
+We're somewhere around step 4 or 5 right now. Most people interacting with AI are still at step 1 — typing prompts into a chat window. Some have moved to step 2 or 3 — using agents with tool access. Very few are at step 5, where skills and hooks create genuinely autonomous workflows.
+
+The next phase is probably **personal agent ecosystems** — environments where multiple specialized agents, each equipped with their own skills and hooks, collaborate on different aspects of your work. One agent manages your knowledge base. Another handles research. Another monitors your projects. They share context through a common memory layer and coordinate through events and hooks.
+
+This isn't science fiction. The components exist today. Skills are Markdown files. Hooks are event-condition-action rules. Agents are LLMs with tool access. Memory is retrieval-augmented context. The engineering is approachable. The hard part is designing the architecture thoughtfully — deciding which skills to build, which events to hook, and how the pieces connect.
+
+The people who figure this out first will have a meaningful advantage. Not because they have access to better models, but because they've built better systems around the same models everyone else is using.
+
+## 15. Closing
+
+Let's bring it all together.
+
+```text
+Skills  = capabilities   → how the agent works
+Hooks   = reactions       → when the system acts
+Tools   = actions         → what the agent can use
+Memory  = context         → what the agent remembers
+Agents  = orchestration   → who coordinates everything
+```
+
+Skills teach agents *how* to perform complex, multi-step workflows reliably and repeatedly. Hooks teach systems *when* to activate those workflows automatically, based on events. Together, they transform a passive model into an active system — one that doesn't wait to be told what to do but responds to the world around it.
+
+The mental model is simple: if you find yourself repeating a multi-step process, that's a skill waiting to be built. If you find yourself manually triggering the same workflow every time a specific event happens, that's a hook waiting to be written.
+
+The best AI systems won't be the ones with the largest models. They'll be the ones with the most thoughtfully designed skills, the smartest hooks, and the cleanest architecture connecting them.
+
+**Build the system, not just the prompt.**
+
+**— Piyush's Dispatch**
+
+---
+
+## Reflection / Active Recall
+
+Before you move on, sit with these for a moment:
+
+1. **What repetitive task in your workflow could become a skill?** Think about what you explain to AI over and over — that's your first candidate.
+
+2. **What event in your system could trigger a useful hook?** A new file arriving, a note being created, a task being completed — what action should follow automatically?
+
+3. **What would happen if your skills and hooks worked together?** Trace the chain. Event → Hook → Skill → Output → Next Hook. Where does it lead?
+
+4. **What parts of your current AI workflow are still completely manual?** Which of those manual steps are actually *decisions* (keep them manual) and which are *procedures* (automate them)?

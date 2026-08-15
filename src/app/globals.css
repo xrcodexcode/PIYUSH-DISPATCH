@@ -564,22 +564,126 @@ body.zen-mode article {
   padding-top: 1.5rem !important;
 }
 
-/* Smooth Scoped Transitions */
-body,
-header,
-footer,
-article,
-aside,
-nav,
-div[class*="bg-"],
-div[class*="border-"] {
-  transition-property: background-color, border-color, color;
-  transition-duration: 0.15s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* ─────────────────────────────────────────────────────────────
+   6. READER TYPOGRAPHY CUSTOMIZER OVERRIDES
+   ───────────────────────────────────────────────────────────── */
+:root[data-reader-font="serif"] .prose,
+body[data-reader-font="serif"] .prose {
+  font-family: var(--font-serif) !important;
 }
 
-a, button, input, select, textarea {
-  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
-  transition-duration: 0.15s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+:root[data-reader-font="sans"] .prose,
+body[data-reader-font="sans"] .prose {
+  font-family: var(--font-sans) !important;
 }
+
+:root[data-reader-font="mono"] .prose,
+body[data-reader-font="mono"] .prose {
+  font-family: var(--font-mono) !important;
+  font-size: 1rem !important;
+}
+
+:root[data-reader-size="compact"] .prose,
+body[data-reader-size="compact"] .prose {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+:root[data-reader-size="default"] .prose,
+body[data-reader-size="default"] .prose {
+  font-size: 1.125rem !important;
+  line-height: 1.75 !important;
+}
+
+:root[data-reader-size="large"] .prose,
+body[data-reader-size="large"] .prose {
+  font-size: 1.25rem !important;
+  line-height: 1.85 !important;
+}
+
+:root[data-reader-size="xlarge"] .prose,
+body[data-reader-size="xlarge"] .prose {
+  font-size: 1.375rem !important;
+  line-height: 1.95 !important;
+}
+
+:root[data-reader-width="compact"] .reading-column-container,
+body[data-reader-width="compact"] .reading-column-container {
+  max-width: 680px !important;
+}
+
+:root[data-reader-width="default"] .reading-column-container,
+body[data-reader-width="default"] .reading-column-container {
+  max-width: 760px !important;
+}
+
+:root[data-reader-width="wide"] .reading-column-container,
+body[data-reader-width="wide"] .reading-column-container {
+  max-width: 880px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. CLEAN EDITORIAL PRINT & PDF STYLES
+   ───────────────────────────────────────────────────────────── */
+@media print {
+  header,
+  footer,
+  aside,
+  .non-reading-ui,
+  .reading-progress-container,
+  .zen-exit-floating-btn,
+  button,
+  .hero-image-wrapper {
+    display: none !important;
+  }
+
+  body, html {
+    background-color: #FFFFFF !important;
+    color: #111111 !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  article {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .prose {
+    color: #111111 !important;
+    max-width: 100% !important;
+    font-size: 12pt !important;
+  }
+
+  .prose h1, .prose h2, .prose h3 {
+    color: #000000 !important;
+    page-break-after: avoid;
+  }
+
+  .prose img, .prose figure {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+
+  .prose a {
+    color: #000000 !important;
+    text-decoration: underline !important;
+  }
+
+  .prose blockquote {
+    border-left: 3px solid #333333 !important;
+    background-color: #F8F8F8 !important;
+    color: #333333 !important;
+  }
+
+  .prose pre, .prose code {
+    background-color: #F4F4F4 !important;
+    color: #111111 !important;
+    border: 1px solid #CCCCCC !important;
+  }
+}
+

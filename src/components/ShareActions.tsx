@@ -212,6 +212,20 @@ export function ShareActions({
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
         </button>
+
+        {/* 7. Print / PDF Clean Export */}
+        <button
+          onClick={() => typeof window !== 'undefined' && window.print()}
+          aria-label="Export Clean PDF or Print"
+          title="Export Clean PDF / Print Briefing"
+          className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface)] hover:border-[var(--accent)] text-[var(--text-secondary)] hover:text-[var(--accent)] transition-all shadow-2xs cursor-pointer shrink-0"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </button>
       </div>
     </div>
   );

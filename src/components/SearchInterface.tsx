@@ -17,7 +17,6 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
   const [activeNodeType, setActiveNodeType] = useState<'daily-node' | 'deep-node' | null>(null);
 
-  // Defer query filtering so typing remains 60fps instant
   const deferredQuery = useDeferredValue(query);
 
   const allTopics = useMemo(() => {
@@ -40,53 +39,105 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
       const q = deferredQuery.toLowerCase();
       filtered = filtered.filter(issue => {
         const badgeText = `the daily nodes #${String(issue.issueNumber).padStart(3, '0')}`.toLowerCase();
-        const rawBadgeText = `daily-nodes#${String(issue.issueNumber).padStart(3, '0')}`.toLowerCase();
         const nodeTypeText = (issue.nodeType || 'daily-node').toLowerCase();
         const nodeTypeDisplay = nodeTypeText === 'deep-node' ? 'deep node' : 'daily node';
-        const altNodeText = `node-${issue.issueNumber}`.toLowerCase();
-        const altNodeSpaceText = `node ${issue.issueNumber}`.toLowerCase();
 
         return (
-          issue.title.toLowerCase().includes(q) || 
+          issue.title.toLowerCase().includes(q) ||
           issue.subtitle.toLowerCase().includes(q) ||
           issue.excerpt.toLowerCase().includes(q) ||
           issue.topics.some(t => t.toLowerCase().includes(q)) ||
           issue.tags.some(t => t.toLowerCase().includes(q)) ||
           nodeTypeText.includes(q) ||
           nodeTypeDisplay.includes(q) ||
-          badgeText.includes(q) ||
-          rawBadgeText.includes(q) ||
-          altNodeText.includes(q) ||
-          altNodeSpaceText.includes(q)
+          badgeText.includes(q)
         );
       });
     }
     return filtered;
   }, [allIssuesList, deferredQuery, activeTopic, activeNodeType]);
 
+  const hasActiveFilters = !!query || !!activeTopic || !!activeNodeType;
+
   return (
     <div className="max-w-5xl mx-auto w-full">
-      {/* New Modern SearchBar Component */}
-      <div className="mb-10">
+      {/* Search Bar */}
+      <div className="mb-8">
         <SearchBar
           value={query}
           onChange={setQuery}
           autoFocus
-          placeholder="Search The Daily Nodes, Deep Nodes, topics, keywords..."
+          placeholder="Search dispatches, topics, keywords..."
         />
+      </div>
+
+      {/* Node Type Tabs + Topic Filters */}
+      <div className="flex flex-col gap-4 mb-8">
+        {/* Node Type Tabs */}
+        <div className="flex items-center gap-1.5 bg-[var(--bg)] p-1 rounded-xl border border-[var(--border-color)] w-fit">
+          {[
+            { id: null, label: 'All' },
+            { id: 'daily-node' as const, label: '⚡ Daily Nodes' },
+            { id: 'deep-node' as const, label: '🧠 Deep Nodes' },
+          ].map((tab) => (
+            <button
+              key={tab.label}
+              onClick={() => setActiveNodeType(tab.id)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer",
+                activeNodeType === tab.id
+                  ? "bg-[var(--accent)] text-white shadow-2xs"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Topic Pills */}
+        {allTopics.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={() => setActiveTopic(null)}
+              className={cn(
+                "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
+                activeTopic === null
+                  ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
+                  : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)]"
+              )}
+            >
+              All Topics
+            </button>
+            {allTopics.map((topic) => (
+              <button
+                key={topic}
+                onClick={() => setActiveTopic(activeTopic === topic ? null : topic)}
+                className={cn(
+                  "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
+                  activeTopic === topic
+                    ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
+                    : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
+                )}
+              >
+                #{topic}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Results Summary */}
       <div className="mb-6 pb-3 border-b border-[var(--border-color)] flex justify-between items-end">
         <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)]">
-          {query ? `Results for "${query}"` : 'All Dispatches'}
+          {query ? `Results for "${query}"` : activeTopic ? `#${activeTopic}` : 'All Dispatches'}
         </h2>
         <span className="text-sm font-mono text-[var(--text-secondary)]">
-          {filteredIssues.length} {filteredIssues.length === 1 ? 'issue' : 'issues'} found
+          {filteredIssues.length} {filteredIssues.length === 1 ? 'dispatch' : 'dispatches'}
         </span>
       </div>
 
-      {/* Results List Grid */}
+      {/* Results Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredIssues.length > 0 ? (
           filteredIssues.map((issue) => (
@@ -100,14 +151,16 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
             </svg>
             <h3 className="text-xl font-serif font-bold text-[var(--text-primary)] mb-2">No dispatches found</h3>
             <p className="text-[var(--text-secondary)] text-sm max-w-md mx-auto mb-6">
-              We couldn&apos;t find any issues matching &quot;{query}&quot;. Try broadening your search terms.
+              No issues match your current filters. Try broadening your search.
             </p>
-            <button 
-              onClick={() => { setQuery(''); setActiveTopic(null); }}
-              className="px-5 py-2.5 bg-[var(--accent)] text-white text-xs font-semibold rounded-full hover:opacity-90 transition-opacity"
-            >
-              Clear search filters
-            </button>
+            {hasActiveFilters && (
+              <button
+                onClick={() => { setQuery(''); setActiveTopic(null); setActiveNodeType(null); }}
+                className="px-5 py-2.5 bg-[var(--accent)] text-white text-xs font-semibold rounded-full hover:opacity-90 transition-opacity"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
         )}
       </div>
