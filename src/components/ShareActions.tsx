@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { sanitizeSlug } from '@/lib/security';
 
 interface ShareActionsProps {
   title: string;
@@ -9,6 +10,21 @@ interface ShareActionsProps {
   substackUrl?: string;
   className?: string;
   variant?: 'inline' | 'sidebar' | 'horizontal';
+}
+
+function getSafeSavedBookmarks(): string[] {
+  try {
+    const raw = localStorage.getItem('saved_dispatches');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map(sanitizeSlug)
+      .filter((s): s is string => Boolean(s) && s.length > 0)
+      .slice(0, 200);
+  } catch {
+    return [];
+  }
 }
 
 export function ShareActions({ 
@@ -27,14 +43,11 @@ export function ShareActions({
       const activeUrl = url || window.location.href;
       setCurrentUrl(activeUrl);
       
-      const slug = activeUrl.split('/issues/')[1] || '';
+      const rawSlug = activeUrl.split('/issues/')[1]?.split('?')[0]?.split('#')[0] || '';
+      const slug = sanitizeSlug(rawSlug);
       if (slug) {
-        try {
-          const saved = JSON.parse(localStorage.getItem('saved_dispatches') || '[]');
-          setBookmarked(saved.includes(slug));
-        } catch {
-          // ignore
-        }
+        const saved = getSafeSavedBookmarks();
+        setBookmarked(saved.includes(slug));
       }
     }
   }, [url]);
@@ -49,6 +62,9 @@ export function ShareActions({
       // Fallback
       const input = document.createElement('input');
       input.value = currentUrl;
+      input.setAttribute('readonly', '');
+      input.style.position = 'absolute';
+      input.style.left = '-9999px';
       document.body.appendChild(input);
       input.select();
       document.execCommand('copy');
@@ -60,17 +76,18 @@ export function ShareActions({
 
   const handleBookmark = () => {
     if (typeof window === 'undefined') return;
-    const slug = (currentUrl || window.location.href).split('/issues/')[1] || '';
+    const rawSlug = (currentUrl || window.location.href).split('/issues/')[1]?.split('?')[0]?.split('#')[0] || '';
+    const slug = sanitizeSlug(rawSlug);
     if (!slug) return;
 
     try {
-      const saved: string[] = JSON.parse(localStorage.getItem('saved_dispatches') || '[]');
+      const saved = getSafeSavedBookmarks();
       let updated: string[];
       if (saved.includes(slug)) {
         updated = saved.filter(s => s !== slug);
         setBookmarked(false);
       } else {
-        updated = [...saved, slug];
+        updated = [...saved, slug].slice(0, 200);
         setBookmarked(true);
       }
       localStorage.setItem('saved_dispatches', JSON.stringify(updated));
@@ -79,6 +96,7 @@ export function ShareActions({
       // ignore
     }
   };
+
 
   const encodedUrl = encodeURIComponent(currentUrl);
   const encodedTitle = encodeURIComponent(`" ${title} " via Piyush's Dispatch`);

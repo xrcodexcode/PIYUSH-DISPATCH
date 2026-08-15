@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { sanitizeSlug } from '@/lib/security';
 
 interface BookmarkButtonProps {
   slug: string;
@@ -9,40 +10,55 @@ interface BookmarkButtonProps {
   compact?: boolean;
 }
 
+function getSafeSavedBookmarks(): string[] {
+  try {
+    const raw = localStorage.getItem('saved_dispatches');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map(sanitizeSlug)
+      .filter((s): s is string => Boolean(s) && s.length > 0)
+      .slice(0, 200);
+  } catch {
+    return [];
+  }
+}
+
 export function BookmarkButton({ slug, className, compact = false }: BookmarkButtonProps) {
+  const cleanSlug = sanitizeSlug(slug);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('saved_dispatches') || '[]');
-      setIsBookmarked(saved.includes(slug));
-    } catch {
-      setIsBookmarked(false);
-    }
-  }, [slug]);
+    if (!cleanSlug) return;
+    const saved = getSafeSavedBookmarks();
+    setIsBookmarked(saved.includes(cleanSlug));
+  }, [cleanSlug]);
 
   const toggleBookmark = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!cleanSlug) return;
 
     try {
-      const saved: string[] = JSON.parse(localStorage.getItem('saved_dispatches') || '[]');
+      const saved = getSafeSavedBookmarks();
       let updated: string[];
 
-      if (saved.includes(slug)) {
-        updated = saved.filter(s => s !== slug);
+      if (saved.includes(cleanSlug)) {
+        updated = saved.filter(s => s !== cleanSlug);
         setIsBookmarked(false);
       } else {
-        updated = [...saved, slug];
+        updated = [...saved, cleanSlug].slice(0, 200);
         setIsBookmarked(true);
       }
 
       localStorage.setItem('saved_dispatches', JSON.stringify(updated));
       window.dispatchEvent(new Event('saved-dispatches-updated'));
-    } catch (err) {
-      console.error('Error toggling bookmark:', err);
+    } catch {
+      // Safe no-op on storage quota or access denial
     }
   };
+
 
   if (compact) {
     return (

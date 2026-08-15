@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import { 
-  getAllIssues, 
-  getIssueBySlug, 
-  getRelatedIssues, 
-  getPreviousIssue, 
-  getNextIssue 
+import {
+  getAllIssues,
+  getIssueBySlug,
+  getRelatedIssues,
+  getPreviousIssue,
+  getNextIssue
 } from '@/lib/content';
 import { formatDate, formatIssueBadge, slugify } from '@/lib/utils';
 import ArticleTOC from '@/components/ArticleTOC';
@@ -141,7 +140,9 @@ export default async function IssuePage({ params }: Props) {
   };
 
   const substackSource = issue.sources?.find(s => s.url && s.url.includes('substack.com'));
-  const substackPostUrl = substackSource ? substackSource.url : 'https://xrcodex.substack.com';
+  const rawSubstackUrl = substackSource ? substackSource.url : 'https://xrcodex.substack.com';
+  const substackPostUrl = rawSubstackUrl.startsWith('https://') ? rawSubstackUrl : 'https://xrcodex.substack.com';
+
 
   return (
     <>

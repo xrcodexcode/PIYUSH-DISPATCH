@@ -28,6 +28,7 @@ export async function getAllIssues(): Promise<Issue[]> {
   const files = fs.readdirSync(contentDir);
   const issues: Issue[] = [];
   const slugMap = new Map<string, Issue>();
+  const topicMap = new Map<string, Topic>();
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
@@ -74,6 +75,8 @@ export async function getAllIssues(): Promise<Issue[]> {
     slugMap.set(lowerId, issueObj);
     slugMap.set(`daily-nodes-${padNum}`.toLowerCase(), issueObj);
     slugMap.set(`daily-nodes-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-daily-nodes-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-daily-nodes-${issueNum}`.toLowerCase(), issueObj);
   }
 
   // Pre-sort chronological order descending once
@@ -81,16 +84,20 @@ export async function getAllIssues(): Promise<Issue[]> {
 
   // Pre-compute summaries array once to avoid runtime Object.entries allocations
   const articleFields = new Set(['content', 'headings', 'sources', 'relatedIssues', 'published']);
-  cachedSummaries = issues.map((issue) =>
-    Object.fromEntries(
-      Object.entries(issue).filter(([key]) => !articleFields.has(key))
-    ) as IssueSummary
-  );
+  const summaries: IssueSummary[] = issues.map((issue) => {
+    const summary = {} as IssueSummary;
+    for (const key of Object.keys(issue) as (keyof Issue)[]) {
+      if (!articleFields.has(key)) {
+        // @ts-expect-error - intentionally narrow the surface
+        summary[key] = issue[key];
+      }
+    }
+    return summary;
+  });
 
   // Pre-compute topic index once
-  const topicMap = new Map<string, Topic>();
-  issues.forEach((issue) => {
-    issue.topics.forEach((topicName) => {
+  for (const issue of issues) {
+    for (const topicName of issue.topics) {
       const s = slugify(topicName);
       const existing = topicMap.get(s);
       if (existing) {
@@ -103,13 +110,15 @@ export async function getAllIssues(): Promise<Issue[]> {
           description: `Articles and issues related to ${topicName}`,
         });
       }
-    });
-  });
-  cachedTopics = Array.from(topicMap.values()).sort((a, b) => b.count - a.count);
+    }
+  }
 
   cachedIssues = issues;
+  cachedSummaries = summaries;
   cachedSlugMap = slugMap;
+  cachedTopics = Array.from(topicMap.values()).sort((a, b) => b.count - a.count);
   cacheTime = now;
+
   return issues;
 }
 

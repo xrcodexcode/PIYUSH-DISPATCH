@@ -88,6 +88,7 @@ export function SubscribeForm({ variant = 'inline' }: SubscribeFormProps) {
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
+                  maxLength={254}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"

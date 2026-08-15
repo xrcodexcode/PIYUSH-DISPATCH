@@ -2,28 +2,44 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { sanitizeSlug } from '@/lib/security';
 
 interface DispatchFeedbackProps {
   slug: string;
 }
 
+const ALLOWED_VOTES = ['exceptional', 'learned', 'needs-work'] as const;
+type ValidVote = typeof ALLOWED_VOTES[number];
+
 export function DispatchFeedback({ slug }: DispatchFeedbackProps) {
+  const cleanSlug = sanitizeSlug(slug);
   const [selectedVote, setSelectedVote] = useState<string | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
-    const savedVote = localStorage.getItem(`feedback-${slug}`);
-    if (savedVote) {
-      setSelectedVote(savedVote);
-      setHasVoted(true);
+    if (!cleanSlug) return;
+    try {
+      const savedVote = localStorage.getItem(`feedback-${cleanSlug}`);
+      if (savedVote && (ALLOWED_VOTES as readonly string[]).includes(savedVote)) {
+        setSelectedVote(savedVote);
+        setHasVoted(true);
+      }
+    } catch {
+      // ignore
     }
-  }, [slug]);
+  }, [cleanSlug]);
 
-  const handleVote = (vote: string) => {
+  const handleVote = (vote: ValidVote) => {
+    if (!cleanSlug) return;
     setSelectedVote(vote);
     setHasVoted(true);
-    localStorage.setItem(`feedback-${slug}`, vote);
+    try {
+      localStorage.setItem(`feedback-${cleanSlug}`, vote);
+    } catch {
+      // ignore
+    }
   };
+
 
   return (
     <div className="w-full bg-[var(--surface)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 text-center shadow-xs transition-all">

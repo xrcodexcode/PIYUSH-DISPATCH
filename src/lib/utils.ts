@@ -8,13 +8,15 @@ export function calculateReadingTime(content: string): number {
 }
 
 export function slugify(text: string): string {
-  return text
+  const clean = text
     .toString()
     .toLowerCase()
     .trim()
     .replace(/\s+/g, '-')
     .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-');
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return clean || 'section';
 }
 
 export function formatDate(date: string): string {
@@ -32,6 +34,7 @@ export function formatIssueBadge(nodeType: string | undefined, issueNumber: numb
 
 export function extractHeadings(content: string): Heading[] {
   const headings: Heading[] = [];
+  const seenIds = new Map<string, number>();
   const lines = content.split('\n');
   
   const codeBlockRegex = /^```/;
@@ -49,13 +52,18 @@ export function extractHeadings(content: string): Heading[] {
     if (match) {
       const level = match[1].length;
       const text = match[2].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_~`]/g, '').trim();
-      const id = slugify(text);
+      const baseId = slugify(text);
+      const count = seenIds.get(baseId) || 0;
+      const id = count === 0 ? baseId : `${baseId}-${count}`;
+      seenIds.set(baseId, count + 1);
+
       headings.push({ id, text, level });
     }
   }
 
   return headings;
 }
+
 
 export function generateExcerpt(content: string, maxLength: number = 150): string {
   // Remove markdown formatting

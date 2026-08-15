@@ -93,6 +93,7 @@ export function SubscribeDrawer() {
               <input
                 type="email"
                 required
+                maxLength={254}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your.email@domain.com"

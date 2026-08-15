@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useDeferredValue } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { IssueSummary } from '@/types';
 import { IssueCard } from './IssueCard';
+import SearchBar from './SearchBar';
 import { cn } from '@/lib/utils';
 
 interface SearchInterfaceProps {
   issues?: IssueSummary[];
   initialIssues?: IssueSummary[];
 }
-
-import SearchBar from './SearchBar';
 
 export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps) {
   const allIssuesList = useMemo(() => issues || initialIssues || [], [issues, initialIssues]);

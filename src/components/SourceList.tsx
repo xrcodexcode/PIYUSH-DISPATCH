@@ -1,4 +1,5 @@
 import React from 'react';
+import { isSafeUrl, sanitizeUrl } from '@/lib/security';
 
 interface Source {
   title: string;
@@ -13,7 +14,9 @@ interface SourceListProps {
 
 export function SourceList({ sources }: SourceListProps) {
   const substackSource = sources?.find(s => s.url && s.url.includes('substack.com'));
-  const substackUrl = substackSource ? substackSource.url : "https://xrcodex.substack.com";
+  const substackUrl = substackSource && isSafeUrl(substackSource.url) 
+    ? substackSource.url 
+    : "https://xrcodex.substack.com";
 
   // Ensure node-wiki is present
   const hasNodeWiki = sources?.some(s => s.title.toLowerCase().includes('node-wiki'));
@@ -57,15 +60,17 @@ export function SourceList({ sources }: SourceListProps) {
         {displaySources.map((source, index) => {
           const isSubstack = source.url && source.url.includes('substack.com');
           const isNodeWiki = source.title.toLowerCase().includes('node-wiki');
+          const safeUrl = sanitizeUrl(source.url, '/');
 
           return (
             <li key={index} className="pl-2">
               <a 
-                href={source.url} 
-                target={source.url.startsWith('http') ? "_blank" : "_self"}
-                rel={source.url.startsWith('http') ? "noopener noreferrer" : undefined}
+                href={safeUrl} 
+                target={safeUrl.startsWith('http') ? "_blank" : "_self"}
+                rel={safeUrl.startsWith('http') ? "noopener noreferrer" : undefined}
                 className="group inline-flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors"
               >
+
                 <span className={
                   isSubstack 
                     ? "font-semibold text-orange-500 group-hover:underline flex items-center gap-1.5" 

@@ -1,23 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { VALID_THEMES, ValidTheme, isValidTheme } from '@/lib/security';
 
-export type Theme = 
-  | 'light' 
-  | 'dark' 
-  | 'midnight' 
-  | 'forest' 
-  | 'nordic' 
-  | 'espresso' 
-  | 'crimson' 
-  | 'amoled-paper'
-  | 'amoled-obsidian'
-  | 'amoled-matcha'
-  | 'amoled-cyber'
-  | 'amoled-espresso'
-  | 'amoled-crimson'
-  | 'amoled-forest'
-  | 'amoled-nordic';
+export type Theme = ValidTheme;
 
 interface ThemeContextType {
   theme: Theme;
@@ -27,23 +13,6 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const VALID_THEMES: Theme[] = [
-  'light', 
-  'dark', 
-  'midnight', 
-  'forest', 
-  'nordic', 
-  'espresso', 
-  'crimson', 
-  'amoled-paper',
-  'amoled-obsidian',
-  'amoled-matcha',
-  'amoled-cyber',
-  'amoled-espresso',
-  'amoled-crimson',
-  'amoled-forest',
-  'amoled-nordic'
-];
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('light');
@@ -51,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     queueMicrotask(() => {
       const savedTheme = localStorage.getItem('theme') as Theme | null;
-      if (savedTheme && VALID_THEMES.includes(savedTheme)) {
+      if (savedTheme && isValidTheme(savedTheme)) {
         setThemeState(savedTheme);
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else {

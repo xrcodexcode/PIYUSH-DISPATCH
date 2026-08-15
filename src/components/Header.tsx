@@ -60,7 +60,8 @@ export function Header() {
             </Link>
             <Link href="/about" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">About</Link>
             
-            <div className="flex items-center space-x-4 ml-2 pl-4 border-l border-[var(--border-color)]">
+            <div className="flex items-center space-x-3 ml-2 pl-4 border-l border-[var(--border-color)]">
+              <ThemeToggle />
               <Link href="/search" aria-label="Search" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors p-2 rounded-full hover:bg-[var(--surface)]">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"></circle>

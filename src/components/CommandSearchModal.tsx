@@ -71,8 +71,9 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
           <input
             type="text"
             autoFocus
+            maxLength={200}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value.slice(0, 200))}
             placeholder="Search dispatches, topics, keywords (e.g., The Daily Nodes #001, RAG, Agents)..."
             className="w-full bg-transparent text-lg font-medium text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:outline-none"
           />

@@ -114,11 +114,13 @@ export async function importNewsletterIssues(options: IngestOptions) {
     };
 
     const newMdxContent = matter.stringify(body, normalizedData);
-    const targetPath = path.join(outputDir, `${slug}.mdx`);
+    const safeSlug = slugify(slug);
+    const targetPath = path.join(outputDir, `${safeSlug}.mdx`);
 
     fs.writeFileSync(targetPath, newMdxContent, 'utf8');
-    console.log(`Successfully imported: Issue #${issueNumber} -> ${slug}.mdx`);
+    console.log(`Successfully imported: Issue #${issueNumber} -> ${safeSlug}.mdx`);
     count++;
+
   }
 
   console.log(`\nImport complete! Processed ${count} issues into ${outputDir}`);

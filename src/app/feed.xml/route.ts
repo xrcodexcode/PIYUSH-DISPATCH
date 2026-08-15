@@ -55,6 +55,8 @@ export async function GET() {
     headers: {
       'Content-Type': 'application/rss+xml; charset=utf-8',
       'Cache-Control': 'public, max-age=0, s-maxage=3600',
+      'X-Content-Type-Options': 'nosniff',
     },
   });
 }
+

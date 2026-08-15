@@ -54,11 +54,13 @@ export function SearchBar({
             ref={inputRef}
             id="search-input"
             type="text"
+            maxLength={200}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value.slice(0, 200))}
             placeholder={placeholder}
             className="w-full bg-transparent py-2.5 pr-9 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:outline-none font-medium"
           />
+
 
           {/* Clear Button */}
           {value && (

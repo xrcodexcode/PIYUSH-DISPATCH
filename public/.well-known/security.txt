@@ -1,0 +1,6 @@
+Contact: mailto:xrpiyushh@gmail.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://dispatch.piyush.dev/.well-known/security.txt
+Policy: https://dispatch.piyush.dev/privacy
+Acknowledgments: https://github.com/xrcodexcode

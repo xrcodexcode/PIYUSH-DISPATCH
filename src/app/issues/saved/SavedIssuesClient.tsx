@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Issue } from '@/types';
 import IssueCard from '@/components/IssueCard';
 import Link from 'next/link';
+import { sanitizeSlug } from '@/lib/security';
 
 interface SavedIssuesClientProps {
   allIssues: Issue[];
@@ -16,8 +17,20 @@ export function SavedIssuesClient({ allIssues }: SavedIssuesClientProps) {
   useEffect(() => {
     const loadSaved = () => {
       try {
-        const saved = JSON.parse(localStorage.getItem('saved_dispatches') || '[]');
-        setSavedSlugs(saved);
+        const raw = localStorage.getItem('saved_dispatches');
+        if (!raw) {
+          setSavedSlugs([]);
+        } else {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            const clean = parsed
+              .map(sanitizeSlug)
+              .filter((s): s is string => Boolean(s) && s.length > 0);
+            setSavedSlugs(clean);
+          } else {
+            setSavedSlugs([]);
+          }
+        }
       } catch {
         setSavedSlugs([]);
       }
@@ -28,6 +41,7 @@ export function SavedIssuesClient({ allIssues }: SavedIssuesClientProps) {
     window.addEventListener('saved-dispatches-updated', loadSaved);
     return () => window.removeEventListener('saved-dispatches-updated', loadSaved);
   }, []);
+
 
   const savedIssues = allIssues.filter(issue => savedSlugs.includes(issue.slug));
 

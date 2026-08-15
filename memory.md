@@ -61,10 +61,35 @@ All UI components strictly use CSS custom variables (`var(--bg)`, `var(--text-pr
 
 ---
 
-## 4. Maintenance & Sync Scripts
+## 4. Enterprise Security Hardening ([`src/lib/security.ts`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/lib/security.ts))
+
+1. **HTTP Security Headers & CSP ([`next.config.ts`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/next.config.ts))**
+   - Content-Security-Policy (strict allowlists for scripts, styles, images, connect), Strict-Transport-Security (HSTS 2-year preload), X-Frame-Options (`DENY`), X-Content-Type-Options (`nosniff`), Referrer-Policy (`strict-origin-when-cross-origin`), Permissions-Policy (disabling camera, mic, geolocation, etc.), Cross-Origin-Opener-Policy (`same-origin-allow-popups`), and Cross-Origin-Resource-Policy.
+   - SVG image sandboxing (`dangerouslyAllowSVG: true`, `contentDispositionType: 'attachment'`, `contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"`).
+
+2. **API Defense & SSRF Protection ([`src/app/api/subscribe/route.ts`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/app/api/subscribe/route.ts))**
+   - Sliding-window in-memory rate limiter (5 requests / min per client IP) returning HTTP 429 with `Retry-After`.
+   - Max 10KB payload limit to prevent memory exhaustion attacks.
+   - SSRF validator blocking private RFC 1918 subnets, cloud metadata IPs (`169.254.169.254`), loopbacks, and non-HTTPS external webhooks.
+   - Honeypot bot traps silently mitigating automated spam.
+   - Strict RFC 5321/5322 email regex and control character stripping.
+
+3. **XSS Defense & Markdown Sanitization ([`src/components/MDXContent.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/MDXContent.tsx))**
+   - Scheme validation blocking `javascript:`, `vbscript:`, and unsafe data URIs.
+   - Automatic `rel="noopener noreferrer"` and `target="_blank"` on all external links.
+   - HTML post-sanitizer stripping dangerous elements (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<form>`, inline event handlers `on*`).
+
+4. **Client State & Vulnerability Reporting**
+   - Theme and bookmark localStorage validation with strict whitelist typeguards.
+   - Public vulnerability reporting standard deployed at `public/.well-known/security.txt` (RFC 9116).
+
+---
+
+## 5. Maintenance & Sync Scripts
 
 - `npm run dev`: Starts local development server on `http://localhost:3000`.
 - `npm run sync:substack`: Runs `scripts/sync-substack.js` to synchronize dispatches with `xrcodex.substack.com/feed`.
 - `node scripts/audit-links.js`: Verifies zero broken links or invalid `/assets/` image paths.
 - `npx tsc --noEmit`: Type checks entire codebase (0 errors required).
 - `npm run build`: Generates static production site (36 static pages in ~3s).
+

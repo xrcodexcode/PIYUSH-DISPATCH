@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
+import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { absoluteUrl, siteConfig } from '@/lib/site';
 
 const inter = Inter({
@@ -64,15 +65,14 @@ export const metadata: Metadata = {
 const themeInitScript = `
   (function() {
     try {
+      var validThemes = ['light','dark','midnight','forest','nordic','espresso','crimson','amoled-paper','amoled-obsidian','amoled-matcha','amoled-cyber','amoled-espresso','amoled-crimson','amoled-forest','amoled-nordic'];
       var saved = localStorage.getItem('theme');
       var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = saved || (prefersDark ? 'dark' : 'light');
+      var theme = (saved && validThemes.indexOf(saved) !== -1) ? saved : (prefersDark ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
     } catch (e) {}
   })();
 `;
-
-import ReadingProgressBar from '@/components/ReadingProgressBar';
 
 export default function RootLayout({
   children,
@@ -109,6 +109,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href={absoluteUrl('/feed.xml')} />
+        {/* Performance: preconnect to third-party origins used by the site */}
+        <link rel="preconnect" href="https://xrcodex.substack.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://substackcdn.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://xrcodex.substack.com" />
+        <link rel="dns-prefetch" href="https://substackcdn.com" />
+        {/* Performance: theme color for mobile browser chrome */}
+        <meta name="theme-color" content="#000000" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <JsonLd data={websiteJsonLd} />
         <JsonLd data={personJsonLd} />

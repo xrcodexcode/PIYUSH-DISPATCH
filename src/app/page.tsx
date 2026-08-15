@@ -5,9 +5,10 @@ import LatestIssue from '@/components/LatestIssue';
 import IssueCard from '@/components/IssueCard';
 import SubscribeForm from '@/components/SubscribeForm';
 
+export const dynamic = 'force-static';
+
 export default async function HomePage() {
-  const latestIssue = await getLatestIssue();
-  const allIssues = await getAllIssues();
+  const [latestIssue, allIssues] = await Promise.all([getLatestIssue(), getAllIssues()]);
   const recentIssues = allIssues.filter(i => i.id !== latestIssue?.id);
 
   return (
