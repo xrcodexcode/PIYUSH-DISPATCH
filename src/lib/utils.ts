@@ -28,7 +28,7 @@ export function formatDate(date: string): string {
 }
 
 export function formatIssueBadge(nodeType: string | undefined, issueNumber: number): string {
-  const seriesName = nodeType === 'deep-node' ? 'The Deep Node' : 'The Daily Nodes';
+  const seriesName = nodeType === 'deep-node' ? 'The Deep Nodes' : 'The Daily Nodes';
   return `${seriesName} #${String(issueNumber).padStart(3, '0')}`;
 }
 

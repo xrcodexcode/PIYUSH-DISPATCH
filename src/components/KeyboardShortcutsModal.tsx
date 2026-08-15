@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeProvider';
 
 export function KeyboardShortcutsModal() {
   const [isOpen, setIsOpen] = useState(false);
   const { cycleTheme } = useTheme();
+  const router = useRouter();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -23,7 +25,7 @@ export function KeyboardShortcutsModal() {
         cycleTheme();
       } else if (e.key === '/') {
         e.preventDefault();
-        window.location.href = '/search';
+        router.push('/search');
       } else if (e.key === 'Z' && e.shiftKey) {
         e.preventDefault();
         const isZenActive = document.body.classList.toggle('zen-mode');

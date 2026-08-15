@@ -91,5 +91,6 @@ All UI components strictly use CSS custom variables (`var(--bg)`, `var(--text-pr
 - `npm run sync:substack`: Runs `scripts/sync-substack.js` to synchronize dispatches with `xrcodex.substack.com/feed`.
 - `node scripts/audit-links.js`: Verifies zero broken links or invalid `/assets/` image paths.
 - `npx tsc --noEmit`: Type checks entire codebase (0 errors required).
-- `npm run build`: Generates static production site (36 static pages in ~3s).
+- `npm run build`: Generates static production site (41 static pages in ~3.9s).
+- **Scroll & Render Optimization**: `requestAnimationFrame` throttling applied to all scroll listeners ([`Header.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/Header.tsx), [`ReadingProgressBar.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/ReadingProgressBar.tsx), [`ArticleTOC.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/ArticleTOC.tsx), [`BackToTop.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/BackToTop.tsx), [`SubscribeDrawer.tsx`](file:///C:/Users/offic/OneDrive/Desktop/newsletter/src/components/SubscribeDrawer.tsx)), eliminating layout thrashing and scroll jank.
 

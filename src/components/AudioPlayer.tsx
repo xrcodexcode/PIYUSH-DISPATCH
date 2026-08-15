@@ -370,7 +370,7 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
         title="Click to seek position"
       >
         <div
-          className="h-full bg-gradient-to-r from-[var(--accent)] via-purple-500 to-amber-500 transition-all duration-200 ease-linear rounded-full relative"
+          className="h-full bg-[var(--accent)] transition-all duration-200 ease-linear rounded-full relative"
           style={{ width: `${audioProgress}%` }}
         />
       </div>

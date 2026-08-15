@@ -56,18 +56,26 @@ export function ArticleTOC({ headings }: ArticleTOCProps) {
 
   // Scroll Autohide Physics (active when NOT pinned)
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
       if (isPinned) return; // Never hide when pinned
 
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > 200 && currentScrollY > lastScrollY.current + 8) {
-        setIsScrollHidden(true);
-      } else if (currentScrollY < lastScrollY.current - 12 || currentScrollY < 150) {
-        setIsScrollHidden(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          if (currentScrollY > 200 && currentScrollY > lastScrollY.current + 8) {
+            setIsScrollHidden(true);
+          } else if (currentScrollY < lastScrollY.current - 12 || currentScrollY < 150) {
+            setIsScrollHidden(false);
+          }
+          
+          lastScrollY.current = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

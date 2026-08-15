@@ -6,18 +6,21 @@ export function ReadingProgressBar() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const updateProgress = () => {
-      const currentScroll = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-      const totalHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.offsetHeight
-      ) - window.innerHeight;
+    let ticking = false;
 
-      if (totalHeight > 0) {
-        const pct = Math.min(100, Math.max(0, (currentScroll / totalHeight) * 100));
-        setProgress(pct);
+    const updateProgress = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.scrollY || document.documentElement.scrollTop;
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+          if (totalHeight > 0) {
+            const pct = Math.min(100, Math.max(0, (currentScroll / totalHeight) * 100));
+            setProgress(pct);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

@@ -70,17 +70,23 @@ export async function getAllIssues(): Promise<Issue[]> {
     const lowerSlug = slug.toLowerCase().trim();
     const lowerId = id.toLowerCase().trim();
     const padNum = String(issueNum).padStart(3, '0');
+    const nodePrefix = issueObj.nodeType === 'deep-node' ? 'deep-nodes' : 'daily-nodes';
+    const altNodePrefix = issueObj.nodeType === 'deep-node' ? 'deep-node' : 'daily-node';
 
     slugMap.set(lowerSlug, issueObj);
     slugMap.set(lowerId, issueObj);
-    slugMap.set(`daily-nodes-${padNum}`.toLowerCase(), issueObj);
-    slugMap.set(`daily-nodes-${issueNum}`.toLowerCase(), issueObj);
-    slugMap.set(`the-daily-nodes-${padNum}`.toLowerCase(), issueObj);
-    slugMap.set(`the-daily-nodes-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`${nodePrefix}-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`${nodePrefix}-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-${nodePrefix}-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-${nodePrefix}-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`${altNodePrefix}-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`${altNodePrefix}-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-${altNodePrefix}-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`the-${altNodePrefix}-${issueNum}`.toLowerCase(), issueObj);
   }
 
-  // Pre-sort chronological order descending once
-  issues.sort((a, b) => b.issueNumber - a.issueNumber);
+  // Pre-sort chronological order descending once (by issueNumber, then by date as tiebreaker)
+  issues.sort((a, b) => b.issueNumber - a.issueNumber || new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Pre-compute summaries array once to avoid runtime Object.entries allocations
   const articleFields = new Set(['content', 'headings', 'sources', 'relatedIssues', 'published']);
