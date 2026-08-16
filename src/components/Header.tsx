@@ -43,8 +43,10 @@ export function Header() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex md:flex-wrap md:justify-end gap-3 lg:gap-4 items-center text-sm font-medium w-full md:w-auto">
+          <nav className="hidden md:flex md:flex-wrap md:justify-end gap-3 lg:gap-5 items-center text-sm font-medium w-full md:w-auto">
             <Link href="/issues" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">All Dispatches</Link>
+            <Link href="/issues?type=daily-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">Daily Nodes</Link>
+            <Link href="/issues?type=deep-node" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap">Deep Nodes</Link>
             <Link href="/issues/saved" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 whitespace-nowrap">
               <span>🔖</span> Saved Vault
             </Link>
@@ -102,6 +104,8 @@ export function Header() {
         <div className="md:hidden border-t border-[var(--border-color)] bg-[var(--bg)] px-6 py-6 shadow-xl">
           <div className="space-y-2">
             <Link href="/issues" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">All Dispatches</Link>
+            <Link href="/issues?type=daily-node" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">⚡ Daily Nodes</Link>
+            <Link href="/issues?type=deep-node" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">🧠 Deep Nodes</Link>
             <Link href="/issues/saved" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">🔖 Saved Vault</Link>
             <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">About</Link>
             <Link href="/search" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--surface)] rounded-xl">Search</Link>

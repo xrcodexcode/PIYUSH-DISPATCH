@@ -20,6 +20,18 @@ export function slugify(text: string): string {
 }
 
 export function formatDate(date: string): string {
+  if (!date) return '';
+  const cleanDate = date.split('T')[0];
+  const parts = cleanDate.split('-');
+  if (parts.length === 3) {
+    const [year, month, day] = parts.map(Number);
+    const d = new Date(year, month - 1, day);
+    return d.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
   return new Date(date).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
