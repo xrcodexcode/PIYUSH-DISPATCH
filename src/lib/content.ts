@@ -85,8 +85,8 @@ export async function getAllIssues(): Promise<Issue[]> {
     slugMap.set(`the-${altNodePrefix}-${issueNum}`.toLowerCase(), issueObj);
   }
 
-  // Pre-sort chronological order descending once (by issueNumber, then by date as tiebreaker)
-  issues.sort((a, b) => b.issueNumber - a.issueNumber || new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Pre-sort chronological order descending once (by date)
+  issues.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Pre-compute summaries array once to avoid runtime Object.entries allocations
   const articleFields = new Set(['content', 'headings', 'sources', 'relatedIssues', 'published']);
@@ -186,13 +186,23 @@ export async function getRelatedIssues(issue: Issue, limit: number = 3): Promise
   return result.slice(0, limit);
 }
 
-export async function getPreviousIssue(issueNumber: number): Promise<Issue | null> {
+export async function getPreviousIssue(issueNumber: number, nodeType?: string): Promise<Issue | null> {
   const issues = await getAllIssues();
+  if (nodeType) {
+    const typeIssues = issues.filter(i => (i.nodeType || 'daily-node') === nodeType);
+    const match = typeIssues.find(i => i.issueNumber < issueNumber);
+    if (match) return match;
+  }
   return issues.find(i => i.issueNumber < issueNumber) || null;
 }
 
-export async function getNextIssue(issueNumber: number): Promise<Issue | null> {
+export async function getNextIssue(issueNumber: number, nodeType?: string): Promise<Issue | null> {
   const issues = await getAllIssues();
+  if (nodeType) {
+    const typeIssues = issues.filter(i => (i.nodeType || 'daily-node') === nodeType);
+    const match = [...typeIssues].reverse().find(i => i.issueNumber > issueNumber);
+    if (match) return match;
+  }
   return [...issues].reverse().find(i => i.issueNumber > issueNumber) || null;
 }
 

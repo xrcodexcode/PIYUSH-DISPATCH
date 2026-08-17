@@ -12,6 +12,7 @@ export const VALID_THEMES = [
   'nordic',
   'espresso',
   'crimson',
+  'amoled-dark',
   'amoled-paper',
   'amoled-obsidian',
   'amoled-matcha',
@@ -40,8 +41,7 @@ export function isValidEmail(email: unknown): boolean {
   if (!trimmed || trimmed.length > 254) return false;
 
   // Disallow ASCII control characters (0-31 and 127)
-  // eslint-disable-next-line no-control-regex
-  if (/[\x00-\x1F\x7F]/.test(trimmed)) return false;
+    if (/[\x00-\x1F\x7F]/.test(trimmed)) return false;
 
   const parts = trimmed.split('@');
   if (parts.length !== 2) return false;
@@ -63,8 +63,7 @@ export function isValidEmail(email: unknown): boolean {
  * Sanitizes an email string by trimming, converting to lowercase, and stripping any control characters.
  */
 export function sanitizeEmail(email: string): string {
-  // eslint-disable-next-line no-control-regex
-  return email.trim().toLowerCase().replace(/[\x00-\x1F\x7F]/g, '').slice(0, 254);
+    return email.trim().toLowerCase().replace(/[\x00-\x1F\x7F]/g, '').slice(0, 254);
 }
 
 /**

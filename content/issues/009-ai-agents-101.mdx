@@ -1,0 +1,183 @@
+---
+issueNumber: 7
+date: '2026-08-10'
+title: AI Agents 101 — From Answering Questions to Taking Action
+subtitle: >-
+  Why the future of AI isn't just about better answers—it's about systems that
+  can reason, choose tools, and execute workflows.
+excerpt: >-
+  An introduction to agentic AI: how AI agents reason, use tools, iterate in
+  loops, and move from answering questions to pursuing goals.
+heroImage: "/assets/daily-node-7/hype_cycle_render.jpg"
+topics:
+  - AI
+  - Agentic AI
+  - AI Agents
+sources:
+  - title: Substack Dispatch
+    publisher: Substack (xrcodex)
+    date: '2026-08-10'
+    url: 'https://xrcodex.substack.com/p/daily-nodes007-ai-agents-101-from'
+  - title: Piyush's Dispatch Original
+    publisher: Piyush's Dispatch
+    date: '2026-08-10'
+    url: 'https://dispatch.piyush.dev'
+  - title: node-wiki (My Knowledge Base)
+    publisher: Infinity Brain Vault
+    date: '2026-08-10'
+    url: /about
+published: true
+nodeType: daily-node
+---
+
+# Issue #7: AI Agents 101 — From Answering Questions to Taking Action
+
+*Why the future of AI isn't just about better answers—it's about systems that can reason, choose tools, and execute workflows.*
+
+![AI Agents 101 Overview](/assets/daily-node-7/1.jpg)
+
+Imagine you tell an AI:
+
+> **“Research the latest AI agent frameworks, compare them, summarize the important differences, and give me a recommendation.”**
+
+A normal chatbot might explain **how you could do this**. An AI agent tries to **actually do it**.
+
+It could search the web, read documentation, compare information, write notes, notice that something is missing, search again, and finally produce a recommendation.
+
+That difference is the beginning of **agentic AI**.
+
+> **An AI agent isn't simply an LLM with a fancy prompt. It's a system that can reason about a goal, take actions, observe the results, and decide what to do next.**
+
+---
+
+## 1. What Is an AI Agent?
+
+An **AI agent** is a software system that uses an AI model to pursue a goal by making decisions, using tools, taking actions, and adapting based on what happens.
+
+![What Is an AI Agent?](/assets/daily-node-7/2.jpg)
+
+A simple way to remember it: **Goal → Reason → Act → Observe → Repeat**
+
+A traditional LLM interaction: `You → Prompt → LLM → Answer`
+
+An agentic loop: `Goal → Reason → Choose Action → Use Tool → Observe Result → Repeat → Complete Goal`
+
+The difference is **iteration**. The model isn't necessarily producing the final answer in one shot—it participates in a dynamic loop.
+
+---
+
+## 2. The Agent Loop
+
+If you understand one thing from this entire issue, understand this:
+
+> **The intelligence of an agent emerges from the loop.**
+
+![The Agentic Loop](/assets/daily-node-7/3.jpg)
+
+Consider a research task: *“Find three good resources for learning AI agents and summarize them.”*
+
+Suppose the agent searches for a resource and gets ten results. It examines them and realizes: *“These three don't adequately explain tool calling.”* So it searches again with refined queries.
+
+The second search produces better sources. The agent reads them, compares the information, and generates the final answer. That is fundamentally different from single-pass text generation.
+
+---
+
+## 3. But How Can an AI Actually “Act”?
+
+Here's where **tools** enter the picture.
+
+![Tool Calling & Function Execution](/assets/daily-node-7/4.jpg)
+
+An LLM by itself processes information and generates text. **Tools give it a way to interact with the outside world.**
+
+An agent can access:
+- 🔎 Web search & documentation scrapers
+- 🧮 Calculators & code execution engines
+- 🗄️ Databases & Vector indexes
+- 📧 Email, calendar & workflow APIs
+- 📁 File systems & desktop automation
+
+When you ask an agent to calculate your monthly expenses, the model decides: *“I need to invoke the database tool.”* The tool executes, returns real transaction data, and the model processes the final result. This is **tool calling / function calling**.
+
+---
+
+## 4. The Anatomy of an AI Agent
+
+Let me look under the hood:
+
+![Anatomy of an AI Agent](/assets/daily-node-7/5.jpg)
+
+### 🧠 Brain (The Model)
+Usually an LLM. It interprets tasks, reasons about possible actions, chooses tools, and generates output. **LLM ≠ Agent**; the LLM is the reasoning engine inside a larger system.
+
+### 🧠 Memory
+Allows the agent to retain useful context across steps (short-term window) or across sessions (long-term database/RAG).
+
+### 🛠️ Tools
+Connect the agent to external systems. Without tools, an agent can only reason; with tools, it can **interact**.
+
+### 🔄 Loop & Environment
+The loop determines what happens next (*Search → Read → Calculate → Retry → Finish*). The environment includes APIs, databases, files, and users.
+
+---
+
+## 5. Let's Build One in Our Head
+
+Imagine building a **Research Agent** with the goal: *“Research AI agents and write a beginner summary.”*
+
+![Research Agent Workflow](/assets/daily-node-7/6.jpg)
+
+The agent doesn't follow a rigid, predetermined path. The next action depends dynamically on what it discovers during search and observation steps.
+
+---
+
+## 6. Agent vs Chatbot vs Workflow
+
+These three concepts are often mixed together:
+
+![Agent vs Chatbot vs Workflow](/assets/daily-node-7/7.jpg)
+
+| System | Primary Behavior | Control Flow |
+| :--- | :--- | :--- |
+| **Chatbot** | Responds to user prompts | Single turn answer generation |
+| **Workflow** | Executes pre-planned code | Deterministic steps designed beforehand |
+| **Agent** | Pursues non-deterministic goals | Dynamically chooses next step based on observation |
+
+> **A workflow follows the path you designed. An agent decides which path to take.**
+
+---
+
+## 7. Where Agents Break
+
+Autonomy comes with engineering trade-offs:
+
+![Where AI Agents Break & Guardrails](/assets/daily-node-7/8.jpg)
+
+An agent can hallucinate, select incorrect tools, enter infinite loops, run up API costs, or take incorrect actions with real-world consequences.
+
+> **More autonomy does not automatically mean more intelligence.** Good agent engineering is knowing when *not* to give the agent control.
+
+---
+
+## 8. The Bigger Picture & Key Takeaways
+
+The AI landscape is evolving from simple text generation to autonomous systems:
+
+1. **LLM**: Generates text from input prompts.
+2. **LLM + Tools**: Interacts with external software and databases.
+3. **LLM + Tools + Memory**: Retains context across sessions.
+4. **Agentic Loop**: Iteratively reasons, acts, and observes.
+5. **AI Agent**: Dynamically pursues complex goals.
+6. **Multi-Agent Systems**: Multiple specialized agents collaborate.
+
+> **A chatbot gives you an answer. An agent works toward an outcome.**
+
+---
+
+### NEXT ISSUE
+**The Agent Loop 101** — A deep dive into Planning, Tool Calling, Feedback, and Retry Mechanisms.
+
+**— Piyush's Dispatch**
+
+
+— Piyush's Dispatch

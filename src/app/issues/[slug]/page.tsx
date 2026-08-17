@@ -25,15 +25,13 @@ import AudioPlayer from '@/components/AudioPlayer';
 import SubscribeDrawer from '@/components/SubscribeDrawer';
 import ZenReadingControls from '@/components/ZenReadingControls';
 import BackToTop from '@/components/BackToTop';
-import ReaderCustomizer from '@/components/ReaderCustomizer';
 import PrintButton from '@/components/PrintButton';
-import SeriesTrackCard from '@/components/SeriesTrackCard';
 import QuoteShareTooltip from '@/components/QuoteShareTooltip';
 import ReadTracker from '@/components/ReadTracker';
-import IssueReactions from '@/components/IssueReactions';
-import BacklinksGraph from '@/components/BacklinksGraph';
 import IssueComments from '@/components/IssueComments';
 import ReadingRuler from '@/components/ReadingRuler';
+import SeriesTrackCard from '@/components/SeriesTrackCard';
+import IssueReactions from '@/components/IssueReactions';
 
 interface Props {
   params: Promise<{
@@ -89,11 +87,10 @@ export default async function IssuePage({ params }: Props) {
     notFound();
   }
 
-  const [allIssues, related, prev, next] = await Promise.all([
-    getAllIssues(),
+  const [related, prev, next] = await Promise.all([
     getRelatedIssues(issue, 3),
-    getPreviousIssue(issue.issueNumber),
-    getNextIssue(issue.issueNumber),
+    getPreviousIssue(issue.issueNumber, issue.nodeType),
+    getNextIssue(issue.issueNumber, issue.nodeType),
   ]);
 
   const articleUrl = absoluteUrl(`/issues/${issue.slug}`);
@@ -173,7 +170,6 @@ export default async function IssuePage({ params }: Props) {
             <span aria-hidden="true">&larr;</span> Back to Archive
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
-            <ReaderCustomizer />
             <PrintButton />
             <BookmarkButton slug={issue.slug} />
             <ZenReadingControls />
@@ -181,7 +177,7 @@ export default async function IssuePage({ params }: Props) {
         </div>
 
         {/* Article Header */}
-        <header className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 text-center mb-12">
+        <header className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 text-center mb-12">
           <div className="flex items-center justify-center gap-3 text-xs font-mono font-semibold text-[var(--accent)] mb-6 tracking-wider uppercase">
             <span>{formatIssueBadge(issue.nodeType, issue.issueNumber)}</span>
             <span className="w-1 h-1 rounded-full bg-current" />
@@ -214,7 +210,7 @@ export default async function IssuePage({ params }: Props) {
         </header>
 
         {/* Hero Visual */}
-        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-12 hero-image-wrapper">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 mb-12 hero-image-wrapper">
           {issue.heroImage ? (
             <div className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-lg border border-[var(--border-color)] aspect-[21/9] bg-[var(--surface)]">
               <OptimizedImage
@@ -232,11 +228,11 @@ export default async function IssuePage({ params }: Props) {
           )}
         </div>
 
-        {/* Perfectly Centered Main Reading Layout */}
-        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col lg:flex-row gap-8 lg:gap-12 relative justify-between items-start">
+        {/* Main Article & Reading Container */}
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16 items-start justify-center relative">
           
           {/* Left Sidebar - Permanently Sticky Table of Contents & Share Actions */}
-          <aside className="hidden lg:block lg:w-72 flex-shrink-0 order-1 sticky top-24 h-fit self-start space-y-6 non-reading-ui z-40">
+          <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0 sticky top-24 h-fit self-start space-y-6 non-reading-ui z-30">
             <ArticleTOC headings={issue.headings} />
             <div className="p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] shadow-xs">
               <ShareActions title={issue.title} substackUrl={substackPostUrl} />
@@ -244,7 +240,7 @@ export default async function IssuePage({ params }: Props) {
           </aside>
 
           {/* Core Reading Column (Fluid Typography & Customizer Responsive) */}
-          <div className="reading-column-container flex-1 max-w-[760px] mx-auto order-1 lg:order-2 w-full transition-all duration-200">
+          <div className="reading-column-container flex-1 w-full mx-auto transition-all duration-200 min-w-0">
             {/* Audio Player Bar */}
             <div className="mb-10 non-reading-ui">
               <AudioPlayer title={issue.title} textToRead={issue.content} readingTimeMinutes={issue.readingTime} />
@@ -256,25 +252,12 @@ export default async function IssuePage({ params }: Props) {
               <ShareActions title={issue.title} substackUrl={substackPostUrl} />
             </div>
 
-            {/* Curated Multi-Part Series Track Card (if part of a series) */}
-            <SeriesTrackCard issueSlug={issue.slug} />
-
             <div className="prose prose-lg max-w-none">
               <MDXContent content={issue.content} />
             </div>
 
-            {/* 5-Dimension Reader Reaction Matrix */}
-            <div className="mt-14 non-reading-ui">
-              <IssueReactions slug={issue.slug} />
-            </div>
-
-            {/* Knowledge Graph & Backlinks Explorer */}
-            <div className="non-reading-ui">
-              <BacklinksGraph currentIssue={issue} allIssues={allIssues} />
-            </div>
-
             {/* Community Comments Thread & Substack Discussion Bridge */}
-            <div className="non-reading-ui">
+            <div className="non-reading-ui mt-14">
               <IssueComments slug={issue.slug} issueTitle={issue.title} substackUrl={substackPostUrl} />
             </div>
 
@@ -297,8 +280,8 @@ export default async function IssuePage({ params }: Props) {
             </div>
           </div>
 
-          {/* Right Balancing Column (Equal width lg:w-72 for 100% perfect center alignment) */}
-          <div className="hidden lg:block lg:w-72 flex-shrink-0 order-3 pointer-events-none aria-hidden non-reading-ui" />
+          {/* Right Balancing Column (Equal width to left sidebar for perfect center alignment) */}
+          <div className="hidden lg:block w-64 xl:w-72 flex-shrink-0 order-3 pointer-events-none aria-hidden non-reading-ui" />
 
         </div>
 
@@ -325,6 +308,9 @@ export default async function IssuePage({ params }: Props) {
               <SubscribeForm variant="inline" />
             </div>
           </div>
+
+          {/* Symmetrical Balancing Spacer on 2XL screens */}
+          <div className="hidden 2xl:block w-72 flex-shrink-0 pointer-events-none" aria-hidden="true" />
         </div>
       </article>
 

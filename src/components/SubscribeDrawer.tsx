@@ -10,10 +10,10 @@ export function SubscribeDrawer() {
   const substackBaseUrl = 'https://xrcodex.substack.com/subscribe';
   const dismissedRef = useRef(false);
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = useCallback(function scrollListener() {
     if (!dismissedRef.current && window.scrollY > 400) {
       setIsVisible(true);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', scrollListener);
     }
   }, []);
 

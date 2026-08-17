@@ -19,6 +19,7 @@ export function ThemeToggle() {
   }, []);
 
   const amoledThemes: { id: Theme; label: string; icon: string }[] = [
+    { id: 'amoled-dark', label: 'AMOLED Dark', icon: '🌑⬛' },
     { id: 'amoled-paper', label: 'AMOLED Paper', icon: '📜⬛' },
     { id: 'amoled-obsidian', label: 'AMOLED Obsidian', icon: '⬛' },
     { id: 'amoled-matcha', label: 'AMOLED Matcha', icon: '🍵⬛' },
@@ -61,9 +62,9 @@ export function ThemeToggle() {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] shadow-2xl z-50 p-2 space-y-1 backdrop-blur-md">
           <div className="max-h-80 overflow-y-auto pr-1">
-            {/* 8 AMOLED Pure Black Themes */}
+            {/* 9 AMOLED Pure Black Themes */}
             <div className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-1 text-[var(--accent)] font-bold">
-              AMOLED Pure Black (#000) (8)
+              AMOLED Pure Black (#000) (9)
             </div>
             {amoledThemes.map((t) => (
               <button

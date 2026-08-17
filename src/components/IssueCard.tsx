@@ -25,6 +25,7 @@ export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
         const readList = JSON.parse(raw);
         if (Array.isArray(readList)) {
           const cleanSlug = sanitizeSlug(issue.slug);
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setIsRead(readList.includes(cleanSlug));
         }
       }

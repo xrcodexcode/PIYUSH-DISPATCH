@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Issue, IssueSummary } from '@/types';
 import { buildIssueGraph } from '@/lib/graph';
-import { formatIssueBadge, cn } from '@/lib/utils';
+import { formatIssueBadge } from '@/lib/utils';
 
 interface BacklinksGraphProps {
   currentIssue: Issue | IssueSummary;

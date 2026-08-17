@@ -47,7 +47,10 @@ export function SeriesTrackCard({ issueSlug }: SeriesTrackCardProps) {
       </p>
 
       {/* Progress Steps Visualizer */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-[var(--border-color)]">
+      <div 
+        className="grid gap-2.5 pt-2 border-t border-[var(--border-color)]"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}
+      >
         {series.issueSlugs.map((slug, idx) => {
           const isCurrent = idx === currentIndex;
           const isPast = idx < currentIndex;

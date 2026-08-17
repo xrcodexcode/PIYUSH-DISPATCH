@@ -36,9 +36,9 @@ Every dispatch includes a dedicated **Sources & Provenance** section (`SourceLis
 2. **`node-wiki (My Knowledge Base)`** (Infinity Brain Vault link to `/about`)
 3. Primary technical references and papers.
 
-### E. Theme Discipline (15 Themes)
+### E. Theme Discipline (16 Themes)
 All UI components strictly use CSS custom variables (`var(--bg)`, `var(--text-primary)`, `var(--accent)`, `var(--border-color)`, `var(--surface)`).
-- **8 AMOLED Pure Black (`#000000`) Themes**: `amoled-paper`, `amoled-obsidian`, `amoled-matcha`, `amoled-cyber`, `amoled-espresso`, `amoled-crimson`, `amoled-forest`, `amoled-nordic`
+- **9 AMOLED Pure Black (`#000000`) Themes**: `amoled-dark`, `amoled-paper`, `amoled-obsidian`, `amoled-matcha`, `amoled-cyber`, `amoled-espresso`, `amoled-crimson`, `amoled-forest`, `amoled-nordic`
 - **7 Editorial Themes**: `light`, `dark`, `midnight`, `forest`, `nordic`, `espresso`, `crimson`
 
 ---

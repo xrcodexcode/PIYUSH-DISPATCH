@@ -9,7 +9,8 @@
 @custom-variant espresso (&:where([data-theme=espresso], [data-theme=espresso] *));
 @custom-variant crimson (&:where([data-theme=crimson], [data-theme=crimson] *));
 
-/* 8 AMOLED Pure Black (#000000) Variants */
+/* 9 AMOLED Pure Black (#000000) Variants */
+@custom-variant amoled-dark (&:where([data-theme=amoled-dark], [data-theme=amoled-dark] *));
 @custom-variant amoled-obsidian (&:where([data-theme=amoled-obsidian], [data-theme=amoled-obsidian] *));
 @custom-variant amoled-paper (&:where([data-theme=amoled-paper], [data-theme=amoled-paper] *));
 @custom-variant amoled-matcha (&:where([data-theme=amoled-matcha], [data-theme=amoled-matcha] *));
@@ -107,10 +108,20 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. 8 AMOLED PURE BLACK (#000000) THEMES
+   2. 9 AMOLED PURE BLACK (#000000) THEMES
    ───────────────────────────────────────────────────────────── */
 
-/* 8. AMOLED Paper (Pure Black #000000 + Warm Amber Parchment) */
+/* 8. AMOLED Dark (Pure Black #000000 + Golden Amber Classic) */
+:root[data-theme='amoled-dark'] {
+  --bg: #000000;
+  --text-primary: #E8E6E1;
+  --text-secondary: #8A8A8A;
+  --border-color: #222222;
+  --accent: #D97706;
+  --surface: #0D0D0D;
+}
+
+/* 9. AMOLED Paper (Pure Black #000000 + Warm Amber Parchment) */
 :root[data-theme='amoled-paper'] {
   --bg: #000000;
   --text-primary: #F3E5D8;
@@ -562,64 +573,6 @@ body.zen-mode .non-reading-ui {
 
 body.zen-mode article {
   padding-top: 1.5rem !important;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   6. READER TYPOGRAPHY CUSTOMIZER OVERRIDES
-   ───────────────────────────────────────────────────────────── */
-:root[data-reader-font="serif"] .prose,
-body[data-reader-font="serif"] .prose {
-  font-family: var(--font-serif) !important;
-}
-
-:root[data-reader-font="sans"] .prose,
-body[data-reader-font="sans"] .prose {
-  font-family: var(--font-sans) !important;
-}
-
-:root[data-reader-font="mono"] .prose,
-body[data-reader-font="mono"] .prose {
-  font-family: var(--font-mono) !important;
-  font-size: 1rem !important;
-}
-
-:root[data-reader-size="compact"] .prose,
-body[data-reader-size="compact"] .prose {
-  font-size: 1rem !important;
-  line-height: 1.65 !important;
-}
-
-:root[data-reader-size="default"] .prose,
-body[data-reader-size="default"] .prose {
-  font-size: 1.125rem !important;
-  line-height: 1.75 !important;
-}
-
-:root[data-reader-size="large"] .prose,
-body[data-reader-size="large"] .prose {
-  font-size: 1.25rem !important;
-  line-height: 1.85 !important;
-}
-
-:root[data-reader-size="xlarge"] .prose,
-body[data-reader-size="xlarge"] .prose {
-  font-size: 1.375rem !important;
-  line-height: 1.95 !important;
-}
-
-:root[data-reader-width="compact"] .reading-column-container,
-body[data-reader-width="compact"] .reading-column-container {
-  max-width: 680px !important;
-}
-
-:root[data-reader-width="default"] .reading-column-container,
-body[data-reader-width="default"] .reading-column-container {
-  max-width: 760px !important;
-}
-
-:root[data-reader-width="wide"] .reading-column-container,
-body[data-reader-width="wide"] .reading-column-container {
-  max-width: 880px !important;
 }
 
 /* ─────────────────────────────────────────────────────────────

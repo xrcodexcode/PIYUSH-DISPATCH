@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { getGlossaryTerm } from '@/lib/glossary';
-import { cn } from '@/lib/utils';
 
 interface GlossaryTooltipProps {
   termKey: string;

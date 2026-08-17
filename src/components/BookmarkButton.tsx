@@ -31,8 +31,13 @@ export function BookmarkButton({ slug, className, compact = false }: BookmarkBut
 
   useEffect(() => {
     if (!cleanSlug) return;
-    const saved = getSafeSavedBookmarks();
-    setIsBookmarked(saved.includes(cleanSlug));
+    const updateState = () => {
+      const saved = getSafeSavedBookmarks();
+      setIsBookmarked(saved.includes(cleanSlug));
+    };
+    updateState();
+    window.addEventListener('saved-dispatches-updated', updateState);
+    return () => window.removeEventListener('saved-dispatches-updated', updateState);
   }, [cleanSlug]);
 
   const toggleBookmark = (e: React.MouseEvent) => {

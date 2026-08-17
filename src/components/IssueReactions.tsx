@@ -44,9 +44,11 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.userSelected && Array.isArray(parsed.userSelected)) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setUserReactions(new Set(parsed.userSelected));
         }
         if (parsed.counts) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setCounts(parsed.counts);
         }
       }

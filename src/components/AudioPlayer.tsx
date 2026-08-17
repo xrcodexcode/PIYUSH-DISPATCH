@@ -69,6 +69,7 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
   // Load browser system voices
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSupported(true);
 
       const loadVoices = () => {
@@ -81,6 +82,7 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
       loadVoices();
       window.speechSynthesis.onvoiceschanged = loadVoices;
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSupported(false);
     }
 

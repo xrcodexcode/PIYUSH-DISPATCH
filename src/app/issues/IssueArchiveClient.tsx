@@ -13,7 +13,6 @@ interface IssueArchiveClientProps {
 }
 
 type SortOption = 'newest' | 'oldest' | 'shortest' | 'longest';
-type ReadFilterOption = 'all' | 'unread' | 'read';
 
 export default function IssueArchiveClient({ initialIssues }: IssueArchiveClientProps) {
   const searchParams = useSearchParams();
@@ -23,31 +22,9 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [selectedNodeType, setSelectedNodeType] = useState<'daily-node' | 'deep-node' | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>('newest');
-  const [readFilter, setReadFilter] = useState<ReadFilterOption>('all');
-  const [readSlugs, setReadSlugs] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(12);
 
-  // Load read status list
-  useEffect(() => {
-    const loadReadList = () => {
-      try {
-        const raw = localStorage.getItem('read_dispatches');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            setReadSlugs(parsed.map(sanitizeSlug).filter(Boolean));
-          }
-        }
-      } catch {
-        // safe fallback
-      }
-    };
-
-    loadReadList();
-    window.addEventListener('read-dispatches-updated', loadReadList);
-    return () => window.removeEventListener('read-dispatches-updated', loadReadList);
-  }, []);
-
+  
   useEffect(() => {
     if (typeParam === 'daily-node' || typeParam === 'deep-node') {
       setSelectedNodeType(typeParam);
@@ -82,13 +59,6 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
       filtered = filtered.filter(issue => issue.topics.includes(selectedTopic));
     }
 
-    // 3. Read status filter
-    if (readFilter === 'read') {
-      filtered = filtered.filter(issue => readSlugs.includes(sanitizeSlug(issue.slug)));
-    } else if (readFilter === 'unread') {
-      filtered = filtered.filter(issue => !readSlugs.includes(sanitizeSlug(issue.slug)));
-    }
-
     // 4. Search query filter
     if (deferredSearchQuery.trim()) {
       const q = deferredSearchQuery.toLowerCase();
@@ -119,10 +89,10 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
     // 5. Sort engine
     filtered.sort((a, b) => {
       if (sortOption === 'newest') {
-        return b.issueNumber - a.issueNumber || new Date(b.date).getTime() - new Date(a.date).getTime();
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
       }
       if (sortOption === 'oldest') {
-        return a.issueNumber - b.issueNumber || new Date(a.date).getTime() - new Date(b.date).getTime();
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
       }
       if (sortOption === 'shortest') {
         return a.readingTime - b.readingTime;
@@ -134,7 +104,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
     });
     
     return filtered;
-  }, [initialIssues, deferredSearchQuery, selectedTopic, selectedNodeType, readFilter, readSlugs, sortOption]);
+  }, [initialIssues, deferredSearchQuery, selectedTopic, selectedNodeType, sortOption]);
 
   const visibleIssues = filteredIssues.slice(0, visibleCount);
   const hasMore = visibleCount < filteredIssues.length;
@@ -150,31 +120,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
         />
 
         {/* Filter Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border-color)] text-xs font-mono">
-          {/* Read Status Tabs */}
-          <div className="flex items-center gap-1 bg-[var(--bg)] p-1 rounded-xl border border-[var(--border-color)]">
-            {(
-              [
-                { id: 'all', label: 'All Dispatches' },
-                { id: 'unread', label: 'Unread' },
-                { id: 'read', label: 'Completed' },
-              ] as const
-            ).map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setReadFilter(tab.id)}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer",
-                  readFilter === tab.id
-                    ? "bg-[var(--accent)] text-white shadow-2xs"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
+        <div className="flex flex-wrap items-center justify-end gap-3 pt-3 border-t border-[var(--border-color)] text-xs font-mono">
           {/* Sort Dropdown */}
           <div className="flex items-center gap-2">
             <span className="text-[var(--text-secondary)] font-medium">Sort:</span>
@@ -246,7 +192,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
             We couldn&apos;t find any issues matching your search filters. Try clearing your filters or search terms.
           </p>
           <button
-            onClick={() => { setSearchQuery(''); setSelectedTopic(null); setReadFilter('all'); }}
+            onClick={() => { setSearchQuery(''); setSelectedTopic(null); }}
             className="px-5 py-2.5 rounded-full bg-[var(--accent)] text-white text-xs font-semibold hover:opacity-90 transition-opacity"
           >
             Clear all search filters

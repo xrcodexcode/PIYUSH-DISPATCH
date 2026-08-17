@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -84,7 +85,10 @@ export function Footer() {
         
         <div className="border-t border-[var(--border-color)] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[var(--text-secondary)]">
           <p>&copy; {currentYear} Piyush&apos;s Dispatch. All rights reserved.</p>
-          <p className="font-mono italic">Built with curiosity &amp; senior web standards.</p>
+          <div className="flex items-center gap-4">
+            <KeyboardShortcutsModal />
+            <p className="font-mono italic">Built with curiosity &amp; senior web standards.</p>
+          </div>
         </div>
       </div>
     </footer>

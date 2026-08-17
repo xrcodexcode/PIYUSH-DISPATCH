@@ -150,7 +150,7 @@ export function QuoteShareTooltip({ issueSlug, issueTitle }: QuoteShareTooltipPr
         left: `${position.left}px`,
         transform: 'translateX(-50%)',
       }}
-      className="fixed z-[1000] flex items-center gap-1.5 p-1 rounded-full bg-[var(--surface)] border border-[var(--border-color)] shadow-2xl backdrop-blur-md animate-fadeIn transition-all"
+      className="absolute z-[1000] flex items-center gap-1.5 p-1 rounded-full bg-[var(--surface)] border border-[var(--border-color)] shadow-2xl backdrop-blur-md animate-fadeIn transition-all"
     >
       {/* 1. Share on X */}
       <button

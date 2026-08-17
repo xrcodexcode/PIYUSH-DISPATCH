@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import Link from 'next/link';
 import { IssueSummary } from '@/types';
-import { formatDate, formatIssueBadge, cn } from '@/lib/utils';
+import { formatDate, formatIssueBadge } from '@/lib/utils';
 
 interface CommandSearchModalProps {
   isOpen: boolean;

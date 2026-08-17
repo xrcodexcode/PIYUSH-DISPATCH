@@ -1,5 +1,6 @@
 import React from 'react';
 import { marked } from 'marked';
+import sanitizeHtml from 'sanitize-html';
 import { slugify } from '@/lib/utils';
 import { isSafeUrl, sanitizeUrl, escapeHtml } from '@/lib/security';
 
@@ -10,20 +11,26 @@ interface MDXContentProps {
 const renderer = new marked.Renderer();
 const renderedContentCache = new Map<string, string>();
 
+const headingCounters = new Map<string, number>();
+
 // Custom heading renderer for TOC anchor scrolling
 renderer.heading = function({ tokens, depth }) {
   const text = this.parser.parseInline(tokens);
   const rawText = tokens.map(t => t.raw || '').join('');
-  const id = slugify(rawText || text);
+  const cleanText = (rawText || text).replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_~`]/g, '').trim();
+  const baseId = slugify(cleanText);
+  const count = headingCounters.get(baseId) || 0;
+  const id = count === 0 ? baseId : `${baseId}-${count}`;
+  headingCounters.set(baseId, count + 1);
 
   if (depth === 2) {
-    return `<h2 id="${id}" class="scroll-mt-28 border-b border-[var(--border-color)] pb-2 font-serif text-2xl md:text-3xl font-bold mt-10 mb-4 text-[var(--text-primary)]">${text}</h2>`;
+    return `<h2 id="${id}" class="scroll-mt-28 border-b border-[var(--border-color)] pb-2 text-2xl md:text-3xl font-bold mt-10 mb-4 text-[var(--text-primary)]">${text}</h2>`;
   }
   if (depth === 3) {
-    return `<h3 id="${id}" class="scroll-mt-28 font-serif text-xl md:text-2xl font-bold mt-8 mb-3 text-[var(--text-primary)]">${text}</h3>`;
+    return `<h3 id="${id}" class="scroll-mt-28 text-xl md:text-2xl font-bold mt-8 mb-3 text-[var(--text-primary)]">${text}</h3>`;
   }
   if (depth === 1) {
-    return `<h1 id="${id}" class="font-serif text-3xl md:text-5xl font-bold mt-8 mb-4 text-[var(--text-primary)]">${text}</h1>`;
+    return `<h1 id="${id}" class="text-3xl md:text-5xl font-bold mt-8 mb-4 text-[var(--text-primary)]">${text}</h1>`;
   }
   return `<h${depth} id="${id}">${text}</h${depth}>`;
 };
@@ -87,26 +94,28 @@ renderer.image = function({ href, title, text }) {
 
 marked.use({ renderer, gfm: true, breaks: false });
 
-/**
- * Sanitizes rendered HTML by removing forbidden elements (<script>, <iframe>, <style>, etc.)
- * and removing inline event handlers (onerror=, onload=, onclick=, etc.).
- */
 function sanitizeHtmlOutput(html: string): string {
-  return html
-    // Strip forbidden tag blocks
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    .replace(/<embed\b[^>]*>/gi, '')
-    .replace(/<applet\b[^<]*(?:(?!<\/applet>)<[^<]*)*<\/applet>/gi, '')
-    .replace(/<base\b[^>]*>/gi, '')
-    .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
-    // Strip inline event handlers (on* attributes)
-    .replace(/\s+on[a-zA-Z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    // Strip javascript: in any remaining attribute
-    .replace(/href\s*=\s*["']\s*javascript:[^"']*["']/gi, 'href=""')
-    .replace(/src\s*=\s*["']\s*javascript:[^"']*["']/gi, 'src=""');
+  return sanitizeHtml(html, {
+    allowedTags: [
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+      'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+      'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'iframe',
+      'img', 'figure', 'figcaption', 'span'
+    ],
+    allowedAttributes: {
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'width', 'height', 'loading', 'decoding', 'style', 'class'],
+      iframe: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen'],
+      '*': ['class', 'id', 'style']
+    },
+    allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com', 'xrcodex.substack.com'],
+    allowIframeRelativeUrls: false,
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: {
+      img: ['http', 'https', 'data']
+    },
+    allowProtocolRelative: false,
+  });
 }
 
 const MAX_CACHE_SIZE = 100;
@@ -115,6 +124,7 @@ export function MDXContent({ content }: MDXContentProps) {
   const source = content || '';
   let htmlContent = renderedContentCache.get(source);
   if (htmlContent === undefined) {
+    headingCounters.clear();
     const rawParsed = marked.parse(source) as string;
     htmlContent = sanitizeHtmlOutput(rawParsed);
     if (renderedContentCache.size >= MAX_CACHE_SIZE) {

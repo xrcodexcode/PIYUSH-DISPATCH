@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { absoluteUrl, siteConfig } from '@/lib/site';
+import { GlobalSearch } from '@/components/GlobalSearch';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,7 +19,7 @@ const inter = Inter({
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-playfair',
   display: 'swap',
   preload: true,
@@ -26,7 +27,7 @@ const playfair = Playfair_Display({
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['400', '700'],
   variable: '--font-jetbrains',
   display: 'swap',
   preload: true,
@@ -65,12 +66,12 @@ export const metadata: Metadata = {
 const themeInitScript = `
   (function() {
     try {
-      var validThemes = ['light','dark','midnight','forest','nordic','espresso','crimson','amoled-paper','amoled-obsidian','amoled-matcha','amoled-cyber','amoled-espresso','amoled-crimson','amoled-forest','amoled-nordic'];
+      var validThemes = ['light','dark','midnight','forest','nordic','espresso','crimson','amoled-dark','amoled-paper','amoled-obsidian','amoled-matcha','amoled-cyber','amoled-espresso','amoled-crimson','amoled-forest','amoled-nordic'];
       var saved = localStorage.getItem('theme');
       var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       var theme = (saved && validThemes.indexOf(saved) !== -1) ? saved : (prefersDark ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
-    } catch (e) {}
+} catch (e) {}
   })();
 `;
 
@@ -106,7 +107,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href={absoluteUrl('/feed.xml')} />
         {/* Performance: preconnect to third-party origins used by the site */}
@@ -131,6 +132,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <GlobalSearch />
         </ThemeProvider>
       </body>
     </html>

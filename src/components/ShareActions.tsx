@@ -32,7 +32,7 @@ export function ShareActions({
   url, 
   substackUrl,
   className,
-  variant = 'horizontal'
+  
 }: ShareActionsProps) {
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
@@ -41,14 +41,22 @@ export function ShareActions({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const activeUrl = url || window.location.href;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentUrl(activeUrl);
       
       const rawSlug = activeUrl.split('/issues/')[1]?.split('?')[0]?.split('#')[0] || '';
       const slug = sanitizeSlug(rawSlug);
-      if (slug) {
-        const saved = getSafeSavedBookmarks();
-        setBookmarked(saved.includes(slug));
-      }
+      
+      const updateBookmarkState = () => {
+        if (slug) {
+          const saved = getSafeSavedBookmarks();
+          setBookmarked(saved.includes(slug));
+        }
+      };
+
+      updateBookmarkState();
+      window.addEventListener('saved-dispatches-updated', updateBookmarkState);
+      return () => window.removeEventListener('saved-dispatches-updated', updateBookmarkState);
     }
   }, [url]);
 

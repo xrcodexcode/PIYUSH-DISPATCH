@@ -10,13 +10,14 @@ export const SERIES_TRACKS: SeriesTrack[] = [
   {
     id: 'agentic-ai-engineering',
     title: 'The Agentic AI Engineering Series',
-    badge: '4-Part Masterclass',
-    description: 'From self-correcting execution loops and graph workflows to full agentic reasoning and long-term neural memory.',
+    badge: '5-Part Masterclass',
+    description: 'From self-correcting execution loops and graph workflows to autonomous cron agents and long-term neural memory.',
     issueSlugs: [
       '030-loop-engineering-what-makes-ai-agents-improve-themselves',
       '031-graph-engineering-beyond-single-ai-loops',
       '032-ai-agents-101',
       '033-agent-memory',
+      '034-cron-jobs-how-to-make-ai-agents-work-while-you-sleep',
     ],
   },
   {
@@ -38,9 +39,7 @@ export const SERIES_TRACKS: SeriesTrack[] = [
     description: 'Designing an AI that doesn’t just answer questions, but builds a lifelong, editable model of your work.',
     issueSlugs: [
       'the-personal-ai',
-      '001-the-personal-ai',
       'agent-skills-and-hooks',
-      '002-agent-skills-and-hooks',
     ],
   },
 ];

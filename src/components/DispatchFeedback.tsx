@@ -21,6 +21,7 @@ export function DispatchFeedback({ slug }: DispatchFeedbackProps) {
     try {
       const savedVote = localStorage.getItem(`feedback-${cleanSlug}`);
       if (savedVote && (ALLOWED_VOTES as readonly string[]).includes(savedVote)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedVote(savedVote);
         setHasVoted(true);
       }

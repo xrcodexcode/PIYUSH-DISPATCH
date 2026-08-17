@@ -35,7 +35,11 @@ export function SubscribeForm({ variant = 'inline' }: SubscribeFormProps) {
       // Open Substack in new tab and redirect current window
       window.open(substackUrl, '_blank', 'noopener,noreferrer');
       setTimeout(() => {
-        window.location.href = substackUrl;
+        
+        
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      window.location.href = substackUrl;
       }, 1000);
     } catch {
       window.location.href = substackUrl;

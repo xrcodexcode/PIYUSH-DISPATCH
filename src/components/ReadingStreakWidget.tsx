@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 export function ReadingStreakWidget() {
   const [streakCount, setStreakCount] = useState(1);
   const [activeDays, setActiveDays] = useState<boolean[]>([false, false, false, false, false, true, true]);
+  const [dayLabels, setDayLabels] = useState<string[]>(['M', 'T', 'W', 'T', 'F', 'S', 'S']);
 
   useEffect(() => {
     try {
@@ -34,23 +35,27 @@ export function ReadingStreakWidget() {
         }
       }
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStreakCount(Math.max(1, streak));
 
-      // Calculate past 7 days activity
+      // Calculate past 7 days activity with accurate rolling day labels
       const days = [];
+      const labels = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date(today);
         d.setDate(today.getDate() - i);
         const dStr = d.toISOString().split('T')[0];
         days.push(dates.includes(dStr));
+        labels.push(d.toLocaleDateString('en-US', { weekday: 'narrow' }));
       }
       setActiveDays(days);
+      setDayLabels(labels);
     } catch {
       // safe fallback
     }
   }, []);
 
-  const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  
 
   return (
     <div className="p-4 md:p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
