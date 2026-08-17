@@ -14,24 +14,12 @@ interface SearchInterfaceProps {
 export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps) {
   const allIssuesList = useMemo(() => issues || initialIssues || [], [issues, initialIssues]);
   const [query, setQuery] = useState('');
-  const [activeTopic, setActiveTopic] = useState<string | null>(null);
   const [activeNodeType, setActiveNodeType] = useState<'daily-node' | 'deep-node' | null>(null);
 
   const deferredQuery = useDeferredValue(query);
 
-  const allTopics = useMemo(() => {
-    const topicsSet = new Set<string>();
-    allIssuesList.forEach(issue => {
-      issue.topics.forEach(topic => topicsSet.add(topic));
-    });
-    return Array.from(topicsSet).sort();
-  }, [allIssuesList]);
-
   const filteredIssues = useMemo(() => {
     let filtered = allIssuesList;
-    if (activeTopic) {
-      filtered = filtered.filter(issue => issue.topics.includes(activeTopic));
-    }
     if (activeNodeType) {
       filtered = filtered.filter(issue => (issue.nodeType || 'daily-node') === activeNodeType);
     }
@@ -55,9 +43,9 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
       });
     }
     return filtered;
-  }, [allIssuesList, deferredQuery, activeTopic, activeNodeType]);
+  }, [allIssuesList, deferredQuery, activeNodeType]);
 
-  const hasActiveFilters = !!query || !!activeTopic || !!activeNodeType;
+  const hasActiveFilters = !!query || !!activeNodeType;
 
   return (
     <div className="max-w-5xl mx-auto w-full">
@@ -71,66 +59,32 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
         />
       </div>
 
-      {/* Node Type Tabs + Topic Filters */}
-      <div className="flex flex-col gap-4 mb-8">
-        {/* Node Type Tabs */}
-        <div className="flex items-center gap-1.5 bg-[var(--bg)] p-1 rounded-xl border border-[var(--border-color)] w-fit">
-          {[
-            { id: null, label: 'All' },
-            { id: 'daily-node' as const, label: '⚡ Daily Nodes' },
-            { id: 'deep-node' as const, label: '🧠 Deep Nodes' },
-          ].map((tab) => (
-            <button
-              key={tab.label}
-              onClick={() => setActiveNodeType(tab.id)}
-              className={cn(
-                "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer",
-                activeNodeType === tab.id
-                  ? "bg-[var(--accent)] text-white shadow-2xs"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Topic Pills */}
-        {allTopics.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <button
-              onClick={() => setActiveTopic(null)}
-              className={cn(
-                "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
-                activeTopic === null
-                  ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
-                  : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)]"
-              )}
-            >
-              All Topics
-            </button>
-            {allTopics.map((topic) => (
-              <button
-                key={topic}
-                onClick={() => setActiveTopic(activeTopic === topic ? null : topic)}
-                className={cn(
-                  "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
-                  activeTopic === topic
-                    ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
-                    : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
-                )}
-              >
-                #{topic}
-              </button>
-            ))}
-          </div>
-        )}
+      {/* Node Type Tabs */}
+      <div className="flex items-center gap-1.5 bg-[var(--bg)] p-1 rounded-xl border border-[var(--border-color)] w-fit mb-8">
+        {[
+          { id: null, label: 'All' },
+          { id: 'daily-node' as const, label: '⚡ Daily Nodes' },
+          { id: 'deep-node' as const, label: '🧠 Deep Nodes' },
+        ].map((tab) => (
+          <button
+            key={tab.label}
+            onClick={() => setActiveNodeType(tab.id)}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer",
+              activeNodeType === tab.id
+                ? "bg-[var(--accent)] text-white shadow-2xs"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            )}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Results Summary */}
       <div className="mb-6 pb-3 border-b border-[var(--border-color)] flex justify-between items-end">
         <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)]">
-          {query ? `Results for "${query}"` : activeTopic ? `#${activeTopic}` : 'All Dispatches'}
+          {query ? `Results for "${query}"` : 'All Dispatches'}
         </h2>
         <span className="text-sm font-mono text-[var(--text-secondary)]">
           {filteredIssues.length} {filteredIssues.length === 1 ? 'dispatch' : 'dispatches'}
@@ -155,7 +109,7 @@ export function SearchInterface({ issues, initialIssues }: SearchInterfaceProps)
             </p>
             {hasActiveFilters && (
               <button
-                onClick={() => { setQuery(''); setActiveTopic(null); setActiveNodeType(null); }}
+                onClick={() => { setQuery(''); setActiveNodeType(null); }}
                 className="px-5 py-2.5 bg-[var(--accent)] text-white text-xs font-semibold rounded-full hover:opacity-90 transition-opacity"
               >
                 Clear all filters

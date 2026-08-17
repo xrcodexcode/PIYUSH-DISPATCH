@@ -105,17 +105,6 @@ export function IssueCard({ issue, variant = 'default' }: IssueCardProps) {
         <p className="text-xs md:text-sm text-[var(--text-secondary)] mb-5 leading-relaxed line-clamp-2">
           {issue.excerpt}
         </p>
-
-        {/* Topic Tags */}
-        {issue.topics && issue.topics.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
-            {issue.topics.slice(0, 3).map((topic, i) => (
-              <span key={i} className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[var(--bg)] border border-[var(--border-color)] text-[var(--text-secondary)] uppercase tracking-wider">
-                #{topic}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Card Footer Link */}

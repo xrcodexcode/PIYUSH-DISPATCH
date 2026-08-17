@@ -19,12 +19,10 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
   const typeParam = searchParams.get('type') || searchParams.get('format');
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [selectedNodeType, setSelectedNodeType] = useState<'daily-node' | 'deep-node' | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>('newest');
   const [visibleCount, setVisibleCount] = useState(12);
 
-  
   useEffect(() => {
     if (typeParam === 'daily-node' || typeParam === 'deep-node') {
       setSelectedNodeType(typeParam);
@@ -36,15 +34,6 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
   // Defer search filtering for instant typing
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
-  // Extract unique topics from issues
-  const allTopics = useMemo(() => {
-    const topics = new Set<string>();
-    initialIssues.forEach(issue => {
-      issue.topics.forEach(topic => topics.add(topic));
-    });
-    return Array.from(topics).sort();
-  }, [initialIssues]);
-
   // Filter & Sort Engine
   const filteredIssues = useMemo(() => {
     let filtered = [...initialIssues];
@@ -54,12 +43,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
       filtered = filtered.filter(issue => (issue.nodeType || 'daily-node') === selectedNodeType);
     }
 
-    // 2. Topic filter
-    if (selectedTopic) {
-      filtered = filtered.filter(issue => issue.topics.includes(selectedTopic));
-    }
-
-    // 4. Search query filter
+    // 2. Search query filter
     if (deferredSearchQuery.trim()) {
       const q = deferredSearchQuery.toLowerCase();
       filtered = filtered.filter(issue => {
@@ -86,7 +70,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
       });
     }
 
-    // 5. Sort engine
+    // 3. Sort engine
     filtered.sort((a, b) => {
       if (sortOption === 'newest') {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -104,7 +88,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
     });
     
     return filtered;
-  }, [initialIssues, deferredSearchQuery, selectedTopic, selectedNodeType, sortOption]);
+  }, [initialIssues, deferredSearchQuery, selectedNodeType, sortOption]);
 
   const visibleIssues = filteredIssues.slice(0, visibleCount);
   const hasMore = visibleCount < filteredIssues.length;
@@ -116,7 +100,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="Search dispatches, topics, keywords..."
+          placeholder="Search dispatches, keywords..."
         />
 
         {/* Filter Controls Row */}
@@ -136,41 +120,12 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
             </select>
           </div>
         </div>
-
-        {/* Topic Tag Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2">
-          <button
-            onClick={() => setSelectedTopic(null)}
-            className={cn(
-              "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
-              selectedTopic === null
-                ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
-                : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)]"
-            )}
-          >
-            All Topics
-          </button>
-          {allTopics.slice(0, 8).map((topic) => (
-            <button
-              key={topic}
-              onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
-              className={cn(
-                "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all cursor-pointer border",
-                selectedTopic === topic
-                  ? "bg-[var(--accent)] text-white border-[var(--accent)] font-bold shadow-2xs"
-                  : "bg-[var(--bg)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
-              )}
-            >
-              #{topic}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Results Header */}
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border-color)]">
         <h2 className="font-serif text-2xl font-bold text-[var(--text-primary)]">
-          {searchQuery ? `Results for "${searchQuery}"` : selectedTopic ? `#${selectedTopic} Dispatches` : 'Vault Archive'}
+          {searchQuery ? `Results for "${searchQuery}"` : 'Vault Archive'}
         </h2>
         <span className="text-xs font-mono text-[var(--text-secondary)]">
           {filteredIssues.length} {filteredIssues.length === 1 ? 'dispatch' : 'dispatches'}
@@ -192,7 +147,7 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
             We couldn&apos;t find any issues matching your search filters. Try clearing your filters or search terms.
           </p>
           <button
-            onClick={() => { setSearchQuery(''); setSelectedTopic(null); }}
+            onClick={() => { setSearchQuery(''); }}
             className="px-5 py-2.5 rounded-full bg-[var(--accent)] text-white text-xs font-semibold hover:opacity-90 transition-opacity"
           >
             Clear all search filters

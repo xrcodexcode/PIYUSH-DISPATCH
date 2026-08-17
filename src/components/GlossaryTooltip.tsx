@@ -68,7 +68,7 @@ export function GlossaryTooltip({ termKey, children }: GlossaryTooltipProps) {
               href={`/topics/${termData.relatedTopic}`}
               className="text-[10px] font-mono font-bold text-[var(--accent)] hover:underline inline-flex items-center gap-1"
             >
-              <span>Explore #{termData.relatedTopic}</span>
+              <span>Explore {termData.relatedTopic}</span>
               <span>&rarr;</span>
             </Link>
             <span className="text-[9px] font-mono text-[var(--text-secondary)]">
