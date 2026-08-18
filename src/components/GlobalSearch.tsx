@@ -1,6 +1,7 @@
 import React from 'react';
 import { getAllIssues } from '@/lib/content';
 import { CommandSearchClient } from './CommandSearchClient';
+import { IssueSummary } from '@/types';
 
 export async function GlobalSearch() {
   const issues = await getAllIssues();
@@ -16,7 +17,7 @@ export async function GlobalSearch() {
     tags: issue.tags,
     issueNumber: issue.issueNumber,
     nodeType: issue.nodeType,
-  }));
+  })) as unknown as IssueSummary[];
 
-  return <CommandSearchClient issues={summaries as any} />;
+  return <CommandSearchClient issues={summaries} />;
 }

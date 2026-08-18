@@ -300,9 +300,9 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. FULLSCREEN ZEN READING MODE (100% FULL SCREEN & HERO PHOTO)
+   4. FULLSCREEN ZEN READING MODE (OPTIMAL CENTERED EDITORIAL FOCUS)
    ───────────────────────────────────────────────────────────── */
-body.zen-mode header,
+body.zen-mode .site-header,
 body.zen-mode footer,
 body.zen-mode aside,
 body.zen-mode .non-reading-ui {
@@ -310,66 +310,93 @@ body.zen-mode .non-reading-ui {
 }
 
 body.zen-mode {
-  padding-top: 1rem !important;
-  padding-bottom: 4rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 6rem !important;
   overflow-x: hidden !important;
 }
 
 body.zen-mode article {
   max-width: 100% !important;
   width: 100% !important;
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  padding-top: 1rem !important;
 }
 
 @media (min-width: 768px) {
   body.zen-mode article {
-    padding-left: 4rem !important;
-    padding-right: 4rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
   }
 }
 
-@media (min-width: 1280px) {
-  body.zen-mode article {
-    padding-left: 6rem !important;
-    padding-right: 6rem !important;
-  }
-}
-
-body.zen-mode .max-w-\[760px\],
-body.zen-mode .max-w-\[680px\],
-body.zen-mode .max-w-5xl,
-body.zen-mode .max-w-3xl,
-body.zen-mode .max-w-\[1440px\] {
-  max-width: 100% !important;
+/* Article Header in Zen Mode: Centered, clean reading measure */
+body.zen-mode article > header {
+  max-width: 780px !important;
   width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 2.5rem !important;
 }
 
-/* Full Screen Hero Upper Photo Overrides */
-body.zen-mode .hero-image-wrapper,
+/* Hero Image in Zen Mode: Centered with comfortable aspect */
+body.zen-mode .hero-image-wrapper {
+  max-width: 860px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 3rem !important;
+}
+
 body.zen-mode .hero-image-wrapper > div {
   max-width: 100% !important;
   width: 100% !important;
-  border-radius: 1.5rem !important;
+  border-radius: 1.25rem !important;
 }
 
 body.zen-mode .hero-image-wrapper img {
-  max-height: 75vh !important;
+  max-height: 55vh !important;
   width: 100% !important;
   object-fit: cover !important;
 }
 
-body.zen-mode .prose {
-  font-size: 1.3rem !important;
-  line-height: 1.95 !important;
-  max-width: 100% !important;
+/* Core Reading Column and Prose: Strict centered measure (760px) preventing end-to-end stretching on laptop */
+body.zen-mode .reading-column-container {
+  max-width: 760px !important;
   width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  flex: none !important;
+}
+
+body.zen-mode .prose {
+  max-width: 760px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  font-size: 1.25rem !important;
+  line-height: 1.95 !important;
+  letter-spacing: -0.011em !important;
 }
 
 body.zen-mode .prose img,
 body.zen-mode .prose figure {
   max-width: 100% !important;
   width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.zen-mode #sources {
+  max-width: 760px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .zen-exit-floating-btn {
@@ -564,16 +591,7 @@ body.zen-mode .zen-exit-floating-btn {
   margin: 2rem 0;
 }
 
-/* Zen Focus / Fullscreen Mode Styles */
-body.zen-mode header,
-body.zen-mode footer,
-body.zen-mode .non-reading-ui {
-  display: none !important;
-}
 
-body.zen-mode article {
-  padding-top: 1.5rem !important;
-}
 
 /* ─────────────────────────────────────────────────────────────
    7. CLEAN EDITORIAL PRINT & PDF STYLES

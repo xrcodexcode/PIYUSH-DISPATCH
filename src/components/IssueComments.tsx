@@ -39,7 +39,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Seed default author discussion prompt if empty
-  const getDefaultComments = (): CommentItem[] => [
+  const getDefaultComments = React.useCallback((): CommentItem[] => [
     {
       id: `author-prompt-${cleanSlug}`,
       author: 'Piyush (Author)',
@@ -49,7 +49,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
       date: new Date(Date.now() - 86400000).toISOString(),
       likes: 5,
     },
-  ];
+  ], [cleanSlug, issueTitle]);
 
   useEffect(() => {
     try {
@@ -61,7 +61,6 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
           // eslint-disable-next-line react-hooks/set-state-in-effect
           setComments(parsed);
         } else {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setComments(getDefaultComments());
         }
       } else {
@@ -78,7 +77,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
     } catch {
       setComments(getDefaultComments());
     }
-  }, [cleanSlug, issueTitle]);
+  }, [cleanSlug, issueTitle, getDefaultComments]);
 
   const handleLike = (id: string) => {
     const nextLiked = new Set(likedComments);

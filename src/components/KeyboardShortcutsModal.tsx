@@ -39,7 +39,7 @@ export function KeyboardShortcutsModal() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [cycleTheme]);
+  }, [cycleTheme, router]);
 
   if (!isOpen) return (
     <button

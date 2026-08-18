@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
 import { sanitizeSlug } from '@/lib/security';
 
 interface DispatchFeedbackProps {
@@ -13,7 +12,7 @@ type ValidVote = typeof ALLOWED_VOTES[number];
 
 export function DispatchFeedback({ slug }: DispatchFeedbackProps) {
   const cleanSlug = sanitizeSlug(slug);
-  const [selectedVote, setSelectedVote] = useState<string | null>(null);
+  const [, setSelectedVote] = useState<string | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {

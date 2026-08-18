@@ -84,8 +84,7 @@ renderer.image = function({ href, title, text }) {
         decoding="async"
         width="1376"
         height="768"
-        style="aspect-ratio: 16 / 9;"
-        class="rounded-2xl border border-[var(--border-color)] shadow-lg w-full max-w-4xl mx-auto object-cover bg-[var(--surface)] transition-transform duration-300 hover:scale-[1.01]" 
+        class="aspect-video rounded-2xl border border-[var(--border-color)] shadow-lg w-full max-w-4xl mx-auto object-cover bg-[var(--surface)] transition-transform duration-300 hover:scale-[1.01]" 
       />
       ${caption ? `<figcaption class="mt-2.5 text-center text-xs font-mono text-[var(--text-secondary)] italic">${safeCaption}</figcaption>` : ''}
     </figure>
@@ -104,9 +103,9 @@ function sanitizeHtmlOutput(html: string): string {
     ],
     allowedAttributes: {
       a: ['href', 'name', 'target', 'rel'],
-      img: ['src', 'alt', 'width', 'height', 'loading', 'decoding', 'style', 'class'],
+      img: ['src', 'alt', 'width', 'height', 'loading', 'decoding', 'class'],
       iframe: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen'],
-      '*': ['class', 'id', 'style']
+      '*': ['class', 'id']
     },
     allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com', 'xrcodex.substack.com'],
     allowIframeRelativeUrls: false,

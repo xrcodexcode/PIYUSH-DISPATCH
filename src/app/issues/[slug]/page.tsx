@@ -30,8 +30,6 @@ import QuoteShareTooltip from '@/components/QuoteShareTooltip';
 import ReadTracker from '@/components/ReadTracker';
 import IssueComments from '@/components/IssueComments';
 import ReadingRuler from '@/components/ReadingRuler';
-import SeriesTrackCard from '@/components/SeriesTrackCard';
-import IssueReactions from '@/components/IssueReactions';
 
 interface Props {
   params: Promise<{
@@ -275,7 +273,7 @@ export default async function IssuePage({ params }: Props) {
             </div>
 
             {/* Sources & Substack Original Provenance */}
-            <div id="sources" className="mt-12 pt-8 border-t border-[var(--border-color)] scroll-mt-28">
+            <div className="scroll-mt-28">
               <SourceList sources={issue.sources || []} />
             </div>
           </div>

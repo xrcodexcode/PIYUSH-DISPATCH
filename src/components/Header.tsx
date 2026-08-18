@@ -30,7 +30,7 @@ export function Header() {
 
   return (
     <header className={cn(
-      "sticky top-0 z-50 w-full transition-all duration-300 border-b border-transparent bg-[var(--bg)] text-[var(--text-primary)] relative",
+      "site-header sticky top-0 z-50 w-full transition-all duration-300 border-b border-transparent bg-[var(--bg)] text-[var(--text-primary)] relative",
       isScrolled && "border-[var(--border-color)] shadow-xs bg-[var(--bg)]/95 backdrop-blur-md"
     )}>
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">

@@ -48,7 +48,6 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
           setUserReactions(new Set(parsed.userSelected));
         }
         if (parsed.counts) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setCounts(parsed.counts);
         }
       }

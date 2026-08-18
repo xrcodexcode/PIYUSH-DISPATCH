@@ -40,6 +40,7 @@ export const SERIES_TRACKS: SeriesTrack[] = [
     issueSlugs: [
       'the-personal-ai',
       'agent-skills-and-hooks',
+      'how-ai-agents-actually-work',
     ],
   },
 ];

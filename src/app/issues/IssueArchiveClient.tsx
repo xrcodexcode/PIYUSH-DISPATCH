@@ -5,9 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { IssueSummary } from '@/types';
 import IssueCard from '@/components/IssueCard';
 import SearchBar from '@/components/SearchBar';
-import { cn } from '@/lib/utils';
-import { sanitizeSlug } from '@/lib/security';
-
 interface IssueArchiveClientProps {
   initialIssues: IssueSummary[];
 }
@@ -25,8 +22,10 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
 
   useEffect(() => {
     if (typeParam === 'daily-node' || typeParam === 'deep-node') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedNodeType(typeParam);
     } else if (!typeParam) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedNodeType(null);
     }
   }, [typeParam]);

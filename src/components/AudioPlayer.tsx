@@ -82,7 +82,6 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
       loadVoices();
       window.speechSynthesis.onvoiceschanged = loadVoices;
     } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSupported(false);
     }
 
