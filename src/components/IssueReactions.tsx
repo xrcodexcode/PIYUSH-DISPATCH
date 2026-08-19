@@ -46,7 +46,7 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object') {
           if (Array.isArray(parsed.userSelected)) {
-            const validSelected = parsed.userSelected.filter((r): r is ReactionType => ALLOWED_REACTIONS.includes(r));
+            const validSelected = parsed.userSelected.filter((r: unknown): r is ReactionType => typeof r === 'string' && ALLOWED_REACTIONS.includes(r as ReactionType));
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setUserReactions(new Set(validSelected));
           }
