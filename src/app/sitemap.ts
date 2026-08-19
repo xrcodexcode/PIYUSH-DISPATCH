@@ -21,12 +21,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '/' ? 1 : 0.7,
   }));
 
-  const issueRoutes: MetadataRoute.Sitemap = issues.map((issue) => ({
-    url: absoluteUrl(`/issues/${issue.slug}`),
-    lastModified: new Date(issue.date),
-    changeFrequency: 'monthly',
-    priority: 0.8,
-  }));
+  const issueRoutes: MetadataRoute.Sitemap = issues.map((issue) => {
+    const parsedDate = new Date(issue.date);
+    const lastModified = isNaN(parsedDate.getTime()) ? now : parsedDate;
+    return {
+      url: absoluteUrl(`/issues/${issue.slug}`),
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    };
+  });
 
   const topicRoutes: MetadataRoute.Sitemap = topics.map((topic) => ({
     url: absoluteUrl(`/topics/${topic.slug}`),

@@ -208,21 +208,21 @@ export default async function IssuePage({ params }: Props) {
         </header>
 
         {/* Hero Visual */}
-        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 mb-12 hero-image-wrapper">
+        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-10 hero-image-wrapper">
           {issue.heroImage ? (
-            <div className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-lg border border-[var(--border-color)] aspect-[21/9] bg-[var(--surface)]">
+            <div className="relative w-full max-w-4xl mx-auto rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-[var(--border-color)] aspect-video">
               <OptimizedImage
                 src={issue.heroImage} 
                 alt={issue.title} 
                 fill
-                sizes="(max-width: 1024px) 100vw, 960px"
+                sizes="(max-width: 1024px) 100vw, 1200px"
                 priority
-                className="object-cover bg-[var(--surface)]"
+                className="object-cover w-full h-full"
                 fallback={<div className="absolute inset-0 bg-gradient-to-tr from-[var(--surface)] to-[var(--bg)]" />}
               />
             </div>
           ) : (
-            <div className="max-w-5xl mx-auto rounded-3xl aspect-[21/9] bg-gradient-to-tr from-[var(--surface)] to-[var(--bg)] border border-[var(--border-color)] flex items-center justify-center p-8 text-center" />
+            <div className="max-w-4xl mx-auto rounded-2xl aspect-video bg-gradient-to-tr from-[var(--surface)] to-[var(--bg)] border border-[var(--border-color)] flex items-center justify-center p-8 text-center" />
           )}
         </div>
 

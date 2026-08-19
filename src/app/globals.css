@@ -658,3 +658,14 @@ body.zen-mode .zen-exit-floating-btn {
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   4K CINEMATIC IMAGE RENDERING & ULTRA-SHARP CLARITY
+   ───────────────────────────────────────────────────────────── */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+

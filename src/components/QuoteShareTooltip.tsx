@@ -119,13 +119,21 @@ export function QuoteShareTooltip({ issueSlug, issueTitle }: QuoteShareTooltipPr
 
     try {
       const raw = localStorage.getItem('saved_highlights');
-      const existing: SavedHighlight[] = raw ? JSON.parse(raw) : [];
+      let existing: SavedHighlight[] = [];
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          existing = parsed.filter((h): h is SavedHighlight => 
+            Boolean(h && typeof h === 'object' && typeof h.id === 'string' && typeof h.text === 'string')
+          );
+        }
+      }
       
       const newHighlight: SavedHighlight = {
         id: `${cleanSlug}-${Date.now()}`,
         issueSlug: cleanSlug,
-        issueTitle,
-        text: selectedText,
+        issueTitle: sanitizeSlug(issueTitle) ? issueTitle.slice(0, 120) : 'Dispatch Note',
+        text: selectedText.slice(0, 500),
         date: new Date().toISOString(),
       };
 
@@ -136,7 +144,7 @@ export function QuoteShareTooltip({ issueSlug, issueTitle }: QuoteShareTooltipPr
       setHighlightSaved(true);
       setTimeout(() => setHighlightSaved(false), 2000);
     } catch {
-      // safe no-op
+      // safe fallback on storage quota or parsing errors
     }
   };
 

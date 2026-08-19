@@ -1,18 +1,21 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      // Next.js dev/hydration + Google Fonts inline styles; production only needs 'self'
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // Next.js hydration requires 'unsafe-inline' for pre-rendered inline scripts; 'unsafe-eval' is restricted to development
+      isProd 
+        ? "script-src 'self' 'unsafe-inline'"
+        : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https://xrcodex.substack.com https://*.substackcdn.com https://substackcdn.com https://*.substack.com https://*.githubusercontent.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://xrcodex.substack.com https://*.substack.com https://*.substackcdn.com",
       "media-src 'self' blob: data:",
-      // Substack subscribe redirects open in popup; allow it
       "frame-src 'self' https://xrcodex.substack.com",
       "frame-ancestors 'none'",
       "form-action 'self' https://xrcodex.substack.com https://*.substack.com",
@@ -27,7 +30,7 @@ const securityHeaders = [
   },
   {
     key: 'X-Frame-Options',
-    value: 'SAMEORIGIN',
+    value: 'DENY',
   },
   {
     key: 'X-Content-Type-Options',
@@ -39,14 +42,13 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=(), interest-cohort=(), payment=(), usb=(), display-capture=(), battery=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), serial=()',
+    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=(), interest-cohort=(), payment=(), usb=(), display-capture=(), battery=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), serial=(), attribution-reporting=(), run-ad-auction=(), compute-pressure=(), join-ad-interest-group=(), private-state-token-issuance=(), private-state-token-redemption=()',
   },
   {
     key: 'Cross-Origin-Opener-Policy',
     value: 'same-origin-allow-popups',
   },
   {
-    // Default to cross-origin so external images (Substack CDN) can be loaded
     key: 'Cross-Origin-Resource-Policy',
     value: 'cross-origin',
   },

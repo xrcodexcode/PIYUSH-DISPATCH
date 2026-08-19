@@ -53,7 +53,7 @@ renderer.link = function({ href, title, tokens }) {
   return `<a href="${escapeHtml(safeHref)}"${titleAttr}${externalAttrs} class="text-[var(--accent)] hover:underline font-medium">${text}</a>`;
 };
 
-// Custom image renderer with reliable path normalization and smooth fade-in styling
+// Custom image renderer with seamless edge-to-edge styling (no side bezels or black borders)
 renderer.image = function({ href, title, text }) {
   let cleanSrc = href || '';
   
@@ -82,11 +82,15 @@ renderer.image = function({ href, title, text }) {
         alt="${safeCaption}" 
         loading="lazy" 
         decoding="async"
-        width="1376"
-        height="768"
-        class="aspect-video rounded-2xl border border-[var(--border-color)] shadow-lg w-full max-w-4xl mx-auto object-cover bg-[var(--surface)] transition-transform duration-300 hover:scale-[1.01]" 
+        width="1920"
+        height="1080"
+        class="w-full h-auto rounded-2xl shadow-xl border border-[var(--border-color)] object-cover block mx-auto transition-transform duration-300 hover:scale-[1.008]" 
       />
-      ${caption ? `<figcaption class="mt-2.5 text-center text-xs font-mono text-[var(--text-secondary)] italic">${safeCaption}</figcaption>` : ''}
+      ${caption ? `
+        <figcaption class="mt-3 text-center text-xs font-mono text-[var(--text-secondary)] italic">
+          ${safeCaption}
+        </figcaption>
+      ` : ''}
     </figure>
   `;
 };
@@ -102,16 +106,33 @@ function sanitizeHtmlOutput(html: string): string {
       'img', 'figure', 'figcaption', 'span'
     ],
     allowedAttributes: {
-      a: ['href', 'name', 'target', 'rel'],
+      a: ['href', 'name', 'target', 'rel', 'title'],
       img: ['src', 'alt', 'width', 'height', 'loading', 'decoding', 'class'],
       iframe: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen'],
       '*': ['class', 'id']
+    },
+    transformTags: {
+      a: (tagName, attribs) => {
+        const href = (attribs.href || '').trim();
+        const isExternal = href.startsWith('http://') || href.startsWith('https://');
+        if (isExternal) {
+          return {
+            tagName: 'a',
+            attribs: {
+              ...attribs,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+            },
+          };
+        }
+        return { tagName: 'a', attribs };
+      },
     },
     allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com', 'xrcodex.substack.com'],
     allowIframeRelativeUrls: false,
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     allowedSchemesByTag: {
-      img: ['http', 'https', 'data']
+      img: ['http', 'https']
     },
     allowProtocolRelative: false,
   });

@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { sanitizeSlug } from '@/lib/security';
+import { sanitizeSlug, safeLocalStorageSet } from '@/lib/security';
 
 interface IssueReactionsProps {
   slug: string;
 }
 
 type ReactionType = 'signal' | 'actionable' | 'paradigm' | 'deep' | 'engaging';
+const ALLOWED_REACTIONS: ReactionType[] = ['signal', 'actionable', 'paradigm', 'deep', 'engaging'];
 
 interface ReactionConfig {
   id: ReactionType;
@@ -43,12 +44,28 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.userSelected && Array.isArray(parsed.userSelected)) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          setUserReactions(new Set(parsed.userSelected));
-        }
-        if (parsed.counts) {
-          setCounts(parsed.counts);
+        if (parsed && typeof parsed === 'object') {
+          if (Array.isArray(parsed.userSelected)) {
+            const validSelected = parsed.userSelected.filter((r): r is ReactionType => ALLOWED_REACTIONS.includes(r));
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setUserReactions(new Set(validSelected));
+          }
+          if (parsed.counts && typeof parsed.counts === 'object') {
+            const safeCounts: Record<ReactionType, number> = {
+              signal: 18,
+              actionable: 14,
+              paradigm: 9,
+              deep: 12,
+              engaging: 8,
+            };
+            for (const key of ALLOWED_REACTIONS) {
+              const val = parsed.counts[key];
+              if (typeof val === 'number' && Number.isFinite(val) && val >= 0 && val <= 100000) {
+                safeCounts[key] = Math.floor(val);
+              }
+            }
+            setCounts(safeCounts);
+          }
         }
       }
     } catch {
@@ -57,6 +74,8 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
   }, [cleanSlug]);
 
   const toggleReaction = (id: ReactionType) => {
+    if (!ALLOWED_REACTIONS.includes(id)) return;
+
     const nextSelected = new Set(userReactions);
     const nextCounts = { ...counts };
 
@@ -73,18 +92,11 @@ export function IssueReactions({ slug }: IssueReactionsProps) {
     setUserReactions(nextSelected);
     setCounts(nextCounts);
 
-    try {
-      const storageKey = `reactions_${cleanSlug}`;
-      localStorage.setItem(
-        storageKey,
-        JSON.stringify({
-          userSelected: Array.from(nextSelected),
-          counts: nextCounts,
-        })
-      );
-    } catch {
-      // safe no-op
-    }
+    const storageKey = `reactions_${cleanSlug}`;
+    safeLocalStorageSet(storageKey, {
+      userSelected: Array.from(nextSelected),
+      counts: nextCounts,
+    });
   };
 
   return (

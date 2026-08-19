@@ -45,7 +45,12 @@ export function SavedIssuesClient({ allIssues }: SavedIssuesClientProps) {
         } else {
           const parsedH = JSON.parse(rawHighlights);
           if (Array.isArray(parsedH)) {
-            setSavedHighlights(parsedH);
+            const valid = parsedH
+              .filter((h): h is SavedHighlight => 
+                Boolean(h && typeof h === 'object' && typeof h.id === 'string' && typeof h.text === 'string' && typeof h.issueSlug === 'string')
+              )
+              .slice(0, 100);
+            setSavedHighlights(valid);
           } else {
             setSavedHighlights([]);
           }

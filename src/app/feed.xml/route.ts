@@ -12,6 +12,12 @@ function escapeXml(value: string) {
     .replace(/'/g, '&apos;');
 }
 
+function safeToUTCString(dateStr: string | undefined): string {
+  if (!dateStr) return new Date().toUTCString();
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? new Date().toUTCString() : d.toUTCString();
+}
+
 export async function GET() {
   const issues = await getAllIssues();
   const updatedAt = issues[0]?.date ?? new Date().toISOString();
@@ -28,7 +34,7 @@ export async function GET() {
           <title>${escapeXml(issue.title)}</title>
           <link>${url}</link>
           <guid isPermaLink="true">${url}</guid>
-          <pubDate>${new Date(issue.date).toUTCString()}</pubDate>
+          <pubDate>${safeToUTCString(issue.date)}</pubDate>
           <author>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</author>
           <description>${escapeXml(issue.excerpt || issue.subtitle)}</description>
           ${categories}

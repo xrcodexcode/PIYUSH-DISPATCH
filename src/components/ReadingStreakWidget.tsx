@@ -12,7 +12,13 @@ export function ReadingStreakWidget() {
     try {
       const todayStr = new Date().toISOString().split('T')[0];
       const raw = localStorage.getItem('reading_activity_dates');
-      let dates: string[] = raw ? JSON.parse(raw) : [];
+      let dates: string[] = [];
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          dates = parsed.filter((d): d is string => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d));
+        }
+      }
 
       if (!dates.includes(todayStr)) {
         dates = [...dates, todayStr].slice(-30);

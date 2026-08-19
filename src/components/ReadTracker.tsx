@@ -17,7 +17,13 @@ export function ReadTracker({ issueSlug }: ReadTrackerProps) {
     const markAsRead = () => {
       try {
         const raw = localStorage.getItem('read_dispatches');
-        const list: string[] = raw ? JSON.parse(raw) : [];
+        let list: string[] = [];
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            list = parsed.map(sanitizeSlug).filter((s): s is string => Boolean(s) && s.length > 0);
+          }
+        }
         if (!list.includes(cleanSlug)) {
           const updated = [...list, cleanSlug].slice(-300);
           localStorage.setItem('read_dispatches', JSON.stringify(updated));

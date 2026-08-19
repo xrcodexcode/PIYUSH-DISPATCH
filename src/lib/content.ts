@@ -210,7 +210,7 @@ export async function searchIssues(query: string): Promise<Issue[]> {
   if (!query || query.trim() === '') return [];
 
   const issues = await getAllIssues();
-  const q = query.toLowerCase().trim();
+  const q = query.toLowerCase().trim().slice(0, 100);
 
   return issues.filter(issue => {
     const badgeText = `the daily nodes #${String(issue.issueNumber).padStart(3, '0')}`.toLowerCase();

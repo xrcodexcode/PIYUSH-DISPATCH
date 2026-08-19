@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { cn, formatDate } from '@/lib/utils';
-import { sanitizeSlug } from '@/lib/security';
+import { sanitizeSlug, sanitizeUserText, safeLocalStorageSet } from '@/lib/security';
 
 interface CommentItem {
   id: string;
@@ -30,6 +30,33 @@ const AVATAR_COLORS = [
   'bg-purple-600',
 ];
 
+function sanitizeCommentItem(raw: unknown): CommentItem | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const obj = raw as Record<string, unknown>;
+
+  const id = typeof obj.id === 'string' ? sanitizeUserText(obj.id, 80) : '';
+  const author = typeof obj.author === 'string' ? sanitizeUserText(obj.author, 60) : 'Fellow Engineer';
+  const isAuthor = Boolean(obj.isAuthor);
+  const avatarColor = typeof obj.avatarColor === 'string' && (AVATAR_COLORS.includes(obj.avatarColor) || obj.avatarColor === 'bg-[var(--accent)]')
+    ? obj.avatarColor
+    : AVATAR_COLORS[0];
+  const content = typeof obj.content === 'string' ? sanitizeUserText(obj.content, 1000) : '';
+  const date = typeof obj.date === 'string' ? obj.date : new Date().toISOString();
+  const likes = typeof obj.likes === 'number' && Number.isFinite(obj.likes) ? Math.max(0, Math.min(10000, Math.floor(obj.likes))) : 0;
+
+  if (!id || !content) return null;
+
+  return {
+    id,
+    author: author || 'Fellow Engineer',
+    isAuthor,
+    avatarColor,
+    content,
+    date,
+    likes,
+  };
+}
+
 export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsProps) {
   const cleanSlug = sanitizeSlug(slug);
   const [comments, setComments] = useState<CommentItem[]>([]);
@@ -45,7 +72,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
       author: 'Piyush (Author)',
       isAuthor: true,
       avatarColor: 'bg-[var(--accent)]',
-      content: `What was your biggest takeaway from "${issueTitle}"? Drop your thoughts, questions, or counter-arguments below!`,
+      content: `What was your biggest takeaway from "${sanitizeUserText(issueTitle, 120)}"? Drop your thoughts, questions, or counter-arguments below!`,
       date: new Date(Date.now() - 86400000).toISOString(),
       likes: 5,
     },
@@ -58,8 +85,17 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          setComments(parsed);
+          const validated = parsed
+            .map(sanitizeCommentItem)
+            .filter((c): c is CommentItem => c !== null)
+            .slice(0, 50);
+          
+          if (validated.length > 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setComments(validated);
+          } else {
+            setComments(getDefaultComments());
+          }
         } else {
           setComments(getDefaultComments());
         }
@@ -71,7 +107,10 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
       if (savedLikes) {
         const parsedLikes = JSON.parse(savedLikes);
         if (Array.isArray(parsedLikes)) {
-          setLikedComments(new Set(parsedLikes));
+          const safeLikes = parsedLikes
+            .filter((id): id is string => typeof id === 'string' && id.length < 80)
+            .slice(0, 100);
+          setLikedComments(new Set(safeLikes));
         }
       }
     } catch {
@@ -97,41 +136,34 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
     setLikedComments(nextLiked);
     setComments(updatedComments);
 
-    try {
-      localStorage.setItem(`comments_${cleanSlug}`, JSON.stringify(updatedComments));
-      localStorage.setItem(`likes_${cleanSlug}`, JSON.stringify(Array.from(nextLiked)));
-    } catch {
-      // safe no-op
-    }
+    safeLocalStorageSet(`comments_${cleanSlug}`, updatedComments);
+    safeLocalStorageSet(`likes_${cleanSlug}`, Array.from(nextLiked));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content.trim()) return;
+    const cleanContent = sanitizeUserText(content, 1000);
+    if (!cleanContent) return;
 
     setIsSubmitting(true);
-    const cleanAuthor = name.trim() || 'Fellow Engineer';
+    const cleanAuthor = sanitizeUserText(name, 60) || 'Fellow Engineer';
     const colorIndex = Math.abs(cleanAuthor.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)) % AVATAR_COLORS.length;
 
     const newComment: CommentItem = {
       id: `user-${Date.now()}`,
       author: cleanAuthor,
       avatarColor: AVATAR_COLORS[colorIndex],
-      content: content.trim(),
+      content: cleanContent,
       date: new Date().toISOString(),
       likes: 1,
     };
 
-    const nextComments = [...comments, newComment];
+    const nextComments = [...comments, newComment].slice(-50);
     setComments(nextComments);
     setContent('');
     setIsSubmitting(false);
 
-    try {
-      localStorage.setItem(`comments_${cleanSlug}`, JSON.stringify(nextComments));
-    } catch {
-      // safe no-op
-    }
+    safeLocalStorageSet(`comments_${cleanSlug}`, nextComments);
   };
 
   return (
