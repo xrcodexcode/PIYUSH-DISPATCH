@@ -7,13 +7,18 @@ const SUBSTACK_FEED_URL = 'https://xrcodex.substack.com/feed';
 const ISSUES_DIR = path.join(__dirname, '..', 'content', 'issues');
 
 const ISSUE_MAPPING = [
-  { match: /ai agents 101/i, filename: '032-ai-agents-101.mdx', num: 7 },
-  { match: /graph engineering/i, filename: '031-graph-engineering-beyond-single-ai-loops.mdx', num: 6 },
-  { match: /loop engineering/i, filename: '030-loop-engineering-what-makes-ai-agents-improve-themselves.mdx', num: 5 },
-  { match: /harness is the kitchen/i, filename: '029-the-prompt-is-just-one-ingredient-the-harness-is-the-kitchen.mdx', num: 4 },
-  { match: /context engineering/i, filename: '028-better-input-better-output-thats-context-engineering.mdx', num: 3 },
-  { match: /rag isn['’]t dead/i, filename: '027-rag-isnt-dead-most-people-just-dont-understand-it.mdx', num: 2 },
-  { match: /buzzword|prompt engineering/i, filename: '026-prompt-engineering-isnt-dead-its-evolving.mdx', num: 1 },
+  { match: /cron jobs/i, filename: '011-cron-jobs-how-to-make-ai-agents-work-while-you-sleep.mdx', num: 11 },
+  { match: /infrastructure race/i, filename: '012-the-ai-infrastructure-race.mdx', num: 10 },
+  { match: /agent memory/i, filename: '010-agent-memory.mdx', num: 8 },
+  { match: /ai agents 101/i, filename: '009-ai-agents-101.mdx', num: 7 },
+  { match: /graph engineering/i, filename: '008-graph-engineering-beyond-single-ai-loops.mdx', num: 6 },
+  { match: /loop engineering/i, filename: '007-loop-engineering-what-makes-ai-agents-improve-themselves.mdx', num: 5 },
+  { match: /harness is the kitchen/i, filename: '006-the-prompt-is-just-one-ingredient-the-harness-is-the-kitchen.mdx', num: 4 },
+  { match: /context engineering/i, filename: '005-better-input-better-output-thats-context-engineering.mdx', num: 3 },
+  { match: /rag isn['’]t dead/i, filename: '004-rag-isnt-dead-most-people-just-dont-understand-it.mdx', num: 2 },
+  { match: /buzzword|prompt engineering/i, filename: '003-prompt-engineering-isnt-dead-its-evolving.mdx', num: 1 },
+  { match: /skills.*hooks/i, filename: '002-agent-skills-and-hooks.mdx', num: 2 },
+  { match: /personal ai/i, filename: '001-the-personal-ai.mdx', num: 1 },
 ];
 
 function fetchUrl(url, maxRedirects = 5) {

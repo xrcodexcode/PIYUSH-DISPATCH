@@ -120,55 +120,72 @@ export function sanitizeUrl(url: string, fallback = '#'): string {
 }
 
 /**
- * Helper: Converts any IPv4 representation (standard decimal, hex, octal, or dword integer)
- * into canonical [octet1, octet2, octet3, octet4] or null if invalid.
+ * Helper: Parses an individual numerical octet/segment in decimal, octal (0-prefix), or hex (0x-prefix).
+ */
+function parseIpPart(partStr: string, maxVal: number): number | null {
+  const trimmed = partStr.trim();
+  if (!trimmed) return null;
+  let num: number;
+  if (/^0x[0-9a-fA-F]+$/i.test(trimmed)) {
+    num = parseInt(trimmed, 16);
+  } else if (trimmed.length > 1 && trimmed.startsWith('0') && /^[0-7]+$/.test(trimmed)) {
+    num = parseInt(trimmed, 8);
+  } else if (/^\d+$/.test(trimmed)) {
+    num = parseInt(trimmed, 10);
+  } else {
+    return null;
+  }
+  if (isNaN(num) || num < 0 || num > maxVal) return null;
+  return num;
+}
+
+/**
+ * Helper: Converts any IPv4 representation (4-part dotted decimal, 3-part, 2-part shorthand,
+ * hex, octal, or single 32-bit dword integer) into canonical [octet1, octet2, octet3, octet4] or null if invalid.
  */
 function parseIpv4ToOctets(ipStr: string): [number, number, number, number] | null {
   const trimmed = ipStr.trim();
+  if (!trimmed) return null;
 
-  // 1. Standard 4-part decimal (with optional octal/hex prefix per octet)
+  // Split by '.'
   const parts = trimmed.split('.');
+
+  // 1. Standard 4-part: A.B.C.D (each 0-255)
   if (parts.length === 4) {
-    const octets: number[] = [];
-    for (const part of parts) {
-      let num: number;
-      if (part.startsWith('0x') || part.startsWith('0X')) {
-        num = parseInt(part, 16);
-      } else if (part.length > 1 && part.startsWith('0') && /^\d+$/.test(part)) {
-        num = parseInt(part, 8);
-      } else if (/^\d+$/.test(part)) {
-        num = parseInt(part, 10);
-      } else {
-        return null;
-      }
-      if (isNaN(num) || num < 0 || num > 255) return null;
-      octets.push(num);
-    }
-    return [octets[0], octets[1], octets[2], octets[3]];
+    const p0 = parseIpPart(parts[0], 255);
+    const p1 = parseIpPart(parts[1], 255);
+    const p2 = parseIpPart(parts[2], 255);
+    const p3 = parseIpPart(parts[3], 255);
+    if (p0 === null || p1 === null || p2 === null || p3 === null) return null;
+    return [p0, p1, p2, p3];
   }
 
-  // 2. Single integer / DWORD notation (e.g. 2130706433 -> 127.0.0.1)
-  if (/^\d+$/.test(trimmed)) {
-    const dword = parseInt(trimmed, 10);
-    if (!isNaN(dword) && dword >= 0 && dword <= 0xffffffff) {
+  // 2. 3-part: A.B.C (A, B 0-255, C is 16-bit uint: 0-65535, e.g. 127.0.1 -> 127.0.0.1)
+  if (parts.length === 3) {
+    const p0 = parseIpPart(parts[0], 255);
+    const p1 = parseIpPart(parts[1], 255);
+    const p2 = parseIpPart(parts[2], 65535);
+    if (p0 === null || p1 === null || p2 === null) return null;
+    return [p0, p1, (p2 >>> 8) & 255, p2 & 255];
+  }
+
+  // 3. 2-part: A.B (A 0-255, B is 24-bit uint: 0-16777215, e.g. 127.1 -> 127.0.0.1)
+  if (parts.length === 2) {
+    const p0 = parseIpPart(parts[0], 255);
+    const p1 = parseIpPart(parts[1], 16777215);
+    if (p0 === null || p1 === null) return null;
+    return [p0, (p1 >>> 16) & 255, (p1 >>> 8) & 255, p1 & 255];
+  }
+
+  // 4. Single integer / DWORD or Hex notation (e.g. 2130706433 or 0x7f000001 -> 127.0.0.1)
+  if (parts.length === 1) {
+    const dword = parseIpPart(trimmed, 0xffffffff);
+    if (dword !== null) {
       return [
         (dword >>> 24) & 255,
         (dword >>> 16) & 255,
         (dword >>> 8) & 255,
         dword & 255,
-      ];
-    }
-  }
-
-  // 3. Hexadecimal integer (e.g. 0x7f000001)
-  if (/^0x[0-9a-fA-F]+$/i.test(trimmed)) {
-    const hex = parseInt(trimmed, 16);
-    if (!isNaN(hex) && hex >= 0 && hex <= 0xffffffff) {
-      return [
-        (hex >>> 24) & 255,
-        (hex >>> 16) & 255,
-        (hex >>> 8) & 255,
-        hex & 255,
       ];
     }
   }
@@ -188,8 +205,8 @@ function isPrivateOrReservedIpv4(octets: [number, number, number, number]): bool
   // 10.0.0.0/8 (Private)
   if (o1 === 10) return true;
 
-  // 100.64.0.0/10 (Carrier-Grade NAT)
-  if (o1 === 100 && o2 >= 64 && o2 <= 127) return true;
+  // 100.64.0.0/10 (Carrier-Grade NAT) & 100.100.100.200 (Alibaba Cloud Metadata)
+  if (o1 === 100 && ((o2 >= 64 && o2 <= 127) || o2 === 100)) return true;
 
   // 127.0.0.0/8 (Loopback)
   if (o1 === 127) return true;
@@ -268,6 +285,7 @@ export function isSafeRemoteEndpoint(urlString: string): boolean {
       hostname === 'localhost' ||
       hostname === '::1' ||
       hostname === '0:0:0:0:0:0:0:1' ||
+      hostname === '0000:0000:0000:0000:0000:0000:0000:0001' ||
       hostname === '::' ||
       hostname.endsWith('.localhost') ||
       hostname.endsWith('.local') ||
@@ -275,16 +293,20 @@ export function isSafeRemoteEndpoint(urlString: string): boolean {
       hostname.endsWith('.lan') ||
       hostname.endsWith('.home.arpa') ||
       hostname === 'metadata.google.internal' ||
+      hostname === 'metadata.tencentyun.com' ||
       hostname === 'instance-data'
     ) {
       return false;
     }
 
-    // Block IPv6 link-local (fe80::) and unique-local (fc00::, fd00::)
+    // Block IPv6 link-local (fe80::), unique-local (fc00::, fd00::), multicast (ff00::), documentation (2001:db8::)
     if (
       hostname.startsWith('fe80:') ||
       hostname.startsWith('fc') ||
-      hostname.startsWith('fd')
+      hostname.startsWith('fd') ||
+      hostname.startsWith('ff') ||
+      hostname.startsWith('2001:db8:') ||
+      hostname.startsWith('100:')
     ) {
       return false;
     }
@@ -298,7 +320,7 @@ export function isSafeRemoteEndpoint(urlString: string): boolean {
       }
     }
 
-    // Check IPv4 forms (decimal, octal, hex, dword)
+    // Check IPv4 forms (1-part, 2-part, 3-part, 4-part decimal, octal, hex, dword)
     const octets = parseIpv4ToOctets(hostname);
     if (octets && isPrivateOrReservedIpv4(octets)) {
       return false;
@@ -401,18 +423,36 @@ export function getClientIp(request: Request): string {
     if (IPV4_REGEX.test(clean) || IPV6_REGEX.test(clean)) return clean;
   }
 
-  // 2. Real IP
+  // 2. Vercel platform-verified client IP
+  const vercelIp = request.headers.get('x-vercel-ip');
+  if (vercelIp) {
+    const clean = vercelIp.trim();
+    if (IPV4_REGEX.test(clean) || IPV6_REGEX.test(clean)) return clean;
+  }
+
+  // 3. Fastly / Akamai / AWS True-Client-IP
+  const trueClientIp = request.headers.get('true-client-ip');
+  if (trueClientIp) {
+    const clean = trueClientIp.trim();
+    if (IPV4_REGEX.test(clean) || IPV6_REGEX.test(clean)) return clean;
+  }
+
+  // 4. Real IP
   const realIp = request.headers.get('x-real-ip');
   if (realIp) {
     const clean = realIp.trim();
     if (IPV4_REGEX.test(clean) || IPV6_REGEX.test(clean)) return clean;
   }
 
-  // 3. X-Forwarded-For
+  // 5. X-Forwarded-For (iterate to find valid IP)
   const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) {
-    const firstIp = forwardedFor.split(',')[0].trim();
-    if (IPV4_REGEX.test(firstIp) || IPV6_REGEX.test(firstIp)) return firstIp;
+    const ips = forwardedFor.split(',').map(s => s.trim());
+    for (const ip of ips) {
+      if (IPV4_REGEX.test(ip) || IPV6_REGEX.test(ip)) {
+        return ip;
+      }
+    }
   }
 
   return '127.0.0.1';

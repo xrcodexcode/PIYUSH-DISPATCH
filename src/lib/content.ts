@@ -83,6 +83,17 @@ export async function getAllIssues(): Promise<Issue[]> {
     slugMap.set(`${altNodePrefix}-${issueNum}`.toLowerCase(), issueObj);
     slugMap.set(`the-${altNodePrefix}-${padNum}`.toLowerCase(), issueObj);
     slugMap.set(`the-${altNodePrefix}-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`node-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`node-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`issue-${padNum}`.toLowerCase(), issueObj);
+    slugMap.set(`issue-${issueNum}`.toLowerCase(), issueObj);
+    slugMap.set(`issue${issueNum}`.toLowerCase(), issueObj);
+    if (!slugMap.has(padNum)) {
+      slugMap.set(padNum, issueObj);
+    }
+    if (!slugMap.has(String(issueNum))) {
+      slugMap.set(String(issueNum), issueObj);
+    }
   }
 
   // Pre-sort chronological order descending once (by date)

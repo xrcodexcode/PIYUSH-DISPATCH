@@ -95,6 +95,12 @@ renderer.image = function({ href, title, text }) {
   `;
 };
 
+const RESERVED_DOM_IDS = new Set([
+  'location', 'document', 'window', 'localstorage', 'sessionstorage', 'fetch',
+  'top', 'parent', 'opener', 'self', 'cookie', 'navigator', 'eval', 'alert',
+  'history', 'name', 'origin', 'status', 'event', 'body', 'head', 'defaultview'
+]);
+
 marked.use({ renderer, gfm: true, breaks: false });
 
 function sanitizeHtmlOutput(html: string): string {
@@ -115,24 +121,29 @@ function sanitizeHtmlOutput(html: string): string {
       a: (tagName, attribs) => {
         const href = (attribs.href || '').trim();
         const isExternal = href.startsWith('http://') || href.startsWith('https://');
-        if (isExternal) {
-          return {
-            tagName: 'a',
-            attribs: {
-              ...attribs,
-              target: '_blank',
-              rel: 'noopener noreferrer',
-            },
-          };
+        const safeAttribs = { ...attribs };
+        if (safeAttribs.id && RESERVED_DOM_IDS.has(safeAttribs.id.toLowerCase())) {
+          safeAttribs.id = `section-${safeAttribs.id}`;
         }
-        return { tagName: 'a', attribs };
+        if (isExternal) {
+          safeAttribs.target = '_blank';
+          safeAttribs.rel = 'noopener noreferrer';
+        }
+        return { tagName: 'a', attribs: safeAttribs };
+      },
+      '*': (tagName, attribs) => {
+        const safeAttribs = { ...attribs };
+        if (safeAttribs.id && RESERVED_DOM_IDS.has(safeAttribs.id.toLowerCase())) {
+          safeAttribs.id = `section-${safeAttribs.id}`;
+        }
+        return { tagName, attribs: safeAttribs };
       },
     },
     allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com', 'xrcodex.substack.com'],
     allowIframeRelativeUrls: false,
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     allowedSchemesByTag: {
-      img: ['http', 'https']
+      img: ['http', 'https', 'data']
     },
     allowProtocolRelative: false,
   });

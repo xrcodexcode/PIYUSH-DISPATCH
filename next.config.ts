@@ -16,7 +16,7 @@ const securityHeaders = [
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://xrcodex.substack.com https://*.substack.com https://*.substackcdn.com",
       "media-src 'self' blob: data:",
-      "frame-src 'self' https://xrcodex.substack.com",
+      "frame-src 'self' https://xrcodex.substack.com https://www.youtube.com https://player.vimeo.com",
       "frame-ancestors 'none'",
       "form-action 'self' https://xrcodex.substack.com https://*.substack.com",
       "base-uri 'self'",

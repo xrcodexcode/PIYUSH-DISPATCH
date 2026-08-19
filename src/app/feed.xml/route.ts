@@ -3,8 +3,10 @@ import { absoluteUrl, siteConfig } from '@/lib/site';
 
 export const dynamic = 'force-static';
 
-function escapeXml(value: string) {
+function escapeXml(value: unknown): string {
+  if (!value || typeof value !== 'string') return '';
   return value
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
