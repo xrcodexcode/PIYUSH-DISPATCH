@@ -30,6 +30,7 @@ import QuoteShareTooltip from '@/components/QuoteShareTooltip';
 import ReadTracker from '@/components/ReadTracker';
 import IssueComments from '@/components/IssueComments';
 import ReadingRuler from '@/components/ReadingRuler';
+import ImageZoomLightbox from '@/components/ImageZoomLightbox';
 
 interface Props {
   params: Promise<{
@@ -160,6 +161,9 @@ export default async function IssuePage({ params }: Props) {
 
       {/* Background Read Completion Tracker */}
       <ReadTracker issueSlug={issue.slug} />
+
+      {/* 3D Image Deep-Zoom Lightbox */}
+      <ImageZoomLightbox />
 
       <article className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)] pt-8 pb-24 transition-colors">
         {/* Article Top Controls Bar */}

@@ -71,26 +71,38 @@ export function KeyboardShortcutsModal() {
           </button>
         </div>
 
-        <div className="space-y-3 font-mono text-xs">
-          <div className="flex justify-between items-center py-2 border-b border-[var(--border-color)]/50">
+        <div className="space-y-2.5 font-mono text-xs">
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
             <span className="text-[var(--text-secondary)]">Toggle Theme Engine</span>
-            <kbd className="px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">T</kbd>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">T</kbd>
           </div>
-          <div className="flex justify-between items-center py-2 border-b border-[var(--border-color)]/50">
-            <span className="text-[var(--text-secondary)]">Fullscreen Zen Mode</span>
-            <kbd className="px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Shift + Z</kbd>
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
+            <span className="text-[var(--text-secondary)]">Focus Zoom In (100% - 200%)</span>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Alt + ]</kbd>
           </div>
-          <div className="flex justify-between items-center py-2 border-b border-[var(--border-color)]/50">
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
+            <span className="text-[var(--text-secondary)]">Focus Zoom Out</span>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Alt + [</kbd>
+          </div>
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
+            <span className="text-[var(--text-secondary)]">Reset Focus Zoom</span>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Alt + 0</kbd>
+          </div>
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
+            <span className="text-[var(--text-secondary)]">Fullscreen Zen Focus</span>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Alt + Z</kbd>
+          </div>
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
             <span className="text-[var(--text-secondary)]">Open Search Archive</span>
-            <kbd className="px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">/</kbd>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">/</kbd>
           </div>
-          <div className="flex justify-between items-center py-2 border-b border-[var(--border-color)]/50">
+          <div className="flex justify-between items-center py-1.5 border-b border-[var(--border-color)]/50">
             <span className="text-[var(--text-secondary)]">Toggle Shortcuts Modal</span>
-            <kbd className="px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">?</kbd>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">?</kbd>
           </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="text-[var(--text-secondary)]">Close Modal / Exit</span>
-            <kbd className="px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Esc</kbd>
+          <div className="flex justify-between items-center py-1.5">
+            <span className="text-[var(--text-secondary)]">Close Lightbox / Modal</span>
+            <kbd className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--border-color)] font-bold text-[var(--accent)]">Esc</kbd>
           </div>
         </div>
 

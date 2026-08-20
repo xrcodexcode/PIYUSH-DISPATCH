@@ -37,6 +37,12 @@
    1. EDITORIAL COLOR THEMES
    ───────────────────────────────────────────────────────────── */
 
+:root {
+  --reading-zoom-scale: 1;
+  --reading-font-size: calc(1.125rem * var(--reading-zoom-scale));
+  --reading-line-height: calc(1.8 * (1 + (var(--reading-zoom-scale) - 1) * 0.15));
+}
+
 /* 1. Light (Clean Editorial Off-White) */
 :root, :root[data-theme='light'] {
   --bg: #FAFAF7;
@@ -365,23 +371,25 @@ body.zen-mode .hero-image-wrapper img {
   object-fit: cover !important;
 }
 
-/* Core Reading Column and Prose: Strict centered measure (760px) preventing end-to-end stretching on laptop */
+/* Core Reading Column and Prose: Strict centered measure with dynamic zoom scaling */
 body.zen-mode .reading-column-container {
-  max-width: 760px !important;
+  max-width: calc(760px * (1 + (var(--reading-zoom-scale) - 1) * 0.35)) !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
   flex: none !important;
+  transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.zen-mode .prose {
-  max-width: 760px !important;
+  max-width: 100% !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  font-size: 1.25rem !important;
-  line-height: 1.95 !important;
+  font-size: calc(1.25rem * var(--reading-zoom-scale)) !important;
+  line-height: calc(1.95 * (1 + (var(--reading-zoom-scale) - 1) * 0.12)) !important;
   letter-spacing: -0.011em !important;
+  transition: font-size 0.25s cubic-bezier(0.4, 0, 0.2, 1), line-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.zen-mode .prose img,
@@ -393,7 +401,7 @@ body.zen-mode .prose figure {
 }
 
 body.zen-mode #sources {
-  max-width: 760px !important;
+  max-width: calc(760px * (1 + (var(--reading-zoom-scale) - 1) * 0.35)) !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -416,15 +424,16 @@ body.zen-mode .zen-exit-floating-btn {
    ───────────────────────────────────────────────────────────── */
 .prose {
   color: var(--text-primary);
-  max-width: 74ch;
+  max-width: calc(74ch * (1 + (var(--reading-zoom-scale) - 1) * 0.25));
   margin: 0 auto;
-  font-size: 1.125rem;
-  line-height: 1.75;
+  font-size: var(--reading-font-size);
+  line-height: var(--reading-line-height);
   content-visibility: auto;
+  transition: font-size 0.25s cubic-bezier(0.4, 0, 0.2, 1), line-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .prose > * + * {
-  margin-top: 1rem;
+  margin-top: calc(1rem * var(--reading-zoom-scale));
 }
 
 .prose h1 {
@@ -569,6 +578,12 @@ body.zen-mode .zen-exit-floating-btn {
   margin: 1.25rem auto;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
+  cursor: zoom-in;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prose img:hover {
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.35);
 }
 
 .prose figure {

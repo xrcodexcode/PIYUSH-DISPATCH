@@ -41,6 +41,7 @@ export const SERIES_TRACKS: SeriesTrack[] = [
       'the-personal-ai',
       'agent-skills-and-hooks',
       'how-ai-agents-actually-work',
+      'how-vector-databases-actually-work',
     ],
   },
 ];
