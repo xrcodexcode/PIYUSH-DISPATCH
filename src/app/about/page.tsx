@@ -97,6 +97,22 @@ export default function AboutPage() {
           </p>
         </section>
 
+        {/* ABOUT THE AUTHOR */}
+        <section className="space-y-6">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
+            ABOUT PIYUSH
+          </h2>
+          <p>
+            I am Piyush Pal, a 2nd year BCA Hons. AI/ML with Fullstack student, technical writer, and the mind behind <strong>Piyush&apos;s Dispatch</strong>. 
+          </p>
+          <p>
+            My work is heavily focused on exploring the intersections of <strong>Agentic AI, System Architecture, and Graph Engineering</strong>. I started this publication as a way to untangle the hype surrounding emerging technologies and distill them down to their fundamental engineering principles.
+          </p>
+          <p>
+            When I am not deep in coursework, code, or architecture research, I am writing here to help other engineers, founders, and curious minds build durable mental models that outlast the current tech cycle.
+          </p>
+        </section>
+
         {/* WHAT WE COVER */}
         <section className="space-y-6">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">

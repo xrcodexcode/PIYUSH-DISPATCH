@@ -60,7 +60,7 @@ export function extractHeadings(content: string): Heading[] {
 
     if (inCodeBlock) continue;
 
-    const match = line.match(/^(#{2,3})\s+(.+)$/);
+    const match = line.match(/^(#{2,4})\s+(.+)$/);
     if (match) {
       const level = match[1].length;
       const text = match[2].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_~`]/g, '').trim();

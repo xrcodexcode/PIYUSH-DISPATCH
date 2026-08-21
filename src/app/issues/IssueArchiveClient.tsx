@@ -22,11 +22,9 @@ export default function IssueArchiveClient({ initialIssues }: IssueArchiveClient
 
   useEffect(() => {
     if (typeParam === 'daily-node' || typeParam === 'deep-node') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedNodeType(typeParam);
+      queueMicrotask(() => setSelectedNodeType(typeParam));
     } else if (!typeParam) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedNodeType(null);
+      queueMicrotask(() => setSelectedNodeType(null));
     }
   }, [typeParam]);
 

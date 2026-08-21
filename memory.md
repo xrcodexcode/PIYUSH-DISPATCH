@@ -10,11 +10,11 @@
 
 ## 1. Core Architecture & Stack
 
-- **Framework**: Next.js 15 (App Router with Server & Client components)
+- **Framework**: Next.js 16 (App Router with Server & Client components)
 - **Language**: TypeScript (`strict: true`)
 - **Styling**: Vanilla CSS Custom Variables + Tailwind CSS v4 (`@import "tailwindcss"`)
 - **Rendering Engine**: Custom `marked` renderer with image path normalization (`/assets/daily-node-N/` and `/assets/issue-N/`) and automated heading slug anchors
-- **Build Output**: 36 Prerendered Static HTML Pages (`npm run build`)
+- **Build Output**: 55 Prerendered Static HTML Pages (`npm run build`)
 
 ---
 

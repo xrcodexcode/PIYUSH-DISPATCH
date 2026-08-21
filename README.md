@@ -7,7 +7,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38BDF8?style=flat-square&logo=tailwindcss)
 ![Themes](https://img.shields.io/badge/Themes-16_Variants-purple?style=flat-square)
-![Static Build](https://img.shields.io/badge/Static_Prerender-45_Pages-emerald?style=flat-square)
+![Static Build](https://img.shields.io/badge/Static_Prerender-55_Pages-emerald?style=flat-square)
 
 ---
 
@@ -174,9 +174,10 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### 4. Build & Static Export
-Verify TypeScript types and build the optimized production output:
+Verify TypeScript types, linting, and build the optimized production output (55 pages):
 ```bash
 npx tsc --noEmit
+npx eslint src/
 npm run build
 ```
 
@@ -200,6 +201,7 @@ npm run build
 
 Before deploying or committing changes:
 - [x] **TypeScript Check**: `npx tsc --noEmit` passes with 0 errors.
+- [x] **Lint Check**: `npx eslint src/` passes with 0 errors and 0 warnings.
 - [x] **Link Audit**: `node scripts/audit-links.js` validates 0 broken or dummy links.
 - [x] **Static Generation**: `npm run build` succeeds and prerenders all pages cleanly.
 - [x] **Badge Standards**: All references match canonical `The Daily Nodes #XXX` format.

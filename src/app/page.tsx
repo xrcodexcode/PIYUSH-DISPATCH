@@ -9,7 +9,7 @@ export const dynamic = 'force-static';
 
 export default async function HomePage() {
   const [latestIssue, allIssues] = await Promise.all([getLatestIssue(), getAllIssues()]);
-  const recentIssues = allIssues.filter(i => i.id !== latestIssue?.id);
+  const recentIssues = allIssues.filter(i => i.id !== latestIssue?.id).slice(0, 6);
 
   return (
     <div className="flex flex-col gap-24 pb-24 w-full">

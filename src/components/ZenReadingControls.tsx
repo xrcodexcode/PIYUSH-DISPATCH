@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 const ZOOM_LEVELS = [100, 125, 150, 175, 200];
 const STORAGE_KEY = 'dispatch_focus_zoom';
@@ -9,6 +9,7 @@ export function ZenReadingControls() {
   const [isZen, setIsZen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const [mounted, setMounted] = useState(false);
+  const mountedRef = useRef(false);
 
   // Apply zoom to CSS variables and persist to localStorage
   const applyZoom = useCallback((newZoom: number) => {
@@ -24,13 +25,17 @@ export function ZenReadingControls() {
 
   // Initialize from storage on mount
   useEffect(() => {
-    setMounted(true);
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      // Defer state update to avoid cascading render within effect
+      queueMicrotask(() => setMounted(true));
+    }
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = parseInt(saved, 10);
         if (ZOOM_LEVELS.includes(parsed)) {
-          applyZoom(parsed);
+          queueMicrotask(() => applyZoom(parsed));
         }
       }
     } catch {
@@ -38,25 +43,25 @@ export function ZenReadingControls() {
     }
   }, [applyZoom]);
 
-  const zoomIn = () => {
+  const zoomIn = useCallback(() => {
     const currentIndex = ZOOM_LEVELS.indexOf(zoomLevel);
     if (currentIndex < ZOOM_LEVELS.length - 1) {
       applyZoom(ZOOM_LEVELS[currentIndex + 1]);
     }
-  };
+  }, [zoomLevel, applyZoom]);
 
-  const zoomOut = () => {
+  const zoomOut = useCallback(() => {
     const currentIndex = ZOOM_LEVELS.indexOf(zoomLevel);
     if (currentIndex > 0) {
       applyZoom(ZOOM_LEVELS[currentIndex - 1]);
     }
-  };
+  }, [zoomLevel, applyZoom]);
 
-  const resetZoom = () => {
+  const resetZoom = useCallback(() => {
     applyZoom(100);
-  };
+  }, [applyZoom]);
 
-  const toggleZen = () => {
+  const toggleZen = useCallback(() => {
     const nextZen = !isZen;
     setIsZen(nextZen);
 
@@ -71,7 +76,7 @@ export function ZenReadingControls() {
         document.exitFullscreen().catch(() => {});
       }
     }
-  };
+  }, [isZen]);
 
   // Fullscreen change listener
   useEffect(() => {
@@ -117,7 +122,7 @@ export function ZenReadingControls() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [zoomLevel, isZen]);
+  }, [zoomIn, zoomOut, resetZoom, toggleZen]);
 
   if (!mounted) {
     return (

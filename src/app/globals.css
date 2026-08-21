@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Custom variant selectors for 15 themes */
+/* Custom variant selectors for 16 themes */
 @custom-variant light (&:where([data-theme=light], [data-theme=light] *));
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 @custom-variant midnight (&:where([data-theme=midnight], [data-theme=midnight] *));
@@ -429,6 +429,7 @@ body.zen-mode .zen-exit-floating-btn {
   font-size: var(--reading-font-size);
   line-height: var(--reading-line-height);
   content-visibility: auto;
+  contain-intrinsic-size: 1px 5000px;
   transition: font-size 0.25s cubic-bezier(0.4, 0, 0.2, 1), line-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -679,6 +680,10 @@ body.zen-mode .zen-exit-floating-btn {
 img {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: high-quality;
+}
+
+.hero-image-wrapper img,
+.prose figure img {
   transform: translateZ(0);
   backface-visibility: hidden;
 }

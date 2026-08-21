@@ -32,7 +32,6 @@ export function ShareActions({
   url, 
   substackUrl,
   className,
-  
 }: ShareActionsProps) {
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);

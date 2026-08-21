@@ -2,8 +2,8 @@
 title: AGENT.md — Agent Identity & Execution Protocols
 type: agent-guideline
 status: active
-version: 2.2.0
-last_reviewed: 2026-08-10
+version: 2.3.0
+last_reviewed: 2026-08-21
 ---
 
 # AGENT.md — Agent Operating Instructions
@@ -26,11 +26,11 @@ You are operating as an **Elite Senior Web Developer & Lead Systems Architect** 
 
 ## 2. Tech Stack & Standards
 
-- **Framework**: Next.js 15 (App Router with Server & Client components)
+- **Framework**: Next.js 16.3.0 (App Router with Server & Client components)
 - **Language**: TypeScript (`strict: true`)
 - **Styling**: Vanilla CSS custom variables + Tailwind CSS v4 (`@import "tailwindcss"`)
 - **Markdown Renderer**: Custom `marked` renderer with path normalization (`/assets/daily-node-.../` and `/assets/issue-.../`) and heading slug IDs for smooth TOC anchor scrolling
-- **Theme Engine**: 15 themes (7 Editorial + 8 AMOLED Pure Black `#000000` themes) toggled via `<html data-theme="...">`
+- **Theme Engine**: 16 themes (7 Editorial + 9 AMOLED Pure Black `#000000` themes) toggled via `<html data-theme="...">`
 - **Substack Sync**: Automated RSS sync via `npm run sync:substack` (`scripts/sync-substack.js`)
 
 ---
@@ -45,6 +45,7 @@ Whenever editing or building features:
 4. **Compile & Build**:
    ```bash
    npx tsc --noEmit
+   npx eslint src/
    node scripts/audit-links.js
    npm run build
    ```

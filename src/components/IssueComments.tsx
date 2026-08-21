@@ -213,6 +213,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              maxLength={60}
               placeholder="e.g. Alex (AI Engineer)"
               className="w-full px-3.5 py-2 rounded-xl bg-[var(--bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
             />
@@ -229,6 +230,7 @@ export function IssueComments({ slug, issueTitle, substackUrl }: IssueCommentsPr
             rows={3}
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            maxLength={1000}
             placeholder="Share your perspective, challenge a claim, or suggest an architectural nuance..."
             className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] resize-none"
           />

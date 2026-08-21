@@ -11,9 +11,9 @@ const securityHeaders = [
       isProd 
         ? "script-src 'self' 'unsafe-inline'"
         : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://xrcodex.substack.com https://*.substackcdn.com https://substackcdn.com https://*.substack.com https://*.githubusercontent.com",
-      "font-src 'self' data: https://fonts.gstatic.com",
+      "font-src 'self' data:",
       "connect-src 'self' https://xrcodex.substack.com https://*.substack.com https://*.substackcdn.com",
       "media-src 'self' blob: data:",
       "frame-src 'self' https://xrcodex.substack.com https://www.youtube.com https://player.vimeo.com",
@@ -93,7 +93,7 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   // Disable Next.js x-powered-by, optimize client bundles
   experimental: {
-    optimizePackageImports: ['clsx', 'tailwind-merge', 'marked'],
+    optimizePackageImports: ['marked'],
   },
   async headers() {
     return [

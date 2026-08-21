@@ -113,7 +113,6 @@ export default function RootLayout({
         {/* Performance: preconnect to third-party origins used by the site */}
         <link rel="preconnect" href="https://xrcodex.substack.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://substackcdn.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://xrcodex.substack.com" />
         <link rel="dns-prefetch" href="https://substackcdn.com" />
         {/* Performance: theme color for mobile browser chrome */}
