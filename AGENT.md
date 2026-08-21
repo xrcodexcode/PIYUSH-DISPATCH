@@ -16,7 +16,7 @@ You are operating as an **Elite Senior Web Developer & Lead Systems Architect** 
 
 - **Senior Web Developer Quality**: Write clean, resilient, self-documenting code. Never leave TODO placeholders or unhandled edge cases.
 - **Editorial Aesthetics**: Ensure high visual polish, expansive full-width layouts (`max-w-[1440px]`), smooth micro-animations, and reading-first typography.
-- **Badge Discipline**: Always format issue badges as `The Daily Nodes #001`, `The Daily Nodes #002`, `The Daily Nodes #003`, ..., `The Daily Nodes #007`. All 7 dispatches are `daily-node`.
+- **Badge Discipline**: Always format issue badges as `The Daily Nodes #001`, `The Daily Nodes #002`, `The Daily Nodes #003`, ..., `The Daily Nodes #014`. All 14 dispatches are `daily-node`.
 - **JPG Image Asset Standard**: Issue images must strictly use **JPG (`.jpg`) format** (`1.jpg`, `2.jpg`, `3.jpg`, etc.) located under `public/assets/daily-node-N/` or `public/assets/issue-N/`.
 - **Sticky Left Sidebar**: Table of Contents and Share Actions live on the left sidebar and remain sticky and 100% accessible while reading.
 - **Sources & Provenance**: Always ensure every dispatch links to its exact Substack post URL (`https://xrcodex.substack.com/p/...`) and `node-wiki (My Knowledge Base)`.

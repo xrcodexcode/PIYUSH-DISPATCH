@@ -7,7 +7,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38BDF8?style=flat-square&logo=tailwindcss)
 ![Themes](https://img.shields.io/badge/Themes-16_Variants-purple?style=flat-square)
-![Static Build](https://img.shields.io/badge/Static_Prerender-55_Pages-emerald?style=flat-square)
+![Static Build](https://img.shields.io/badge/Static_Prerender-56_Pages-emerald?style=flat-square)
 
 ---
 
@@ -70,7 +70,7 @@ The application leverages **Next.js 16 (App Router)**, **React 19**, **TypeScrip
 ```text
 newsletter/
 ├── content/
-│   └── issues/            # Authentic MDX newsletter issues (001 to 011)
+│   └── issues/            # Authentic MDX newsletter issues (001 to 014)
 ├── public/
 │   └── assets/            # Issue hero images & illustrations (/assets/daily-node-N/)
 ├── src/
@@ -174,7 +174,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### 4. Build & Static Export
-Verify TypeScript types, linting, and build the optimized production output (55 pages):
+Verify TypeScript types, linting, and build the optimized production output (56 pages):
 ```bash
 npx tsc --noEmit
 npx eslint src/

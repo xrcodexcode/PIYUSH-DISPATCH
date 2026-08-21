@@ -5,7 +5,7 @@ status: active
 version: 2.4.0
 last_reviewed: 2026-08-21
 approved_by: publication-owner
-change_reason: "Updated with Next.js 16.3.0 stack, strictly enforced ESLint policies (zero warnings), GPU hardware layer scoping, and 55-page static build output."
+change_reason: "Updated with Next.js 16.3.0 stack, strictly enforced ESLint policies (zero warnings), GPU hardware layer scoping, and 56-page static build output."
 deprecation_date: null
 ---
 
@@ -21,7 +21,7 @@ The publication is a **premium independent newsletter & permanent long-form tech
 
 1. **Reading-First Architecture**: Every feature, layout change, or typography rule must prioritize high-legibility long-form reading.
 2. **Zero Data Loss**: Never delete, overwrite, or corrupt authentic issue content (`content/issues/*.mdx`) or user assets without explicit backup and user consent.
-3. **Badge Naming Standard**: Issue numbers across all cards, headers, navigation, and badges MUST use the canonical format: `The Daily Nodes #001`, `The Daily Nodes #002`, `The Daily Nodes #003`, ..., `The Daily Nodes #007`. All 7 dispatches are classified as `daily-node`.
+3. **Badge Naming Standard**: Issue numbers across all cards, headers, navigation, and badges MUST use the canonical format: `The Daily Nodes #001`, `The Daily Nodes #002`, `The Daily Nodes #003`, ..., `The Daily Nodes #014`. All 14 dispatches are classified as `daily-node`.
 4. **JPG Image Asset Standard**: All issue hero and inline illustration assets must strictly use **JPG (`.jpg`) format** stored in normalized directories (`public/assets/daily-node-N/`, `public/assets/deep-node-N/`, and `public/assets/issue-N/`).
 5. **No ASCII / Mermaid Pipeline Diagrams in Dispatches**: Crude ASCII box/arrow charts and Mermaid diagrams must never be embedded in dispatch MDX content. Complex workflows must be communicated through high-resolution editorial JPG imagery or clean typographic callouts and structured step lists.
 6. **Link & Asset Integrity**: Every link (internal navigation, source references, TOC anchors) and image asset path (`/assets/...`) must resolve cleanly. Never introduce dummy `#` links.
@@ -36,9 +36,9 @@ The publication is a **premium independent newsletter & permanent long-form tech
 
 ```text
 C:\Users\offic\OneDrive\Desktop\newsletter\
-├── content\issues\       # Authentic MDX newsletter issue content (DAILY-NODES #001 to #007)
+├── content\issues\       # Authentic MDX newsletter issue content (DAILY-NODES #001 to #014)
 ├── public\
-│   └── assets\           # JPG image assets for issues (/assets/daily-node-7/*.jpg, /assets/issue-7/*.jpg)
+│   └── assets\           # JPG image assets for issues (/assets/daily-node-14/*.jpg, /assets/issue-14/*.jpg)
 ├── src\
 │   ├── app\              # Next.js 16.3.0 App Router pages & layouts
 │   │   ├── globals.css   # 16-theme CSS variables & GPU hardware acceleration
@@ -65,5 +65,5 @@ Before completing any task:
 1. Run `npx tsc --noEmit` ➔ 0 errors required.
 2. Run `npx eslint src/` ➔ 0 errors, 0 warnings required.
 3. Run `node scripts/audit-links.js` ➔ 0 broken/dummy links required.
-4. Run `npm run build` ➔ 55 static pages prerendered successfully.
+4. Run `npm run build` ➔ 56 static pages prerendered successfully.
 5. Ensure dev server runs cleanly on `http://localhost:3000`.
