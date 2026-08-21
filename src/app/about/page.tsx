@@ -3,7 +3,7 @@ import SubscribeForm from '@/components/SubscribeForm';
 
 export const metadata: Metadata = {
   title: "About — PIYUSH'S DISPATCH",
-  description: "A daily technical briefing on AI, software systems, and the ideas reshaping technology.",
+  description: "A public learning journal about AI, software, and the ideas behind the technology by Piyush Pal.",
   alternates: {
     canonical: '/about',
   },
@@ -12,18 +12,19 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-12 md:py-20 min-h-screen">
+      {/* Header Section */}
       <header className="mb-16 border-b border-[var(--border-color)] pb-12 text-center max-w-4xl mx-auto">
         <div className="inline-block mb-4 px-3.5 py-1 border border-[var(--border-color)] bg-[var(--surface)] rounded-full text-xs font-mono text-[var(--accent)] uppercase font-semibold">
-          Editorial Manifesto
+          About The Publication &amp; Author
         </div>
         <h1 className="font-serif text-4xl md:text-6xl font-bold text-[var(--text-primary)] tracking-tight mb-6">
           PIYUSH&apos;S DISPATCH
         </h1>
         <p className="text-xl md:text-2xl text-[var(--text-primary)] leading-relaxed font-semibold mb-4">
-          A daily technical briefing on AI, software systems, and the ideas reshaping technology.
+          A public learning journal about AI, software, and the ideas behind the technology.
         </p>
         <p className="text-base md:text-lg text-[var(--text-secondary)] leading-relaxed font-light max-w-2xl mx-auto">
-          Written from first principles. Built for people who want to understand <strong>what is changing, why it matters, and what comes next.</strong>
+          Written by <strong>Piyush Pal</strong>. Documenting the process of studying technical concepts, building systems, and turning information into understanding.
         </p>
 
         {/* Social Links */}
@@ -69,182 +70,256 @@ export default function AboutPage() {
         </div>
       </header>
 
+      {/* Main Content Sections */}
       <div className="max-w-[760px] mx-auto space-y-16 text-lg leading-relaxed text-[var(--text-primary)]">
-        {/* THE DISPATCH */}
+        
+        {/* WHO I AM */}
         <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>01</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>The Author</span>
+          </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
-            THE DISPATCH
+            Who I Am
           </h2>
           <p>
-            Technology moves faster than most people can meaningfully understand it.
+            I&apos;m <strong>Piyush Pal</strong>, a BCA (Hons.) student specializing in AI/ML, with a strong interest in software engineering and full-stack development.
           </p>
           <p>
-            New models appear every week. New frameworks become trends overnight. New buzzwords promise to redefine software, intelligence, and business.
+            I&apos;m still learning. I don&apos;t write as a senior engineer, researcher, founder, or industry expert. I&apos;m simply someone who enjoys going deep into difficult technical subjects, building things, asking questions, and figuring out how they actually work.
           </p>
-          <p className="text-xl font-semibold text-[var(--text-primary)] bg-[var(--surface)] p-6 rounded-2xl border border-[var(--border-color)]">
-            Piyush&apos;s Dispatch is a place to slow down.
-          </p>
-          <p>
-            Each issue takes one important idea and goes beneath the surface — tracing it back to first principles, connecting it to the larger technical landscape, and turning complexity into useful mental models.
-          </p>
-          <ul className="space-y-2 font-mono text-sm text-[var(--text-secondary)] pl-4 border-l-2 border-[var(--border-color)]">
-            <li>• No hype for the sake of hype.</li>
-            <li>• No recycled headlines.</li>
-            <li>• No shallow summaries.</li>
-          </ul>
-          <p className="text-xl font-bold text-[var(--accent)]">
-            Just clear thinking about technology.
+          <p className="text-[var(--text-secondary)] font-medium">
+            That process is what this publication is about.
           </p>
         </section>
 
-        {/* ABOUT THE AUTHOR */}
+        {/* WHY I WRITE */}
         <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>02</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Process &amp; Purpose</span>
+          </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
-            ABOUT PIYUSH
+            Why I Write
           </h2>
           <p>
-            I am Piyush Pal, a 2nd year BCA Hons. AI/ML with Fullstack student, technical writer, and the mind behind <strong>Piyush&apos;s Dispatch</strong>. 
+            Technology moves incredibly fast. New models, frameworks, agents, products, and buzzwords appear almost every day.
           </p>
           <p>
-            My work is heavily focused on exploring the intersections of <strong>Agentic AI, System Architecture, and Graph Engineering</strong>. I started this publication as a way to untangle the hype surrounding emerging technologies and distill them down to their fundamental engineering principles.
+            It&apos;s easy to consume information without really understanding it.
           </p>
           <p>
-            When I am not deep in coursework, code, or architecture research, I am writing here to help other engineers, founders, and curious minds build durable mental models that outlast the current tech cycle.
+            So when I explore something, I try to go beyond the headline:
           </p>
-        </section>
-
-        {/* WHAT WE COVER */}
-        <section className="space-y-6">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
-            WHAT WE COVER
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] space-y-2">
-              <h3 className="font-serif font-bold text-xl text-[var(--accent)]">Artificial Intelligence &amp; LLMs</h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Agents, context engineering, RAG, memory, tool use, loop engineering, graph systems, model architectures, and the infrastructure emerging around intelligent software.
-              </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-4">
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">01</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">What happened?</span>
             </div>
-
-            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] space-y-2">
-              <h3 className="font-serif font-bold text-xl text-[var(--accent)]">Software Engineering &amp; Systems</h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Developer tools, cloud infrastructure, distributed systems, MLOps, system architecture, and the engineering principles behind scalable software.
-              </p>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">02</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">How does it actually work?</span>
             </div>
-
-            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] space-y-2">
-              <h3 className="font-serif font-bold text-xl text-[var(--accent)]">Startups &amp; Business</h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Unit economics, product strategy, founder decisions, product-market fit, competitive dynamics, and the economics shaping technology companies.
-              </p>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">03</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">Why does it matter?</span>
             </div>
-
-            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] space-y-2">
-              <h3 className="font-serif font-bold text-xl text-[var(--accent)]">First-Principles Thinking</h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Research papers, emerging technologies, industry shifts, hype cycles, and the underlying mechanisms that explain why things work.
-              </p>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">04</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">What&apos;s underneath the hype?</span>
             </div>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">05</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">What can we learn from it?</span>
+            </div>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] flex items-center gap-3">
+              <span className="text-xs font-mono text-[var(--accent)] font-bold">06</span>
+              <span className="font-semibold text-sm text-[var(--text-primary)]">What might happen next?</span>
+            </div>
+          </div>
+          <p>
+            Writing helps me answer those questions. If I can&apos;t explain an idea clearly, I probably haven&apos;t understood it deeply enough.
+          </p>
+          <div className="p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] text-center">
+            <p className="font-serif text-xl font-bold text-[var(--accent)]">
+              The Dispatch is where information becomes understanding.
+            </p>
           </div>
         </section>
 
-        {/* THE EDITORIAL PHILOSOPHY */}
+        {/* LEARNING IN PUBLIC */}
         <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>03</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Perspective</span>
+          </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
-            THE EDITORIAL PHILOSOPHY
+            Learning in Public
           </h2>
-          <blockquote className="my-6 pl-6 border-l-4 border-[var(--accent)] italic font-serif text-xl md:text-2xl text-[var(--text-primary)] bg-[var(--surface)] p-6 rounded-r-2xl shadow-xs">
-            &quot;Every new AI buzzword is a new floor — not a demolition crew. Fundamentals compound over time.&quot;
-          </blockquote>
           <p>
-            The goal isn&apos;t to predict every trend.
+            Piyush&apos;s Dispatch is my way of <strong>learning in public</strong>.
           </p>
           <p>
-            It&apos;s to develop the <strong>mental models that remain useful after the trend disappears.</strong>
+            It documents the process of studying technical concepts, reading research, experimenting with software, building systems, connecting ideas, and turning what I learn into explanations.
+          </p>
+          <blockquote className="my-4 pl-6 border-l-4 border-[var(--accent)] font-serif text-lg md:text-xl text-[var(--text-primary)] bg-[var(--surface)] p-6 rounded-r-2xl shadow-xs space-y-2">
+            <p className="italic text-[var(--text-secondary)]">
+              I&apos;m not trying to appear like someone who already knows everything.
+            </p>
+            <p className="font-bold text-[var(--text-primary)] not-italic">
+              I&apos;m trying to become someone who understands a little more every day.
+            </p>
+          </blockquote>
+        </section>
+
+        {/* WHAT I'M EXPLORING */}
+        <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>04</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Focus Areas</span>
+          </div>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
+            What I&apos;m Exploring
+          </h2>
+          <p>
+            My curiosity currently takes me across:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {[
+              "Artificial Intelligence & Machine Learning",
+              "LLMs & Generative AI",
+              "Agentic AI, agents & tool use",
+              "Context engineering",
+              "RAG & knowledge systems",
+              "AI memory & graph-based systems",
+              "Software architecture",
+              "Developer tools & automation",
+              "Cloud & modern infrastructure",
+              "Startups & technology businesses",
+              "First-principles thinking"
+            ].map((topic) => (
+              <div 
+                key={topic}
+                className="flex items-center gap-3 p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface)] text-sm font-medium text-[var(--text-primary)]"
+              >
+                <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
+                <span>{topic}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm font-mono text-[var(--text-secondary)] italic">
+            The list will change. That&apos;s part of the point.
+          </p>
+        </section>
+
+        {/* HOW I APPROACH TECHNOLOGY */}
+        <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>05</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Methodology</span>
+          </div>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
+            How I Approach Technology
+          </h2>
+          <p className="text-xl font-semibold text-[var(--text-primary)]">
+            I care more about <strong className="text-[var(--accent)]">mechanisms than hype</strong>.
+          </p>
+          <p>
+            I prefer first principles over buzzwords, primary sources over recycled summaries, mental models over memorization, and technical context over headlines.
+          </p>
+          <p>
+            When a new framework or model appears, I&apos;m interested in more than <em>what it can do</em>. I want to understand the ideas underneath it—and whether those ideas will still matter when the next framework arrives.
           </p>
           <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--bg)] font-mono text-sm space-y-2">
-            <p className="text-[var(--text-secondary)]">Because frameworks change.</p>
-            <p className="text-[var(--text-secondary)]">Models change.</p>
-            <p className="text-[var(--text-secondary)]">Markets change.</p>
-            <p className="text-[var(--accent)] font-bold text-base pt-2 border-t border-[var(--border-color)]">Fundamentals compound.</p>
+            <p className="text-[var(--text-secondary)]">Because technologies change quickly.</p>
+            <p className="text-[var(--accent)] font-bold text-base pt-2 border-t border-[var(--border-color)]">
+              Fundamentals compound.
+            </p>
           </div>
         </section>
 
-        {/* READING, NOT SCROLLING */}
+        {/* WHO THIS IS FOR */}
         <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>06</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Audience</span>
+          </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
-            READING, NOT SCROLLING
+            Who This Is For
           </h2>
           <p>
-            The web is optimized for consumption.
-          </p>
-          <p className="text-xl font-bold text-[var(--text-primary)]">
-            Piyush&apos;s Dispatch is optimized for understanding.
+            Piyush&apos;s Dispatch is for students, developers, builders, AI/ML learners, engineers, founders, researchers, and anyone who is simply curious about how technology works.
           </p>
           <p>
-            Every article is designed around the reading experience:
+            You don&apos;t need to be an expert.
           </p>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-[var(--text-primary)] font-medium">
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Long-form, distraction-free writing</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Carefully structured technical explanations</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Strong typography &amp; generous whitespace</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Dark, light &amp; paper-inspired reading themes</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Sources preserved alongside analysis</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>No intrusive pop-ups</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>No advertising clutter</span>
-            </li>
-            <li className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--surface)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] flex-shrink-0" />
-              <span>Evergreen value long after publication</span>
-            </li>
-          </ul>
-          <div className="pt-4 border-t border-[var(--border-color)] text-center">
-            <p className="text-sm font-mono text-[var(--text-secondary)] mb-1">This isn&apos;t a feed.</p>
-            <p className="font-serif text-xl font-bold text-[var(--accent)]">
-              It&apos;s a technical library that grows one issue at a time.
+          <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] space-y-2">
+            <p className="font-serif italic text-lg text-[var(--text-primary)]">
+              &quot;I understand what this does, but how does it actually work?&quot;
+            </p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              If you&apos;ve ever looked at a technical idea and thought that—you&apos;re probably in the right place.
             </p>
           </div>
         </section>
 
-        {/* SUBSCRIBE TO THE DAILY BRIEFING */}
+        {/* THE PHILOSOPHY */}
+        <section className="space-y-6">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider">
+            <span>07</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Core Belief</span>
+          </div>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3">
+            The Philosophy
+          </h2>
+          <p>
+            I maintain a personal knowledge system called <strong>xr-nodes</strong>, built around a simple idea: knowledge becomes more useful when ideas are connected rather than stored in isolation.
+          </p>
+          <p>
+            The Dispatch is the public expression of that philosophy:
+          </p>
+          <div className="p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] text-sm font-mono text-[var(--accent)] font-semibold text-center overflow-x-auto">
+            Learn &rarr; Research &rarr; Connect &rarr; Build mental models &rarr; Explain &rarr; Publish
+          </div>
+          <p>
+            The goal isn&apos;t to collect everything.
+          </p>
+          <p className="font-semibold text-[var(--text-primary)]">
+            It&apos;s to understand what matters—and keep building on it.
+          </p>
+        </section>
+
+        {/* SUBSCRIBE */}
         <section className="pt-12 border-t border-[var(--border-color)]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent)] font-semibold uppercase tracking-wider mb-6 justify-center">
+            <span>08</span>
+            <span className="w-8 h-px bg-[var(--accent)]" />
+            <span>Join The Journey</span>
+          </div>
           <div className="p-8 md:p-12 rounded-3xl border border-[var(--border-color)] bg-[var(--surface)] text-center shadow-md">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
-              SUBSCRIBE TO THE DAILY BRIEFING
+              Subscribe
             </h2>
-            <p className="font-mono text-xs text-[var(--accent)] font-bold tracking-widest uppercase mb-4">
-              One idea. One deep dive. Every day.
+            <p className="text-[var(--text-secondary)] mb-6 text-base max-w-lg mx-auto leading-relaxed">
+              If you&apos;re interested in learning how technology works beneath the surface, follow along.
             </p>
-            <p className="text-[var(--text-secondary)] mb-6 text-base max-w-md mx-auto leading-relaxed">
-              Get <em>Piyush&apos;s Dispatch</em> delivered to your inbox — with original sources, technical context, and practical mental models preserved in every issue.
+            <p className="text-sm font-mono text-[var(--text-secondary)] mb-2">
+              I&apos;m still figuring things out.
             </p>
-            <p className="font-serif text-lg font-bold text-[var(--text-primary)] mb-8 italic">
-              Read less noise. Understand more.
+            <p className="font-serif text-xl font-bold text-[var(--accent)] mb-8">
+              That&apos;s exactly why I&apos;m writing.
             </p>
             <SubscribeForm variant="inline" />
           </div>
         </section>
+
       </div>
     </main>
   );
