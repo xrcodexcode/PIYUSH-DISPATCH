@@ -40,9 +40,11 @@ interface Props {
 
 export async function generateStaticParams() {
   const issues = await getAllIssues();
-  return issues.map((issue) => ({
+  const params = issues.map((issue) => ({
     slug: issue.slug,
   }));
+  params.push({ slug: 'latest' });
+  return params;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

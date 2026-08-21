@@ -26,7 +26,7 @@ export function KeyboardShortcutsModal() {
       } else if (e.key === '/') {
         e.preventDefault();
         router.push('/search');
-      } else if (e.key === 'Z' && e.shiftKey) {
+      } else if ((e.altKey && (e.key === 'z' || e.key === 'Z')) || (e.shiftKey && e.key === 'Z')) {
         e.preventDefault();
         const isZenActive = document.body.classList.toggle('zen-mode');
         if (isZenActive && document.documentElement.requestFullscreen) {
@@ -45,7 +45,8 @@ export function KeyboardShortcutsModal() {
     <button
       onClick={() => setIsOpen(true)}
       title="Press '?' for keyboard shortcuts"
-      className="hidden md:flex items-center gap-1 text-[11px] font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--surface)] transition-colors"
+      aria-label="Keyboard Shortcuts"
+      className="hidden md:flex items-center gap-1 text-[11px] font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--surface)] transition-colors cursor-pointer"
     >
       <kbd className="font-sans font-semibold">?</kbd>
       <span>Shortcuts</span>
@@ -53,14 +54,20 @@ export function KeyboardShortcutsModal() {
   );
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
+      onClick={() => setIsOpen(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="shortcuts-modal-title"
+    >
       <div 
         className="w-full max-w-md bg-[var(--surface)] border border-[var(--border-color)] rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 text-[var(--text-primary)] relative"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
           <div className="flex items-center gap-2">
-            <span className="font-serif font-bold text-xl">Keyboard Shortcuts</span>
+            <span id="shortcuts-modal-title" className="font-serif font-bold text-xl">Keyboard Shortcuts</span>
             <span className="text-xs font-mono bg-[var(--accent)] text-white px-2 py-0.5 rounded-full font-bold">Pro</span>
           </div>
           <button

@@ -358,7 +358,13 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
 
       {/* Interactive Seek Bar */}
       <div 
-        className="w-full bg-[var(--bg)] h-2 rounded-full overflow-hidden border border-[var(--border-color)] relative group cursor-pointer"
+        role="slider"
+        tabIndex={0}
+        aria-label="Audio playback seek bar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(audioProgress)}
+        className="w-full bg-[var(--bg)] h-2 rounded-full overflow-hidden border border-[var(--border-color)] relative group cursor-pointer focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
         onClick={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
@@ -368,7 +374,16 @@ export function AudioPlayer({ title, textToRead, readingTimeMinutes = 5 }: Audio
             speakFromOffset(pct);
           }
         }}
-        title="Click to seek position"
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            handleSkipForward5();
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            handleSkipBack5();
+          }
+        }}
+        title="Click or use left/right arrows to seek position"
       >
         <div
           className="h-full bg-[var(--accent)] transition-all duration-200 ease-linear rounded-full relative"

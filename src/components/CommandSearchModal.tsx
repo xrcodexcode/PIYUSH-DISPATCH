@@ -17,13 +17,8 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement).tagName)) {
-        return;
-      }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if (e.key === 'Escape' && isOpen) {
         e.preventDefault();
-        if (isOpen) onClose();
-      } else if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
@@ -57,6 +52,9 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
     <div 
       className="fixed inset-0 z-[99999] flex items-start justify-center pt-16 md:pt-24 p-4 bg-black/70 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command search palette"
     >
       <div
         className="w-full max-w-2xl bg-[var(--surface)] border border-[var(--border-color)] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] text-[var(--text-primary)]"
@@ -69,17 +67,20 @@ export function CommandSearchModal({ isOpen, onClose, issues }: CommandSearchMod
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
           <input
+            id="command-search-input"
             type="text"
             autoFocus
             maxLength={200}
             value={query}
             onChange={(e) => setQuery(e.target.value.slice(0, 200))}
+            aria-label="Search dispatches and topics"
             placeholder="Search dispatches, topics, keywords (e.g., The Daily Nodes #001, RAG, Agents)..."
             className="w-full bg-transparent text-lg font-medium text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:outline-none"
           />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg)] transition-colors ml-2"
+            aria-label="Close search"
+            className="p-1.5 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg)] transition-colors ml-2 cursor-pointer"
           >
             <kbd className="text-xs font-mono px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--bg)]">Esc</kbd>
           </button>

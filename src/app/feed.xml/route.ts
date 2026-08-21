@@ -52,7 +52,7 @@ export async function GET() {
         <atom:link href="${absoluteUrl('/feed.xml')}" rel="self" type="application/rss+xml" />
         <description>${escapeXml(siteConfig.description)}</description>
         <language>en-US</language>
-        <lastBuildDate>${new Date(updatedAt).toUTCString()}</lastBuildDate>
+        <lastBuildDate>${safeToUTCString(updatedAt)}</lastBuildDate>
         <managingEditor>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</managingEditor>
         <webMaster>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</webMaster>
         ${items}

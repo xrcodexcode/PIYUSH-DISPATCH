@@ -13,11 +13,11 @@ export const SERIES_TRACKS: SeriesTrack[] = [
     badge: '5-Part Masterclass',
     description: 'From self-correcting execution loops and graph workflows to autonomous cron agents and long-term neural memory.',
     issueSlugs: [
-      '030-loop-engineering-what-makes-ai-agents-improve-themselves',
-      '031-graph-engineering-beyond-single-ai-loops',
-      '032-ai-agents-101',
-      '033-agent-memory',
-      '034-cron-jobs-how-to-make-ai-agents-work-while-you-sleep',
+      '007-loop-engineering-what-makes-ai-agents-improve-themselves',
+      '008-graph-engineering-beyond-single-ai-loops',
+      '009-ai-agents-101',
+      '010-agent-memory',
+      '011-cron-jobs-how-to-make-ai-agents-work-while-you-sleep',
     ],
   },
   {
@@ -26,10 +26,10 @@ export const SERIES_TRACKS: SeriesTrack[] = [
     badge: '4-Part Track',
     description: 'Why prompt engineering evolved into context architectures, RAG systems, and tool harness design.',
     issueSlugs: [
-      '026-prompt-engineering-isnt-dead-its-evolving',
-      '027-rag-isnt-dead-most-people-just-dont-understand-it',
-      '028-better-input-better-output-thats-context-engineering',
-      '029-the-prompt-is-just-one-ingredient-the-harness-is-the-kitchen',
+      '003-prompt-engineering-isnt-dead-its-evolving',
+      '004-rag-isnt-dead-most-people-just-dont-understand-it',
+      '005-better-input-better-output-thats-context-engineering',
+      '006-the-prompt-is-just-one-ingredient-the-harness-is-the-kitchen',
     ],
   },
   {
