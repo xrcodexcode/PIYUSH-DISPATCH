@@ -42,6 +42,7 @@ export const SERIES_TRACKS: SeriesTrack[] = [
       'agent-skills-and-hooks',
       'how-ai-agents-actually-work',
       'how-vector-databases-actually-work',
+      'embeddings-turning-meaning-into-mathematics',
     ],
   },
 ];
