@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import JsonLd from '@/components/JsonLd';
+import { absoluteUrl, siteConfig } from '@/lib/site';
 import { getAllTopics, getIssuesByTopic } from '@/lib/content';
 import IssueCard from '@/components/IssueCard';
 import Link from 'next/link';
@@ -46,8 +48,29 @@ export default async function TopicSlugPage({ params }: Props) {
 
   const issues = await getIssuesByTopic(slug);
 
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${topic.name} Dispatches`,
+    description: topic.description,
+    url: absoluteUrl(`/topics/${topic.slug}`),
+    isPartOf: {
+      '@type': 'WebSite',
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    numberOfItems: issues.length,
+    hasPart: issues.slice(0, 10).map((issue) => ({
+      '@type': 'Article',
+      headline: issue.title,
+      url: absoluteUrl(`/issues/${issue.slug}`),
+    })),
+  };
+
   return (
-    <main className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-12 md:py-20 min-h-screen">
+    <>
+      <JsonLd data={collectionJsonLd} />
+      <main className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-12 md:py-20 min-h-screen">
       <div className="mb-8">
         <Link href="/topics" className="text-xs font-mono font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] flex items-center gap-1">
           <span aria-hidden="true">&larr;</span> All Topics
@@ -82,5 +105,6 @@ export default async function TopicSlugPage({ params }: Props) {
         </div>
       )}
     </main>
+    </>
   );
 }

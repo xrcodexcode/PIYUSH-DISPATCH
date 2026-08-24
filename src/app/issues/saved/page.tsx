@@ -6,6 +6,8 @@ import SavedIssuesClient from './SavedIssuesClient';
 export const metadata: Metadata = {
   title: "Saved Vault | Piyush's Dispatch",
   description: "Access your bookmarked dispatches and technical briefing notes.",
+  robots: { index: false, follow: true },
+  alternates: { canonical: '/issues/saved' },
 };
 
 export default async function SavedVaultPage() {

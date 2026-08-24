@@ -4,6 +4,21 @@ import NewsletterHero from '@/components/NewsletterHero';
 import LatestIssue from '@/components/LatestIssue';
 import IssueCard from '@/components/IssueCard';
 import SubscribeForm from '@/components/SubscribeForm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "PIYUSH'S DISPATCH — Ideas, Analysis & Daily Intelligence",
+  description: 'A premium daily newsletter delivering structured briefings on AI, software architecture, engineering, and technology. Deep analysis, not headlines.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "PIYUSH'S DISPATCH — Ideas, Analysis & Daily Intelligence",
+    description: 'A premium daily newsletter delivering structured briefings on AI, software architecture, engineering, and technology.',
+    url: 'https://dispatch.piyush.dev',
+    type: 'website',
+  },
+};
 
 export const dynamic = 'force-static';
 

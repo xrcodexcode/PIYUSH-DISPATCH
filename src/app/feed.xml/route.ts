@@ -40,6 +40,7 @@ export async function GET() {
           <author>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</author>
           <description>${escapeXml(issue.excerpt || issue.subtitle)}</description>
           ${categories}
+          ${issue.heroImage ? `<enclosure url="${absoluteUrl(issue.heroImage)}" type="image/jpeg" length="0" />` : ''}
         </item>`;
     })
     .join('');
@@ -55,6 +56,11 @@ export async function GET() {
         <lastBuildDate>${safeToUTCString(updatedAt)}</lastBuildDate>
         <managingEditor>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</managingEditor>
         <webMaster>${escapeXml(siteConfig.contactEmail)} (${escapeXml(siteConfig.author.name)})</webMaster>
+        <image>
+          <url>${absoluteUrl('/favicon.ico')}</url>
+          <title>${escapeXml(siteConfig.name)}</title>
+          <link>${siteConfig.url}</link>
+        </image>
         ${items}
       </channel>
     </rss>`;

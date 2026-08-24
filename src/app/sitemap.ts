@@ -6,19 +6,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [issues, topics] = await Promise.all([getAllIssues(), getAllTopics()]);
   const now = new Date();
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    '/issues',
-    '/topics',
-    '/about',
-    '/subscribe',
-    '/search',
-    '/contact',
-    '/privacy',
-  ].map((route) => ({
+  const staticRouteConfigs: Array<{ route: string; frequency: 'daily' | 'weekly' | 'monthly'; prio: number }> = [
+    { route: '/issues', frequency: 'daily', prio: 0.9 },
+    { route: '/topics', frequency: 'weekly', prio: 0.7 },
+    { route: '/about', frequency: 'monthly', prio: 0.5 },
+    { route: '/subscribe', frequency: 'monthly', prio: 0.6 },
+    { route: '/contact', frequency: 'monthly', prio: 0.4 },
+    { route: '/privacy', frequency: 'monthly', prio: 0.3 },
+  ];
+
+  const staticRoutes: MetadataRoute.Sitemap = staticRouteConfigs.map(({ route, frequency, prio }) => ({
     url: absoluteUrl(route),
     lastModified: now,
-    changeFrequency: route === '/' ? 'daily' : 'weekly',
-    priority: route === '/' ? 1 : 0.7,
+    changeFrequency: frequency,
+    priority: prio,
   }));
 
   const issueRoutes: MetadataRoute.Sitemap = issues.map((issue) => {
